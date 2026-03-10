@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -27,7 +28,7 @@ export default function Header() {
         ease: "power3.out",
       });
     },
-    { scope: containerRef }
+    { scope: containerRef },
   );
 
   return (
@@ -46,32 +47,14 @@ export default function Header() {
           className="flex items-center gap-3"
           aria-label="Properganda - Home"
         >
-          <svg
-            width="36"
-            height="36"
-            viewBox="0 0 40 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              d="M20 2L36 11V29L20 38L4 29V11L20 2Z"
-              stroke="#00E04A"
-              strokeWidth="2"
-              fill="none"
-            />
-            <text
-              x="20"
-              y="26"
-              textAnchor="middle"
-              fill="#00E04A"
-              fontSize="18"
-              fontWeight="700"
-              fontFamily="sans-serif"
-            >
-              P
-            </text>
-          </svg>
+          <Image
+            src="/images/svg/logo.svg"
+            alt="Properganda"
+            width={126}
+            height={22}
+            priority
+            className="h-10 w-auto"
+          />
           <span className="text-xs font-medium tracking-[0.25em] text-white uppercase">
             Properganda
           </span>
@@ -83,25 +66,25 @@ export default function Header() {
         >
           <a
             href="#about"
-            className="text-sm text-brand-gray transition-colors hover:text-brand-green"
+            className="text-sm text-white transition-colors hover:text-brand-green"
           >
             About
           </a>
           <a
             href="#work"
-            className="text-sm text-brand-gray transition-colors hover:text-brand-green"
+            className="text-sm text-white transition-colors hover:text-brand-green"
           >
             Work
           </a>
           <a
             href="#services"
-            className="text-sm text-brand-gray transition-colors hover:text-brand-green"
+            className="text-sm text-white transition-colors hover:text-brand-green"
           >
             Services
           </a>
           <a
             href="#contact"
-            className="text-sm text-brand-gray transition-colors hover:text-brand-green"
+            className="text-sm text-white transition-colors hover:text-brand-green"
           >
             Contact
           </a>
