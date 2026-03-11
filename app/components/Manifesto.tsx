@@ -43,10 +43,10 @@ export default function Manifesto() {
   return (
     <section
       ref={sectionRef}
-      className="bg-brand-gray-light py-24 md:py-32"
+      className="bg-brand-gray-light px-4 py-24 sm:px-6 md:px-10 md:py-32 lg:px-16"
       aria-label="Brand manifesto"
     >
-      <div className="mx-auto max-w-[1140px] px-10 sm:px-16 md:px-20 lg:px-24">
+      <div className="mx-auto max-w-[1400px]">
         <div className="grid items-center gap-12 md:grid-cols-[1fr_auto]">
           <div className="flex flex-col gap-6">
             {/* Hexagon icon */}

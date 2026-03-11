@@ -34,14 +34,14 @@ export default function Header() {
   return (
     <header
       ref={containerRef}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 sm:px-6 md:px-10 lg:px-16 ${
         isScrolled
           ? "bg-brand-black/95 backdrop-blur-md border-b border-white/5"
           : "bg-transparent"
       }`}
       role="banner"
     >
-      <div className="mx-auto flex max-w-[1140px] items-center justify-between px-10 py-5 sm:px-16 md:px-20 lg:px-24">
+      <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between py-5">
         <a
           href="/"
           className="flex items-center gap-3"
@@ -55,7 +55,7 @@ export default function Header() {
             priority
             className="h-10 w-auto"
           />
-          <span className="text-xs font-medium tracking-[0.25em] text-white uppercase">
+          <span className="text-sm font-medium tracking-[0.25em] text-white uppercase">
             Properganda
           </span>
         </a>
@@ -66,27 +66,44 @@ export default function Header() {
         >
           <a
             href="#about"
-            className="text-sm text-white transition-colors hover:text-brand-green"
+            className="text-sm leading-[31px] text-white transition-colors hover:text-brand-green"
           >
-            About
+            About Us
           </a>
           <a
             href="#work"
-            className="text-sm text-white transition-colors hover:text-brand-green"
+            className="text-sm leading-[31px] text-white transition-colors hover:text-brand-green"
           >
-            Work
+            What We Do
           </a>
           <a
-            href="#services"
-            className="text-sm text-white transition-colors hover:text-brand-green"
+            href="#clients"
+            className="text-sm leading-[31px] text-white transition-colors hover:text-brand-green"
           >
-            Services
+            Clients
           </a>
           <a
             href="#contact"
-            className="text-sm text-white transition-colors hover:text-brand-green"
+            className="text-sm leading-[31px] text-white transition-colors hover:text-brand-green"
           >
             Contact
+          </a>
+
+          <a
+            href="#canopy"
+            className="ml-2 flex items-center justify-center gap-3 rounded-full border border-[#FFCC00] px-4 py-3 transition-all hover:bg-[#FFCC00]/10"
+          >
+            <div className="flex flex-col text-left leading-tight">
+              <span className="text-[8px] text-[#FFCC00]">Our</span>
+              <span className="text-[8px] text-[#FFCC00]">Studio</span>
+            </div>
+            <Image 
+              src="/images/svg/canopy.svg" 
+              alt="CANOPY" 
+              width={161} 
+              height={21} 
+              className="w-auto" 
+            />
           </a>
         </nav>
 

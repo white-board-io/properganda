@@ -60,8 +60,13 @@ export default function CreativeCollective() {
       className="bg-brand-black px-4 py-24 sm:px-6 md:px-10 md:py-32 lg:px-16"
       aria-label="About - Creative Collective"
     >
+      
       <div className="mx-auto max-w-[1400px]">
         {/* Dark Box Container */}
+         <p className="cc-text-item relative z-10 mb-5 text-xs font-bold tracking-[0.2em] text-[#169D52] uppercase">
+            ABOUT US
+          </p>
+
         <div
           className="relative overflow-hidden rounded-[2.5rem] px-8 pb-32 pt-16 sm:px-16 md:px-24 md:pb-40 md:pt-24 lg:px-32"
           style={{
@@ -69,73 +74,99 @@ export default function CreativeCollective() {
               "linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(48, 48, 48, 0.5) 100%)",
           }}
         >
-          {/* About Us label */}
-          <p className="cc-text-item relative z-10 mb-20 text-xs font-bold tracking-[0.2em] text-brand-green uppercase">
-            ABOUT US
-          </p>
+          {/* ── Rows wrapper: position:relative so image can be absolute ── */}
+          <div className="relative z-10">
 
-          {/* Main Layout Grid */}
-          <div className="relative z-10 grid gap-x-12 gap-y-16 lg:grid-cols-[1fr_auto]">
-            {/* Left Column - Texts */}
-            <div className="flex max-w-2xl flex-col">
-              {/* Title & Description Grid */}
-              <div className="grid gap-8 md:grid-cols-[auto_1fr] md:gap-12 lg:gap-16">
-                <h2 className="cc-text-item font-display text-[clamp(4rem,7vw,6rem)] uppercase leading-[0.9] tracking-wide text-white">
+            {/* ── ROW 1: 3-column grid ── */}
+            <div className="grid grid-cols-3 gap-x-10">
+              {/* Col 1 – Creative Collective heading */}
+              <div className="cc-text-item flex flex-col justify-start">
+                <h2
+                  className="uppercase text-white leading-none"
+                  style={{
+                    fontFamily: "'Bebas Neue', sans-serif",
+                    fontWeight: 400,
+                    fontSize: "88px",
+                    lineHeight: "78px",
+                    letterSpacing: "0%",
+                  }}
+                >
                   Creative
                   <br />
                   Collective
                 </h2>
-                <div className="cc-text-item max-w-[480px] pt-3">
-                  <p className="whitespace-nowrap text-[16px] font-light leading-[1.44] tracking-[0.02em] text-[#a0a0a0]">
-                    Using ideas, information
-                    <br />
-                    and messages with the sincere
-                    <br />
-                    intent of{" "}
-                    <span className="font-bold text-white">
-                      positively influencing
-                    </span>
-                    <br />
-                    the beliefs and actions of
-                    <br />
-                    causes, communities and
-                    <br />
-                    companies.
-                  </p>
-                </div>
               </div>
 
-              {/* Quote Area */}
-              <div className="cc-text-item relative z-20 mt-20">
-                <p className="font-display text-[clamp(3.5rem,7vw,6.5rem)] leading-[0.95] text-[#169D52]">
-                  We rise by
-                  <br />
-                  <span className="relative flex items-end">
-                    lifting others
-                    <span className="mb-4 ml-1 inline-block h-4 w-4 rounded-full bg-[#169D52] sm:mb-5 sm:h-5 sm:w-5 md:mb-6 md:h-6 md:w-6"></span>
-                  </span>
-                </p>
-                <a
-                  href="#contact"
-                  className="mt-8 inline-block text-sm font-medium text-white underline decoration-white/30 underline-offset-8 transition-colors hover:decoration-white"
+              {/* Col 2 – Description text */}
+              <div className="cc-text-item flex flex-col justify-start pt-2">
+                <p
+                  className="text-[#a0a0a0]"
+                  style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontWeight: 300,
+                    fontSize: "23px",
+                    lineHeight: "144%",
+                    letterSpacing: "0.02em",
+                  }}
                 >
-                  Be a part of Us
-                </a>
+                  Using ideas, information and messages with the sincere intent of{" "}
+                  <span className="font-bold text-white">
+                    positively influencing
+                  </span>{" "}
+                  the beliefs and actions of causes, communities and companies.
+                </p>
               </div>
+
+              {/* Col 3 – Empty (image floats here via absolute) */}
+              <div />
             </div>
 
-            {/* Right Column - Torii Image */}
-            <div className="cc-image relative z-10 mt-4 w-full self-end sm:mt-8 lg:mt-4 lg:mb-5 lg:ml-[-10rem] lg:w-[550px] xl:w-[650px]">
-              <div className="relative h-[300px] w-full sm:h-[400px] lg:h-[450px]">
-                <Image
-                  src="/images/svg/torri.svg"
-                  alt="Torii Line Art"
-                  fill
-                  className="object-contain object-left md:object-right"
-                  priority
-                />
-              </div>
+            {/* ── ROW 2: Quote text ── */}
+            <div className="cc-text-item relative z-20 mt-6">
+              <p
+                className="text-[#169D52]"
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 700,
+                  fontSize: "88px",
+                  lineHeight: "110px",
+                  letterSpacing: "0%",
+                }}
+              >
+                We rise by
+                <br />
+                <span className="relative inline-flex items-end">
+                  lifting others
+                  <span className="mb-3 ml-2 inline-block h-5 w-5 rounded-full bg-[#169D52]" />
+                </span>
+              </p>
+              <a
+                href="#contact"
+                className="mt-8 inline-block text-sm font-medium text-white underline decoration-white/30 underline-offset-8 transition-colors hover:decoration-white"
+              >
+                Be a part of Us
+              </a>
             </div>
+
+            {/* ── Image: absolutely positioned on the right, spanning both rows ── */}
+            <div
+              className="cc-image absolute right-0"
+              style={{
+                top: "1rem",
+                right: "-2rem",
+                width: "580px",
+                height: "444px",
+              }}
+            >
+              <Image
+                src="/images/svg/torri.svg"
+                alt="Torii Line Art"
+                fill
+                className="object-contain object-bottom"
+                priority
+              />
+            </div>
+
           </div>
         </div>
 

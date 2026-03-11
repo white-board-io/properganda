@@ -140,11 +140,11 @@ export default function Services() {
     <section
       ref={sectionRef}
       id="services"
-      className="bg-brand-black py-24 md:py-32"
+      className="bg-brand-black px-4 py-24 sm:px-6 md:px-10 md:py-32 lg:px-16"
       aria-label="Our services"
     >
-      <div className="mx-auto max-w-[1140px] px-10 sm:px-16 md:px-20 lg:px-24">
-        <p className="mb-16 text-[10px] tracking-[0.3em] text-brand-gray uppercase">
+      <div className="mx-auto max-w-[1400px]">
+       <p className="cc-text-item relative z-10 mb-5 text-xs font-bold tracking-[0.2em] text-[#169D52] uppercase">
           What We Do
         </p>
 

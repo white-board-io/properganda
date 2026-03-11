@@ -56,7 +56,7 @@ export default function CTA() {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative overflow-hidden bg-brand-gray-dark py-24 md:py-32"
+      className="relative overflow-hidden bg-brand-gray-dark px-4 py-24 sm:px-6 md:px-10 md:py-32 lg:px-16"
       aria-label="Get in touch"
     >
       {/* Decorative green glow */}
@@ -65,7 +65,7 @@ export default function CTA() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto max-w-[1140px] px-10 sm:px-16 md:px-20 lg:px-24">
+      <div className="relative mx-auto max-w-[1400px]">
         <div className="grid items-center gap-12 md:grid-cols-2">
           <div>
             <p className="mb-4 text-[10px] tracking-[0.3em] text-brand-gray uppercase">

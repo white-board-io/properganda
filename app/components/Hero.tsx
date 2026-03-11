@@ -38,7 +38,7 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-screen flex-col justify-end overflow-hidden bg-brand-black"
+      className="relative flex min-h-screen flex-col justify-end overflow-hidden bg-brand-black px-4 sm:px-6 md:px-10 lg:px-16"
       aria-label="Hero"
     >
       {/* Background image */}
@@ -54,12 +54,11 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-t from-brand-black/80 via-brand-black/20 to-transparent" />
       </div>
 
-
-
-      <div className="relative z-10 mx-auto w-full max-w-[1140px] px-10 pb-32 pt-32 sm:px-16 md:px-20 lg:pb-40 lg:px-24">
+      <div className="relative z-10 mx-auto w-full max-w-[1400px] pb-32 pt-32 lg:pb-40">
         <h1
           ref={headingRef}
-          className="font-display text-[clamp(2.5rem,6.5vw,6.5rem)] uppercase leading-[0.9] tracking-wide text-white"
+          className="text-[clamp(4rem,12vw,13rem)] uppercase leading-[0.85] tracking-wide text-white"
+          style={{ fontFamily: "'Bebas Neue', sans-serif" }}
         >
           <span className="block whitespace-nowrap">Creativity With</span>
           <span className="block whitespace-nowrap">
@@ -85,7 +84,7 @@ export default function Hero() {
           {/* Circular badge */}
           <div
             ref={badgeRef}
-            className="absolute bottom-[-4rem] right-[-2rem] flex h-20 w-20 items-center justify-center rounded-full bg-[#169D52] shadow-[0_0_40px_rgba(0,224,74,0.3)] transition-shadow hover:shadow-[0_0_50px_rgba(0,224,74,0.5)] md:h-16 md:w-16 lg:bottom-[-4rem] lg:right-[-12rem]"
+            className="absolute bottom-[-4rem] right-[-2rem] flex h-24 w-24 items-center justify-center rounded-full bg-[#169D52] shadow-[0_0_40px_rgba(0,224,74,0.3)] transition-shadow hover:shadow-[0_0_50px_rgba(0,224,74,0.5)] md:h-20 md:w-20 lg:bottom-[-4rem] lg:right-[1rem]"
             aria-label="Let's Talk"
           >
             <svg
@@ -98,7 +97,7 @@ export default function Hero() {
                 <path id="badge-circle-bottom" d="M 15,50 a 35,35 0 0,0 70,0" />
               </defs>
               <text
-                fontSize="14"
+                fontSize="16"
                 fill="#FFFFFF"
                 fontFamily="sans-serif"
                 fontWeight="bold"
@@ -118,8 +117,8 @@ export default function Hero() {
               <Image
                 src="/images/svg/logo.svg"
                 alt="Properganda Logo"
-                width={30}
-                height={34}
+                width={36}
+                height={40}
               />
             </div>
           </div>

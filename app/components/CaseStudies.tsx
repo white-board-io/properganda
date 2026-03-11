@@ -50,13 +50,13 @@ export default function CaseStudies() {
     <section
       ref={sectionRef}
       id="work"
-      className="bg-brand-black py-24 md:py-32"
+      className="bg-brand-black px-4 py-24 sm:px-6 md:px-10 md:py-32 lg:px-16"
       aria-label="Case studies"
     >
-      <div className="mx-auto max-w-[1140px] px-10 sm:px-16 md:px-20 lg:px-24">
+      <div className="mx-auto max-w-[1400px]">
 
         {/* Section label */}
-        <p className="mb-10 text-[11px] font-semibold uppercase tracking-[0.25em] text-brand-green">
+       <p className="cc-text-item relative z-10 mb-5 text-xs font-bold tracking-[0.2em] text-[#169D52] uppercase">
           Case Study
         </p>
 

@@ -44,7 +44,7 @@ export default function Footer() {
   return (
     <footer
       ref={sectionRef}
-      className="relative overflow-hidden bg-brand-black pt-24 pb-8 md:pt-32"
+      className="relative overflow-hidden bg-brand-black px-4 pt-24 pb-8 sm:px-6 md:px-10 md:pt-32 lg:px-16"
       role="contentinfo"
     >
       {/* Large decorative hexagon — left side */}
@@ -68,7 +68,7 @@ export default function Footer() {
         </svg>
       </div>
 
-      <div className="relative mx-auto max-w-[1140px] px-10 sm:px-16 md:px-20 lg:px-24">
+      <div className="relative mx-auto max-w-[1400px]">
         {/* Giant Heading */}
         <div className="footer-heading mb-16">
           <p className="font-display text-[clamp(2.5rem,7vw,6rem)] leading-[1.05] tracking-wide text-white">

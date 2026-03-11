@@ -41,10 +41,10 @@ export default function LogoBar() {
   return (
     <section
       ref={containerRef}
-      className="bg-white py-10"
+      className="bg-white py-12 px-4 sm:px-6 md:px-10 lg:px-16"
       aria-label="Trusted by"
     >
-      <div className="mx-auto max-w-[1140px] px-10 pt-10 sm:px-16 md:px-20 lg:px-24">
+      <div className="mx-auto max-w-[1400px]">
         <div className="flex flex-wrap items-center justify-between gap-8">
           {logos.map((logo) => (
             <div
