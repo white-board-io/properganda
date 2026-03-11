@@ -86,7 +86,7 @@ export default function CreativeCollective() {
                   Collective
                 </h2>
                 <div className="cc-text-item max-w-[480px] pt-3">
-                  <p className="whitespace-nowrap text-[24px] font-light leading-[1.44] tracking-[0.02em] text-[#a0a0a0]">
+                  <p className="whitespace-nowrap text-[16px] font-light leading-[1.44] tracking-[0.02em] text-[#a0a0a0]">
                     Using ideas, information
                     <br />
                     and messages with the sincere
@@ -125,8 +125,8 @@ export default function CreativeCollective() {
             </div>
 
             {/* Right Column - Torii Image */}
-            <div className="cc-image relative z-10 -ml-32 mt-4 w-full self-end sm:-ml-28 sm:mt-8 lg:mt-6 lg:ml-[-13rem] lg:w-[550px] xl:w-[650px]">
-              <div className="relative h-[300px] w-full sm:h-[400px] lg:h-[550px]">
+            <div className="cc-image relative z-10 mt-4 w-full self-end sm:mt-8 lg:mt-4 lg:mb-5 lg:ml-[-10rem] lg:w-[550px] xl:w-[650px]">
+              <div className="relative h-[300px] w-full sm:h-[400px] lg:h-[450px]">
                 <Image
                   src="/images/svg/torri.svg"
                   alt="Torii Line Art"

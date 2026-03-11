@@ -12,22 +12,12 @@ export default function Hero() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const subtextRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      tl.from(lineRef.current, {
-        scaleY: 0,
-        transformOrigin: "top",
-        duration: 1,
-      })
-        .from(
-          headingRef.current,
-          { y: 120, opacity: 0, duration: 1.2 },
-          "-=0.5",
-        )
+      tl.from(headingRef.current, { y: 120, opacity: 0, duration: 1.2 })
         .from(subtextRef.current, { y: 40, opacity: 0, duration: 0.8 }, "-=0.6")
         .from(
           badgeRef.current,
@@ -37,6 +27,7 @@ export default function Hero() {
             opacity: 0,
             duration: 1,
             ease: "back.out(1.7)",
+            clearProps: "transform",
           },
           "-=0.8",
         );
@@ -57,32 +48,29 @@ export default function Hero() {
           alt=""
           fill
           priority
-          className="object-cover object-center opacity-40"
+          className="object-cover object-center opacity-100"
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-black/80 via-brand-black/20 to-transparent" />
       </div>
 
-      {/* Green vertical accent line */}
-      <div
-        ref={lineRef}
-        className="absolute top-0 left-0 z-10 h-full w-[3px] bg-brand-green"
-        aria-hidden="true"
-      />
+
 
       <div className="relative z-10 mx-auto w-full max-w-[1140px] px-10 pb-32 pt-32 sm:px-16 md:px-20 lg:pb-40 lg:px-24">
         <h1
           ref={headingRef}
-          className="font-display text-[clamp(4rem,11vw,9rem)] uppercase leading-[0.9] tracking-wide text-white"
+          className="font-display text-[clamp(2.5rem,6.5vw,6.5rem)] uppercase leading-[0.9] tracking-wide text-white"
         >
-          Creativity With
-          <br />A{" "}
-          <span className="transition-colors duration-300 hover:text-brand-green">
-            Conscience
+          <span className="block whitespace-nowrap">Creativity With</span>
+          <span className="block whitespace-nowrap">
+            A{" "}
+            <span className="transition-colors duration-300 hover:text-brand-green">
+              Conscience
+            </span>
           </span>
         </h1>
 
-        <div className="mt-24 md:mt-32 flex items-center justify-between">
+        <div className="relative mt-24 md:mt-32 flex items-center justify-between">
           <div ref={subtextRef} className="flex flex-col gap-1">
             <p className="text-sm text-white/70">
               For Brands{" "}
@@ -97,7 +85,7 @@ export default function Hero() {
           {/* Circular badge */}
           <div
             ref={badgeRef}
-            className="relative flex h-20 w-20 shrink-0 translate-x-6 items-center justify-center rounded-full bg-[#169D52] shadow-[0_0_40px_rgba(0,224,74,0.3)] transition-shadow hover:shadow-[0_0_50px_rgba(0,224,74,0.5)] md:h-24 md:w-24 lg:translate-x-12"
+            className="absolute bottom-[-4rem] right-[-2rem] flex h-20 w-20 items-center justify-center rounded-full bg-[#169D52] shadow-[0_0_40px_rgba(0,224,74,0.3)] transition-shadow hover:shadow-[0_0_50px_rgba(0,224,74,0.5)] md:h-16 md:w-16 lg:bottom-[-4rem] lg:right-[-12rem]"
             aria-label="Let's Talk"
           >
             <svg
@@ -110,7 +98,7 @@ export default function Hero() {
                 <path id="badge-circle-bottom" d="M 15,50 a 35,35 0 0,0 70,0" />
               </defs>
               <text
-                fontSize="16"
+                fontSize="14"
                 fill="#FFFFFF"
                 fontFamily="sans-serif"
                 fontWeight="bold"
@@ -130,8 +118,8 @@ export default function Hero() {
               <Image
                 src="/images/svg/logo.svg"
                 alt="Properganda Logo"
-                width={38}
-                height={42}
+                width={30}
+                height={34}
               />
             </div>
           </div>
