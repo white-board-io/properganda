@@ -57,7 +57,7 @@ export default function Hero() {
       <div className="relative z-10 mx-auto w-full max-w-[1400px] pb-32 pt-32 lg:pb-40">
         <h1
           ref={headingRef}
-          className="text-[clamp(4rem,12vw,13rem)] uppercase leading-[0.85] tracking-wide text-white"
+          className="relative top-14 text-[clamp(4rem,12vw,13rem)] uppercase leading-[0.85] tracking-wide text-white"
           style={{ fontFamily: "'Bebas Neue', sans-serif" }}
         >
           <span className="block whitespace-nowrap">Creativity With</span>

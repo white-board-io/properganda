@@ -55,7 +55,7 @@ export default function Header() {
             priority
             className="h-10 w-auto"
           />
-          <span className="text-sm font-medium tracking-[0.25em] text-white uppercase">
+          <span className="font-inter-google text-[31px] font-medium tracking-[0.25em] text-white uppercase">
             Properganda
           </span>
         </a>
@@ -66,25 +66,25 @@ export default function Header() {
         >
           <a
             href="#about"
-            className="text-sm leading-[31px] text-white transition-colors hover:text-brand-green"
+            className="font-inter-google text-[20px] leading-[20px] text-white transition-colors hover:text-brand-green"
           >
             About Us
           </a>
           <a
-            href="#work"
-            className="text-sm leading-[31px] text-white transition-colors hover:text-brand-green"
+            href="#services"
+            className="font-inter-google text-[20px] leading-[20px] text-white transition-colors hover:text-brand-green"
           >
             What We Do
           </a>
           <a
             href="#clients"
-            className="text-sm leading-[31px] text-white transition-colors hover:text-brand-green"
+            className="font-inter-google text-[20px] leading-[20px] text-white transition-colors hover:text-brand-green"
           >
             Clients
           </a>
           <a
             href="#contact"
-            className="text-sm leading-[31px] text-white transition-colors hover:text-brand-green"
+            className="font-inter-google text-[20px] leading-[20px] text-white transition-colors hover:text-brand-green"
           >
             Contact
           </a>

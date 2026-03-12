@@ -27,9 +27,16 @@
   --color-brand-gray: var(--color-brand-gray);
   --color-brand-gray-dark: var(--color-brand-gray-dark);
   --color-brand-green-muted: var(--color-brand-green-muted);
-  --font-body: var(--font-inter);
+  --font-sans: var(--font-inter-google), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter-google);
   --font-display: var(--font-bebas-neue);
+  --font-inter: var(--font-inter-google);
+  --font-inter-google: var(--font-inter-google);
   --animate-spin-slow: spin-slow 8s linear infinite;
+}
+
+@utility font-inter-google {
+  font-family: var(--font-inter-google), ui-sans-serif, system-ui, sans-serif !important;
 }
 
 

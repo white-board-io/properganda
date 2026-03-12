@@ -60,12 +60,11 @@ export default function CreativeCollective() {
       className="bg-brand-black px-4 py-24 sm:px-6 md:px-10 md:py-32 lg:px-16"
       aria-label="About - Creative Collective"
     >
-      
       <div className="mx-auto max-w-[1400px]">
         {/* Dark Box Container */}
-         <p className="cc-text-item relative z-10 mb-5 text-xs font-bold tracking-[0.2em] text-[#169D52] uppercase">
-            ABOUT US
-          </p>
+        <p className="cc-text-item relative z-10 mb-5 text-xs font-bold tracking-[0.2em] text-[#169D52] uppercase">
+          ABOUT US
+        </p>
 
         <div
           className="relative overflow-hidden rounded-[2.5rem] px-8 pb-32 pt-16 sm:px-16 md:px-24 md:pb-40 md:pt-24 lg:px-32"
@@ -76,7 +75,6 @@ export default function CreativeCollective() {
         >
           {/* ── Rows wrapper: position:relative so image can be absolute ── */}
           <div className="relative z-10">
-
             {/* ── ROW 1: 3-column grid ── */}
             <div className="grid grid-cols-3 gap-x-10">
               {/* Col 1 – Creative Collective heading */}
@@ -86,8 +84,8 @@ export default function CreativeCollective() {
                   style={{
                     fontFamily: "'Bebas Neue', sans-serif",
                     fontWeight: 400,
-                    fontSize: "88px",
-                    lineHeight: "78px",
+                    fontSize: "120px",
+                    lineHeight: "120px",
                     letterSpacing: "0%",
                   }}
                 >
@@ -104,12 +102,13 @@ export default function CreativeCollective() {
                   style={{
                     fontFamily: "'Inter', sans-serif",
                     fontWeight: 300,
-                    fontSize: "23px",
+                    fontSize: "24px",
                     lineHeight: "144%",
                     letterSpacing: "0.02em",
                   }}
                 >
-                  Using ideas, information and messages with the sincere intent of{" "}
+                  Using ideas, information and messages with the sincere intent
+                  of{" "}
                   <span className="font-bold text-white">
                     positively influencing
                   </span>{" "}
@@ -150,12 +149,12 @@ export default function CreativeCollective() {
 
             {/* ── Image: absolutely positioned on the right, spanning both rows ── */}
             <div
-              className="cc-image absolute right-0"
+              className="cc-image absolute right-2"
               style={{
                 top: "1rem",
-                right: "-2rem",
+                right: "-0.5rem",
                 width: "580px",
-                height: "444px",
+                height: "440px",
               }}
             >
               <Image
@@ -166,7 +165,6 @@ export default function CreativeCollective() {
                 priority
               />
             </div>
-
           </div>
         </div>
 

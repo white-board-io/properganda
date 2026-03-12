@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -12,28 +14,15 @@ export default function Footer() {
 
   useGSAP(
     () => {
-      gsap.from(".footer-heading > *", {
+      gsap.from(".footer-content > *", {
         opacity: 0,
-        y: 60,
+        y: 30,
         stagger: 0.1,
         duration: 0.8,
         ease: "power3.out",
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 70%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      gsap.from(".footer-hex", {
-        opacity: 0,
-        scale: 0,
-        stagger: 0.15,
-        duration: 0.6,
-        ease: "back.out(1.7)",
-        scrollTrigger: {
-          trigger: ".footer-hex-row",
-          start: "top 85%",
+          start: "top 80%",
           toggleActions: "play none none none",
         },
       });
@@ -44,118 +33,81 @@ export default function Footer() {
   return (
     <footer
       ref={sectionRef}
-      className="relative overflow-hidden bg-brand-black px-4 pt-24 pb-8 sm:px-6 md:px-10 md:pt-32 lg:px-16"
+      className="bg-brand-black pt-20 pb-12 text-white font-inter-google"
       role="contentinfo"
     >
-      {/* Large decorative hexagon — left side */}
-      <div
-        className="absolute -left-16 bottom-20 opacity-20 md:-left-8 md:bottom-24"
-        aria-hidden="true"
-      >
-        <svg
-          width="220"
-          height="220"
-          viewBox="0 0 40 40"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M20 2L36 11V29L20 38L4 29V11L20 2Z"
-            stroke="#00E04A"
-            strokeWidth="0.8"
-            fill="none"
-          />
-        </svg>
-      </div>
-
-      <div className="relative mx-auto max-w-[1400px]">
-        {/* Giant Heading */}
-        <div className="footer-heading mb-16">
-          <p className="font-display text-[clamp(2.5rem,7vw,6rem)] leading-[1.05] tracking-wide text-white">
-            We&apos;re not big,
-          </p>
-          <p className="font-display text-[clamp(2.5rem,7vw,6rem)] leading-[1.05] tracking-wide text-white">
-            We&apos;re <span className="text-brand-green">GIANT</span>
-          </p>
-        </div>
-
-        {/* Decorative hexagons row */}
-        <div className="footer-hex-row mb-16 flex items-center gap-4" aria-hidden="true">
-          {[48, 64, 40, 56].map((size, i) => (
-            <svg
-              key={i}
-              className="footer-hex"
-              width={size}
-              height={size}
-              viewBox="0 0 40 40"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M20 2L36 11V29L20 38L4 29V11L20 2Z"
-                stroke="#00E04A"
-                strokeWidth="1.5"
-                fill="none"
-                opacity={0.3 + i * 0.2}
+      {/* Content Container */}
+      <div className="mx-auto max-w-[1400px]">
+        <div className="footer-content grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-36">
+          {/* First Column: Logo (sub-col 1) and Text/Icons (sub-col 2) */}
+          <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-8 lg:gap-12 items-start">
+            <Link href="/" className="inline-block mt-2">
+              <Image
+                src="/images/svg/logo.svg"
+                alt="Properganda Logo"
+                width={207}
+                height={168}
+                className="w-auto h-auto min-w-[207px]"
               />
-            </svg>
-          ))}
-        </div>
-
-        {/* Bottom bar */}
-        <div className="border-t border-white/10 pt-8">
-          <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-            <div className="flex items-center gap-3">
-              <svg
-                width="28"
-                height="28"
-                viewBox="0 0 40 40"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                <path
-                  d="M20 2L36 11V29L20 38L4 29V11L20 2Z"
-                  stroke="#00E04A"
-                  strokeWidth="2"
-                  fill="none"
-                />
-                <text
-                  x="20"
-                  y="26"
-                  textAnchor="middle"
-                  fill="#00E04A"
-                  fontSize="18"
-                  fontWeight="700"
-                  fontFamily="sans-serif"
-                >
-                  P
-                </text>
-              </svg>
-              <span className="text-xs tracking-[0.25em] text-brand-gray uppercase">
-                Properganda
-              </span>
+            </Link>
+            
+            <div className="flex flex-col gap-8">
+              <h2 className="text-[30px] font-bold leading-tight text-brand-green sm:text-4xl lg:h-[102px] lg:w-[332px] lg:text-[40px] lg:leading-[51px]">
+                We&apos;re not big.<br />
+                But we&apos;re Proper.
+              </h2>
+              
+              <div className="flex gap-4">
+                <Link href="#" className="hover:scale-110 transition-transform">
+                  <Image src="/images/svg/insta.svg" alt="Instagram" width={48} height={48} />
+                </Link>
+                <Link href="#" className="hover:scale-110 transition-transform">
+                  <Image src="/images/svg/x.svg" alt="X (formerly Twitter)" width={48} height={48} />
+                </Link>
+                <Link href="#" className="hover:scale-110 transition-transform">
+                  <Image src="/images/svg/linkedin.svg" alt="LinkedIn" width={48} height={48} />
+                </Link>
+              </div>
             </div>
+          </div>
 
-            <nav aria-label="Footer navigation" className="flex gap-6">
-              <a href="#about" className="text-xs text-brand-gray transition-colors hover:text-brand-green">
-                About
-              </a>
-              <a href="#work" className="text-xs text-brand-gray transition-colors hover:text-brand-green">
-                Work
-              </a>
-              <a href="#services" className="text-xs text-brand-gray transition-colors hover:text-brand-green">
-                Services
-              </a>
-              <a href="#contact" className="text-xs text-brand-gray transition-colors hover:text-brand-green">
-                Contact
-              </a>
+          {/* Second Column: Navigation and Info */}
+          <div className="flex flex-col gap-24">
+            {/* First Row: Nav Links - Full Width Distribution */}
+            <nav className="flex flex-wrap justify-between gap-y-4">
+              <Link href="/about" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">About Us</Link>
+              <Link href="/services" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">What We Do</Link>
+              <Link href="/clients" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">Clients</Link>
+              <Link href="/contact" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">Contact</Link>
             </nav>
 
-            <p className="text-xs text-brand-gray">
-              &copy; {new Date().getFullYear()} Properganda. All rights reserved.
-            </p>
+            {/* Second Row: Detailed Info - Spread out */}
+            <div className="flex flex-wrap justify-between gap-12">
+              <div className="space-y-6">
+                <h3 className="font-bold uppercase tracking-wider text-[31px] text-white">Locations</h3>
+                <div className="space-y-2 text-lg text-brand-gray">
+                  <p>Sao Tome and Principe</p>
+                  <p>(208) 555-0112</p>
+                </div>
+              </div>
+              <div className="space-y-6 lg:min-w-[300px]">
+                <h3 className="font-bold uppercase tracking-wider text-[31px] text-white">Other</h3>
+                <div className="space-y-2 text-lg text-brand-gray">
+                  <p><Link href="/brand-book" className="hover:text-brand-green underline transition-colors">Brand Book</Link></p>
+                  <p><Link href="/employee-hand-book" className="hover:text-brand-green underline transition-colors">Employee Hand Book</Link></p>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
+
+      {/* Bottom Bar with Full-Width Border */}
+      <div className="mt-20 border-t border-white/10 pt-8">
+        <div className="mx-auto max-w-[1400px] px-4 sm:px-6 md:px-10 lg:px-16 text-center sm:text-left">
+          <p className="text-sm text-brand-gray">
+            Copyright &copy; 2025 Properganda - All Rights Reserved.
+          </p>
         </div>
       </div>
     </footer>

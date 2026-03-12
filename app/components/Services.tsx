@@ -149,7 +149,7 @@ export default function Services() {
         </p>
 
         <div
-          className="flex flex-col gap-2"
+          className="flex flex-col gap-1"
           onMouseLeave={handleListMouseLeave}
         >
           {services.map((service, index) => (
@@ -167,7 +167,7 @@ export default function Services() {
                   fontFamily: "Inter, sans-serif",
                   fontWeight: 700,
                   fontSize: "clamp(2.5rem, 7vw, 100px)",
-                  lineHeight: "125px",
+                  lineHeight: "1.2",
                   letterSpacing: "0%",
                 }}
               >
@@ -179,7 +179,7 @@ export default function Services() {
                 ref={(el) => { subRefs.current[index] = el; }}
                 style={{ height: 0, opacity: 0, overflow: "hidden" }}
               >
-                <p className="pt-2 text-[0.75rem] text-white tracking-wide leading-relaxed">
+                <p className="text-[0.75rem] text-white tracking-wide leading-relaxed">
                   {service.subItems.slice(0, 3).map((item, i) => (
                     <span key={item}>
                       <span className="underline underline-offset-2 cursor-pointer hover:opacity-70 transition-opacity">
