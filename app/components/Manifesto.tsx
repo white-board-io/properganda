@@ -33,8 +33,6 @@ export default function Manifesto() {
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
   
   const sectionRef = useRef<HTMLElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
-  const authorRef = useRef<HTMLDivElement>(null);
 
   const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
@@ -52,34 +50,11 @@ export default function Manifesto() {
     emblaApi.on("reInit", onSelect);
   }, [emblaApi, onSelect]);
 
-  useGSAP(
-    () => {
-      // Animation for switching slides
-      const tl = gsap.timeline();
-      tl.to([textRef.current, authorRef.current], {
-        opacity: 0,
-        y: 20,
-        filter: "blur(4px)",
-        duration: 0.4,
-        ease: "power2.in",
-      })
-      .set([textRef.current, authorRef.current], {
-        y: -20,
-      })
-      .to([textRef.current, authorRef.current], {
-        opacity: 1,
-        y: 0,
-        filter: "blur(0px)",
-        duration: 0.6,
-        ease: "power3.out",
-      });
-    },
-    { dependencies: [selectedIndex], scope: sectionRef }
-  );
 
   return (
     <section
       ref={sectionRef}
+      id="manifesto"
       className="bg-[#F5F5F7] px-4 py-24 sm:px-6 md:px-10 md:py-32 lg:px-16 overflow-hidden"
       aria-label="Brand manifesto carousel"
     >
@@ -111,7 +86,7 @@ export default function Manifesto() {
             {manifestoData.map((slide, index) => (
               <div className="flex-[0_0_100%] min-w-0" key={index}>
                 <div className="relative bg-white rounded-2xl p-10 md:p-16 shadow-[0_10px_40px_rgba(0,0,0,0.03)] mb-14 mx-4">
-                  <div ref={index === selectedIndex ? textRef : null} className="text-brand-black text-[15px] leading-relaxed md:text-[18px] font-inter">
+                  <div className="text-brand-black text-[15px] leading-relaxed md:text-[18px] font-inter">
                     {slide.text.split(' ').map((word, i) => {
                       const cleanedWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
                       const isBold = ["ipsum", "dolor", "sit", "amet", "consectetur"].includes(cleanedWord.toLowerCase());
@@ -137,7 +112,7 @@ export default function Manifesto() {
                 </div>
 
                 {/* Footer Area with Avatar and Logo */}
-                <div ref={index === selectedIndex ? authorRef : null} className="flex flex-col md:flex-row items-end justify-between px-10 gap-8">
+                <div className="flex flex-col md:flex-row items-end justify-between px-10 gap-8">
                   <div className="flex items-center gap-5">
                     <div className="relative w-16 h-16 rounded-full overflow-hidden grayscale ring-1 ring-black/5">
                       <Image 
@@ -157,29 +132,22 @@ export default function Manifesto() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col items-center gap-1 md:items-end">
-                    <div className="flex items-center gap-2">
-                      <svg
-                        width="40"
-                        height="40"
-                        viewBox="0 0 80 80"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="translate-y-1"
-                      >
-                        <rect x="10" y="20" width="60" height="6" rx="1" fill="#141E3C" />
-                        <rect x="15" y="30" width="50" height="4" rx="1" fill="#141E3C" />
-                        <rect x="22" y="34" width="6" height="40" rx="1" fill="#141E3C" />
-                        <rect x="52" y="34" width="6" height="40" rx="1" fill="#141E3C" />
-                      </svg>
-                      <span className="font-display text-[42px] tracking-tighter text-[#141E3C] leading-none mb-[-4px]">
-                        torii
-                      </span>
-                    </div>
-                  </div>
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Static Torii Image - Positioned outside the slide loop */}
+        <div className="absolute bottom-[115px] right-[40px] pointer-events-none z-10 hidden md:block">
+          <div className="flex items-center gap-2">
+             <Image 
+               src="/images/svg/torii.svg" 
+               alt="Torii" 
+               width={80} 
+               height={80} 
+               className="h-10 w-auto"
+             />
           </div>
         </div>
 

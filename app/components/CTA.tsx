@@ -1,15 +1,29 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function CTA() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [selectedService, setSelectedService] = useState("");
+
+  const services = [
+    { value: "branding", label: "Branding" },
+    { value: "marketing", label: "Marketing" },
+    { value: "design", label: "Design" },
+  ];
 
   useGSAP(
     () => {
@@ -144,7 +158,7 @@ export default function CTA() {
                     type="text"
                     id="name"
                     placeholder="Enter your Name"
-                    className="w-[370px] h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm outline-none focus:border-[#169D52] transition-colors font-inter"
+                    className="w-[370px] h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm text-brand-black placeholder:text-brand-gray/50 outline-none focus:border-[#169D52] transition-colors font-inter"
                     required
                   />
                 </div>
@@ -160,7 +174,7 @@ export default function CTA() {
                     type="email"
                     id="email"
                     placeholder="Enter your email ID"
-                    className="w-[370px] h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm outline-none focus:border-[#169D52] transition-colors font-inter"
+                    className="w-[370px] h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm text-brand-black placeholder:text-brand-gray/50 outline-none focus:border-[#169D52] transition-colors font-inter"
                     required
                   />
                 </div>
@@ -176,7 +190,7 @@ export default function CTA() {
                     type="tel"
                     id="mobile"
                     placeholder="Enter your Mobile number"
-                    className="w-[370px] h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm outline-none focus:border-[#169D52] transition-colors font-inter"
+                    className="w-[370px] h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm text-brand-black placeholder:text-brand-gray/50 outline-none focus:border-[#169D52] transition-colors font-inter"
                     required
                   />
                 </div>
@@ -189,33 +203,34 @@ export default function CTA() {
                     Service <span className="text-red-500">*</span>
                   </label>
                   <div className="relative w-[370px]">
-                    <select
-                      id="service"
-                      className="w-full h-[62px] appearance-none rounded-[4px] border border-brand-black/20 px-4 pr-10 text-sm outline-none focus:border-[#169D52] transition-colors bg-white font-inter"
-                      required
-                      defaultValue=""
-                    >
-                      <option value="" disabled>
-                        Select your Service
-                      </option>
-                      <option value="branding">Branding</option>
-                      <option value="marketing">Marketing</option>
-                      <option value="design">Design</option>
-                    </select>
-                    <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <polyline points="6 9 12 15 18 9" />
-                      </svg>
-                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button
+                          type="button"
+                          className="flex w-full items-center justify-between h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm outline-none focus:border-[#169D52] transition-colors bg-white font-inter text-left"
+                        >
+                          <span className={selectedService ? "text-brand-black" : "text-brand-gray-dark/50"}>
+                            {selectedService 
+                              ? services.find(s => s.value === selectedService)?.label 
+                              : "Select your Service"}
+                          </span>
+                          <ChevronDown className="size-6 text-brand-black opacity-80" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-[370px] bg-white border-brand-black/20">
+                        {services.map((service) => (
+                          <DropdownMenuItem
+                            key={service.value}
+                            onClick={() => setSelectedService(service.value)}
+                            className="cursor-pointer hover:bg-[#169D52]/10 focus:bg-[#169D52]/10"
+                          >
+                            {service.label}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    {/* Hidden input for form submission */}
+                    <input type="hidden" name="service" value={selectedService} required />
                   </div>
                 </div>
               </div>
@@ -230,7 +245,7 @@ export default function CTA() {
                 </label>
                 <textarea
                   id="message"
-                  className="w-full lg:w-[797px] h-[162px] resize-none rounded-[4px] border border-brand-black/20 p-4 text-sm outline-none focus:border-[#169D52] transition-colors font-inter"
+                  className="w-full lg:w-[797px] h-[162px] resize-none rounded-[4px] border border-brand-black/20 p-4 text-sm text-brand-black placeholder:text-brand-gray/50 outline-none focus:border-[#169D52] transition-colors font-inter"
                   placeholder=""
                   required
                 ></textarea>

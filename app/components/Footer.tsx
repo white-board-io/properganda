@@ -75,23 +75,23 @@ export default function Footer() {
           <div className="flex flex-col gap-24">
             {/* First Row: Nav Links - Full Width Distribution */}
             <nav className="flex flex-wrap justify-between gap-y-4">
-              <Link href="/about" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">About Us</Link>
-              <Link href="/services" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">What We Do</Link>
-              <Link href="/clients" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">Clients</Link>
-              <Link href="/contact" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">Contact</Link>
+              <Link href="#about" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">About Us</Link>
+              <Link href="#services" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">What We Do</Link>
+              <Link href="#manifesto" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">Clients</Link>
+              <Link href="#contact" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">Contact</Link>
             </nav>
 
             {/* Second Row: Detailed Info - Spread out */}
             <div className="flex flex-wrap justify-between gap-12">
               <div className="space-y-6">
-                <h3 className="font-bold uppercase tracking-wider text-[31px] text-white">Locations</h3>
+                <h3 className="font-bold tracking-wider text-[31px] text-white">Locations</h3>
                 <div className="space-y-2 text-lg text-brand-gray">
                   <p>Sao Tome and Principe</p>
                   <p>(208) 555-0112</p>
                 </div>
               </div>
               <div className="space-y-6 lg:min-w-[300px]">
-                <h3 className="font-bold uppercase tracking-wider text-[31px] text-white">Other</h3>
+                <h3 className="font-bold tracking-wider text-[31px] text-white">Other</h3>
                 <div className="space-y-2 text-lg text-brand-gray">
                   <p><Link href="/brand-book" className="hover:text-brand-green underline transition-colors">Brand Book</Link></p>
                   <p><Link href="/employee-hand-book" className="hover:text-brand-green underline transition-colors">Employee Hand Book</Link></p>

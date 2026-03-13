@@ -77,7 +77,7 @@ export default function Header() {
             What We Do
           </a>
           <a
-            href="#clients"
+            href="#manifesto"
             className="font-inter-google text-[20px] leading-[20px] text-white transition-colors hover:text-brand-green"
           >
             Clients

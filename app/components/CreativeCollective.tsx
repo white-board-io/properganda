@@ -84,8 +84,8 @@ export default function CreativeCollective() {
                   style={{
                     fontFamily: "'Bebas Neue', sans-serif",
                     fontWeight: 400,
-                    fontSize: "120px",
-                    lineHeight: "120px",
+                    fontSize: "88px",
+                    lineHeight: "78px",
                     letterSpacing: "0%",
                   }}
                 >
@@ -102,7 +102,7 @@ export default function CreativeCollective() {
                   style={{
                     fontFamily: "'Inter', sans-serif",
                     fontWeight: 300,
-                    fontSize: "24px",
+                    fontSize: "23px",
                     lineHeight: "144%",
                     letterSpacing: "0.02em",
                   }}
