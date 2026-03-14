@@ -1,14 +1,29 @@
 "use client";
 
-import { useRef } from "react";
+import Image from "next/image";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function CTA() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [selectedService, setSelectedService] = useState("");
+
+  const services = [
+    { value: "branding", label: "Branding" },
+    { value: "marketing", label: "Marketing" },
+    { value: "design", label: "Design" },
+  ];
 
   useGSAP(
     () => {
@@ -20,70 +35,244 @@ export default function CTA() {
         },
       });
 
-      tl.from(".cta-heading", {
+      tl.from(".cta-card", {
         opacity: 0,
         y: 60,
         duration: 0.8,
         ease: "power3.out",
       })
         .from(
-          ".cta-grid-item",
+          ".cta-content > *",
           {
             opacity: 0,
-            y: 40,
-            stagger: 0.08,
+            y: 20,
+            stagger: 0.1,
             duration: 0.5,
             ease: "power2.out",
           },
-          "-=0.4"
+          "-=0.4",
         )
         .from(
-          ".cta-decor",
+          ".cta-form-item",
           {
             opacity: 0,
-            scale: 0.5,
-            rotation: -90,
-            duration: 1,
-            ease: "back.out(1.5)",
+            y: 20,
+            stagger: 0.05,
+            duration: 0.5,
+            ease: "power2.out",
           },
-          "-=0.6"
+          "-=0.3",
         );
     },
-    { scope: sectionRef }
+    { scope: sectionRef },
   );
 
   return (
     <section
       ref={sectionRef}
       id="contact"
-      className="relative overflow-hidden bg-brand-gray-dark py-24 md:py-32"
+      className="relative bg-white font-inter-google"
       aria-label="Get in touch"
     >
-      {/* Decorative green glow */}
-      <div
-        className="cta-decor absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-brand-green/10 blur-3xl"
-        aria-hidden="true"
-      />
+      {/* Split Background Effect */}
+      <div className="absolute inset-0 flex flex-col pointer-events-none">
+        <div className="h-1/2 bg-[#F5F5F5]" />
+        <div className="h-1/2 bg-[#169D52]" />
+      </div>
 
-      <div className="relative mx-auto max-w-[1140px] px-10 sm:px-16 md:px-20 lg:px-24">
-        <div className="grid items-center gap-12 md:grid-cols-2">
-          <div>
-            <p className="mb-4 text-[10px] tracking-[0.3em] text-brand-gray uppercase">
-              Get In Touch
-            </p>
-            <h2 className="cta-heading font-display text-[clamp(3rem,7vw,6rem)] leading-[1] tracking-wide text-white">
-              Let&apos;s
-              <br />
-              get started!
-            </h2>
-          </div>
+      <div className="relative mx-auto flex min-h-screen items-center justify-center px-4 py-20 sm:px-6 md:px-10 lg:px-16">
+        <div className="cta-card overflow-hidden rounded-[16px] bg-white p-8 md:p-16 lg:p-[100px] shadow-2xl w-full max-w-[1400px] lg:h-[798px]">
+          <div className="flex flex-col lg:flex-row lg:justify-between h-full gap-12 lg:gap-0">
+            {/* Left Column: Info */}
+            <div className="cta-content flex flex-col h-full w-full lg:w-[385px]">
+              <span className="mb-8 text-sm font-bold tracking-[0.2em] text-[#169D52] uppercase">
+                Contact
+              </span>
+              <h2 className="mb-10 w-[300px] h-[92px] font-inter font-bold text-[42px] leading-[42px] tracking-[0%] text-brand-black">
+                Let&apos;s
+                <br />
+                get started!
+              </h2>
 
-          {/* Decorative grid blocks (matching mock layout) */}
-          <div className="grid grid-cols-3 gap-3" aria-hidden="true">
-            <div className="cta-grid-item col-span-2 aspect-[2/1] rounded-lg bg-brand-black" />
-            <div className="cta-grid-item aspect-square rounded-lg bg-brand-green" />
-            <div className="cta-grid-item aspect-square rounded-lg bg-brand-green" />
-            <div className="cta-grid-item col-span-2 aspect-[2/1] rounded-lg bg-brand-black" />
+              <div className="mb-12 w-[385px] h-[129px]">
+                <p className="font-inter font-bold text-[20px] leading-[26px] tracking-[0%] text-brand-black">
+                  Need to make a mark?
+                  </p>
+                  <br />
+                  <p className="font-inter font-regular text-[20px] leading-[26px] tracking-[0%] text-brand-black">
+                  Our team delivers impressive results
+                  <br />
+                  and expert execution. Visionary
+                  <br />
+                  or overwhelmed, we&apos;re here to help!
+                  <br />
+                  Expect a response within 24 hours.
+                </p>
+              </div>
+
+              <div className="mt-auto space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-[40px] w-[40px] items-center justify-center">
+                    <Image
+                      src="/images/svg/mail.svg"
+                      alt="Mail"
+                      width={40}
+                      height={20}
+                    />
+                  </div>
+                  <a
+                    href="mailto:ping@properganda.in"
+                    className="text-[20px] font-semibold leading-[26px] text-brand-black hover:text-[#169D52] transition-colors font-inter"
+                  >
+                    ping@properganda.in
+                  </a>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="flex h-[40px] w-[40px] items-center justify-center">
+                    <Image
+                      src="/images/svg/phone.svg"
+                      alt="Phone"
+                      width={30}
+                      height={30}
+                    />
+                  </div>
+                  <span className="text-[20px] font-semibold leading-[26px] text-brand-black font-inter">
+                    00000 00000
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Form */}
+            <form className="flex flex-col gap-8 w-full lg:w-[797px] h-full">
+              <div className="grid grid-cols-1 gap-y-6 gap-x-14 md:grid-cols-2">
+                {/* Name */}
+                <div className="cta-form-item flex flex-col gap-2">
+                  <label
+                    htmlFor="name"
+                    className="text-sm font-bold text-brand-black font-inter"
+                  >
+                    Name<span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter your Name"
+                    className="w-[370px] h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm text-brand-black placeholder:text-brand-gray/50 outline-none focus:border-[#169D52] transition-colors font-inter"
+                    required
+                  />
+                </div>
+                {/* Email */}
+                <div className="cta-form-item flex flex-col gap-2">
+                  <label
+                    htmlFor="email"
+                    className="text-sm font-bold text-brand-black font-inter"
+                  >
+                    Email<span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email ID"
+                    className="w-[370px] h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm text-brand-black placeholder:text-brand-gray/50 outline-none focus:border-[#169D52] transition-colors font-inter"
+                    required
+                  />
+                </div>
+                {/* Mobile */}
+                <div className="cta-form-item flex flex-col gap-2">
+                  <label
+                    htmlFor="mobile"
+                    className="text-sm font-bold text-brand-black font-inter"
+                  >
+                    Mobile<span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    id="mobile"
+                    placeholder="Enter your Mobile number"
+                    className="w-[370px] h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm text-brand-black placeholder:text-brand-gray/50 outline-none focus:border-[#169D52] transition-colors font-inter"
+                    required
+                  />
+                </div>
+                {/* Service */}
+                <div className="cta-form-item flex flex-col gap-2">
+                  <label
+                    htmlFor="service"
+                    className="text-sm font-bold text-brand-black font-inter"
+                  >
+                    Service <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative w-[370px]">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button
+                          type="button"
+                          className="flex w-full items-center justify-between h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm outline-none focus:border-[#169D52] transition-colors bg-white font-inter text-left"
+                        >
+                          <span className={selectedService ? "text-brand-black" : "text-brand-gray-dark/50"}>
+                            {selectedService 
+                              ? services.find(s => s.value === selectedService)?.label 
+                              : "Select your Service"}
+                          </span>
+                          <ChevronDown className="size-6 text-brand-black opacity-80" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-[370px] bg-white border-brand-black/20">
+                        {services.map((service) => (
+                          <DropdownMenuItem
+                            key={service.value}
+                            onClick={() => setSelectedService(service.value)}
+                            className="cursor-pointer hover:bg-[#169D52]/10 focus:bg-[#169D52]/10"
+                          >
+                            {service.label}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    {/* Hidden input for form submission */}
+                    <input type="hidden" name="service" value={selectedService} required />
+                  </div>
+                </div>
+              </div>
+
+              {/* Message */}
+              <div className="cta-form-item flex flex-col gap-2">
+                <label
+                  htmlFor="message"
+                  className="text-sm font-bold text-brand-black font-inter"
+                >
+                  How can we help?<span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  id="message"
+                  className="w-full lg:w-[797px] h-[162px] resize-none rounded-[4px] border border-brand-black/20 p-4 text-sm text-brand-black placeholder:text-brand-gray/50 outline-none focus:border-[#169D52] transition-colors font-inter"
+                  placeholder=""
+                  required
+                ></textarea>
+              </div>
+
+              {/* Submit */}
+              <div className="cta-form-item mt-4">
+                <button
+                  type="submit"
+                  className="group flex items-center justify-between gap-4 rounded-xl bg-[#169D52] px-8 py-4 font-medium text-white transition-all hover:bg-[#169D52] active:scale-[0.98] w-fit font-inter"
+                >
+                  Request For Free Consultation
+                  <svg
+                    className="h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="7" y1="17" x2="17" y2="7" />
+                    <polyline points="7 7 17 7 17 17" />
+                  </svg>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

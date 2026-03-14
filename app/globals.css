@@ -11,7 +11,12 @@
   --color-brand-green-muted: #1A3D2A;
 }
 
-@theme inline {
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@theme {
   --color-background: var(--color-brand-black);
   --color-foreground: var(--color-brand-white);
   --color-brand-black: var(--color-brand-black);
@@ -22,15 +27,18 @@
   --color-brand-gray: var(--color-brand-gray);
   --color-brand-gray-dark: var(--color-brand-gray-dark);
   --color-brand-green-muted: var(--color-brand-green-muted);
-  --font-body: var(--font-inter);
+  --font-sans: var(--font-inter-google), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter-google);
   --font-display: var(--font-bebas-neue);
+  --font-inter: var(--font-inter-google);
+  --font-inter-google: var(--font-inter-google);
+  --animate-spin-slow: spin-slow 8s linear infinite;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@utility font-inter-google {
+  font-family: var(--font-inter-google), ui-sans-serif, system-ui, sans-serif !important;
 }
+
 
 html {
   scroll-behavior: smooth;

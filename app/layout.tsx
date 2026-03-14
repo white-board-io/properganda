@@ -4,7 +4,7 @@ import { Bebas_Neue } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
-  variable: "--font-inter",
+  variable: "--font-inter-google",
   subsets: ["latin"],
 });
 
