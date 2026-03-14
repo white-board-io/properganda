@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Bebas_Neue } from "next/font/google";
+import { metadataBase, siteConfig } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,9 +16,31 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "Properganda | Creativity With A Conscience",
-  description:
-    "We build brands. We design campaigns. We craft stories. We shape conversations.",
+  metadataBase,
+  category: "marketing",
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  applicationName: siteConfig.name,
+  keywords: [...siteConfig.defaultKeywords],
+  description: siteConfig.defaultDescription,
+  icons: {
+    icon: "/favicon.ico",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+    },
+  },
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
 };
 
 export default function RootLayout({
