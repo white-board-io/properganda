@@ -11,6 +11,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function Footer() {
   const sectionRef = useRef<HTMLElement>(null);
+  const currentYear = new Date().getFullYear();
 
   useGSAP(
     () => {
@@ -27,7 +28,7 @@ export default function Footer() {
         },
       });
     },
-    { scope: sectionRef }
+    { scope: sectionRef },
   );
 
   return (
@@ -50,22 +51,38 @@ export default function Footer() {
                 className="w-auto h-auto min-w-[207px]"
               />
             </Link>
-            
+
             <div className="flex flex-col gap-8">
               <h2 className="text-[30px] font-bold leading-tight text-brand-green sm:text-4xl lg:h-[102px] lg:w-[332px] lg:text-[40px] lg:leading-[51px]">
-                We&apos;re not big.<br />
+                We&apos;re not big.
+                <br />
                 But we&apos;re Proper.
               </h2>
-              
+
               <div className="flex gap-4">
                 <Link href="#" className="hover:scale-110 transition-transform">
-                  <Image src="/images/svg/insta.svg" alt="Instagram" width={48} height={48} />
+                  <Image
+                    src="/images/svg/insta.svg"
+                    alt="Instagram"
+                    width={48}
+                    height={48}
+                  />
                 </Link>
                 <Link href="#" className="hover:scale-110 transition-transform">
-                  <Image src="/images/svg/x.svg" alt="X (formerly Twitter)" width={48} height={48} />
+                  <Image
+                    src="/images/svg/x.svg"
+                    alt="X (formerly Twitter)"
+                    width={48}
+                    height={48}
+                  />
                 </Link>
                 <Link href="#" className="hover:scale-110 transition-transform">
-                  <Image src="/images/svg/linkedin.svg" alt="LinkedIn" width={48} height={48} />
+                  <Image
+                    src="/images/svg/linkedin.svg"
+                    alt="LinkedIn"
+                    width={48}
+                    height={48}
+                  />
                 </Link>
               </div>
             </div>
@@ -75,26 +92,64 @@ export default function Footer() {
           <div className="flex flex-col gap-24">
             {/* First Row: Nav Links - Full Width Distribution */}
             <nav className="flex flex-wrap justify-between gap-y-4">
-              <Link href="#about" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">About Us</Link>
-              <Link href="#services" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">What We Do</Link>
-              <Link href="#manifesto" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">Clients</Link>
-              <Link href="#contact" className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors">Contact</Link>
+              <Link
+                href="#about"
+                className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors"
+              >
+                About Us
+              </Link>
+              <Link
+                href="#services"
+                className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors"
+              >
+                What We Do
+              </Link>
+              <Link
+                href="#manifesto"
+                className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors"
+              >
+                Clients
+              </Link>
+              <Link
+                href="#contact"
+                className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors"
+              >
+                Contact
+              </Link>
             </nav>
 
             {/* Second Row: Detailed Info - Spread out */}
             <div className="flex flex-wrap justify-between gap-12">
               <div className="space-y-6">
-                <h3 className="font-bold tracking-wider text-[31px] text-white">Locations</h3>
+                <h3 className="font-bold tracking-wider text-[31px] text-white">
+                  Locations
+                </h3>
                 <div className="space-y-2 text-lg text-brand-gray">
                   <p>Sao Tome and Principe</p>
                   <p>(208) 555-0112</p>
                 </div>
               </div>
               <div className="space-y-6 lg:min-w-[300px]">
-                <h3 className="font-bold tracking-wider text-[31px] text-white">Other</h3>
+                <h3 className="font-bold tracking-wider text-[31px] text-white">
+                  Other
+                </h3>
                 <div className="space-y-2 text-lg text-brand-gray">
-                  <p><Link href="/brand-book" className="hover:text-brand-green underline transition-colors">Brand Book</Link></p>
-                  <p><Link href="/employee-hand-book" className="hover:text-brand-green underline transition-colors">Employee Hand Book</Link></p>
+                  <p>
+                    <Link
+                      href="/brand-book"
+                      className="hover:text-brand-green underline transition-colors"
+                    >
+                      Brand Book
+                    </Link>
+                  </p>
+                  <p>
+                    <Link
+                      href="/employee-hand-book"
+                      className="hover:text-brand-green underline transition-colors"
+                    >
+                      Employee Hand Book
+                    </Link>
+                  </p>
                 </div>
               </div>
             </div>
@@ -106,7 +161,7 @@ export default function Footer() {
       <div className="mt-20 border-t border-white/10 pt-8">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 md:px-10 lg:px-16 text-center sm:text-left">
           <p className="text-sm text-brand-gray">
-            Copyright &copy; 2025 Properganda - All Rights Reserved.
+            Copyright &copy; {currentYear} Properganda - All Rights Reserved.
           </p>
         </div>
       </div>
