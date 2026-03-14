@@ -17,7 +17,7 @@ const bebasNeue = Bebas_Neue({
 
 export const metadata: Metadata = {
   metadataBase,
-  category: "marketing",
+  category: "business",
   creator: siteConfig.name,
   publisher: siteConfig.name,
   applicationName: siteConfig.name,
