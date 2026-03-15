@@ -39,7 +39,7 @@ export default function TorriStatementGraphic({
 
   return (
     <svg
-      viewBox="0 -20 1320 390"
+      viewBox="0 -100 1320 470"
       role="img"
       aria-labelledby="torri-statement-title"
       className={className}

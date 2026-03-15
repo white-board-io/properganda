@@ -92,13 +92,13 @@ export default function AboutUs() {
               </section>
             </section>
 
-            <section className="relative z-20">
+            <section className="relative z-20 -mt-20">
               <section className="cc-image w-full max-w-6xl">
                 <TorriStatementGraphic className="h-auto w-full" />
               </section>
               <a
                 href="#contact"
-                className="cc-text-item mt-6 inline-block text-sm font-medium text-white underline decoration-white/30 underline-offset-8 transition-colors hover:decoration-white"
+                className="cc-text-item inline-block text-sm font-medium text-white underline decoration-white/30 underline-offset-8 transition-colors hover:decoration-white"
               >
                 Be a part of Us
               </a>
