@@ -10,6 +10,8 @@ import { SiteContainer } from "@/components/ui/site-container";
 
 gsap.registerPlugin(useGSAP);
 
+const SLOT_WORDS = ["STAND", "SHINE", "SOAR", "THRIVE", "LEAD"] as const;
+
 const ORBIT_COPY = "COMMANDMENTS  ";
 const orbitCharacters = Array.from(ORBIT_COPY).map((char, index) => ({
   id: `${char === " " ? "space" : char}-${index}`,
@@ -26,7 +28,9 @@ export default function Hero({
   const sectionRef = useRef<HTMLElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
   const subtextRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLSpanElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const standRef = useRef<HTMLParagraphElement>(null);
   const orbitContainerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -36,13 +40,86 @@ export default function Hero({
       const textTargets = [headingRef.current, subtextRef.current].filter(
         Boolean,
       );
+      const chars = Array.from(
+        headingRef.current?.querySelectorAll<HTMLElement>(".typewriter-char") ??
+          [],
+      );
+      const cursor = cursorRef.current;
 
+      // Initial states — chars + cursor stay hidden while the h1 fades in
       gsap.set(textTargets, { opacity: 0 });
-      gsap.to(textTargets, {
-        opacity: 1,
-        duration: 1,
-        ease: "circ.out",
-        delay: 0.1,
+      gsap.set(chars, { opacity: 0 });
+      gsap.set(cursor, { opacity: 0 });
+
+      // Cursor blink tween — started manually after opacity reveal
+      const cursorBlink = gsap.to(cursor, {
+        opacity: 0,
+        yoyo: true,
+        repeat: -1,
+        paused: true,
+        duration: 0.6,
+        ease: "expo.inOut",
+      });
+
+      const tl = gsap.timeline({ delay: 0.1 });
+
+      // 1. Fade-in "Creativity With A" + subtext; pin "typing" label at its START
+      tl.to(textTargets, { opacity: 1, duration: 1, ease: "circ.out" }).addLabel(
+        "typing",
+        "<",
+      );
+
+      // 2. Cursor appears at t=0 of the opacity tween — fully parallel, zero wait
+      tl.call(
+        () => {
+          if (!cursor) return;
+          chars[0]?.before(cursor);
+          gsap.set(cursor, { opacity: 1 });
+          cursorBlink.play();
+        },
+        [],
+        "typing",
+      );
+
+      // 3. Each char + cursor move anchored to "typing" — C_ → Co_ → Con_ …
+      chars.forEach((char, i) => {
+        const t = `typing+=${i * 0.07}`;
+        tl.set(char, { opacity: 1 }, t);
+        tl.call(() => { if (cursor) char.after(cursor); }, [], t);
+      });
+    },
+    { scope: sectionRef, dependencies: [variant] },
+  );
+
+  useGSAP(
+    () => {
+      if (variant !== "default" || !standRef.current) return;
+
+      const HOLD = 2;
+      const ROLL = 0.55;
+
+      const wordEls = Array.from(
+        standRef.current.querySelectorAll<HTMLElement>(".word-slot"),
+      );
+
+      // Initial state: first word (STAND) visible, rest queued below
+      gsap.set(wordEls[0], { y: "0%" });
+      gsap.set(wordEls.slice(1), { y: "110%" });
+
+      const cycleTl = gsap.timeline({ repeat: -1, delay: HOLD });
+
+      wordEls.forEach((_, i) => {
+        const cur = wordEls[i];
+        const nxt = wordEls[(i + 1) % wordEls.length];
+
+        cycleTl
+          // Ensure next word is staged below before it enters
+          .set(nxt, { y: "110%" })
+          // Current exits upward, next rolls in from below — fully parallel
+          .to(cur, { y: "-100%", duration: ROLL, ease: "power3.inOut" })
+          .to(nxt, { y: "0%", duration: ROLL, ease: "power3.inOut" }, "<")
+          // Hold this word before rolling to the next
+          .to({}, { duration: HOLD });
       });
     },
     { scope: sectionRef, dependencies: [variant] },
@@ -117,7 +194,19 @@ export default function Hero({
               className="font-bebas-neue uppercase font-normal text-[240px] leading-[208px] tracking-normal text-white"
             >
               <span className="block whitespace-nowrap">Creativity With</span>
-              <span className="block whitespace-nowrap">A Conscience</span>
+              <span className="block whitespace-nowrap">
+                {"A "}
+                {"Conscience".split("").map((char, i) => (
+                  <span key={i} className="typewriter-char text-green-500">
+                    {char}
+                  </span>
+                ))}
+                {/* Blinking underscore cursor — moves after each typed char */}
+                <span
+                  ref={cursorRef}
+                  className="inline-block w-[48px] h-[18px] bg-green-500 align-bottom translate-y-[-0.13em]"
+                />
+              </span>
             </h1>
 
             <section className="relative flex items-center justify-between">
@@ -126,8 +215,21 @@ export default function Hero({
                   For Brands <span className="font-bold text-white">&</span>{" "}
                   Businesses that want to
                 </p>
-                <p className="font-bebas-neue text-4xl tracking-wide text-white md:text-5xl">
-                  STAND
+                <p
+                  ref={standRef}
+                  className="relative overflow-hidden h-[1.1em] font-bebas-neue text-4xl tracking-wide text-white md:text-5xl"
+                >
+                  {SLOT_WORDS.map((word, i) => (
+                    <span
+                      key={word}
+                      className="word-slot absolute inset-x-0 top-0 leading-none"
+                      style={{
+                        transform: i === 0 ? "translateY(0%)" : "translateY(110%)",
+                      }}
+                    >
+                      {word}
+                    </span>
+                  ))}
                 </p>
               </div>
             </section>
@@ -236,9 +338,9 @@ export default function Hero({
             <text
               fontSize="16"
               fill="#FFFFFF"
-              fontFamily="sans-serif"
               fontWeight="bold"
               letterSpacing="1"
+              fontFamily="sans-serif"
             >
               <textPath
                 href="#badge-circle-bottom"
@@ -251,10 +353,10 @@ export default function Hero({
           </svg>
           <div className="absolute left-[40%] top-[45%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
             <Image
-              src="/images/svg/logo.svg"
-              alt="Properganda Logo"
               width={36}
               height={40}
+              alt="Properganda Logo"
+              src="/images/svg/logo.svg"
             />
           </div>
         </div>
