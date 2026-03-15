@@ -11,7 +11,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
 export default function CommandmentsPageClient() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {

@@ -5,14 +5,14 @@ import { metadataBase, siteConfig } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
-  variable: "--font-inter-google",
   subsets: ["latin"],
+  variable: "--font-inter-google",
 });
 
 const bebasNeue = Bebas_Neue({
-  variable: "--font-bebas-neue",
-  subsets: ["latin"],
   weight: "400",
+  subsets: ["latin"],
+  variable: "--font-bebas-neue",
 });
 
 export const metadata: Metadata = {

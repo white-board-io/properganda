@@ -5,21 +5,29 @@ import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
+import { SectionShell } from "@/components/ui/section-shell";
+import { SiteContainer } from "@/components/ui/site-container";
+
 gsap.registerPlugin(useGSAP);
+
+const ORBIT_COPY = "COMMANDMENTS  ";
+const orbitCharacters = Array.from(ORBIT_COPY).map((char, index) => ({
+  id: `${char === " " ? "space" : char}-${index}`,
+  char,
+}));
+
+type HeroVariant = "default" | "commandments";
 
 export default function Hero({
   variant = "default",
 }: {
-  variant?: "default" | "minimal" | "commandments";
+  variant?: HeroVariant;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const subtextRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
+  const subtextRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const orbitContainerRef = useRef<HTMLDivElement>(null);
-
-  const isMinimal = variant === "minimal";
-  const isCommandments = variant === "commandments";
 
   useGSAP(
     () => {
@@ -42,9 +50,9 @@ export default function Hero({
           badgeRef.current,
           {
             scale: 0,
-            rotation: -180,
             opacity: 0,
             duration: 1,
+            rotation: -180,
             ease: "back.out(1.7)",
             clearProps: "all",
           },
@@ -52,7 +60,7 @@ export default function Hero({
         );
       }
 
-      if (isCommandments && orbitContainerRef.current) {
+      if (variant === "commandments" && orbitContainerRef.current) {
         const chars = orbitContainerRef.current.querySelectorAll(".char-orbit");
         const radiusX = 240;
         const radiusY = 75;
@@ -87,105 +95,143 @@ export default function Hero({
         );
       }
     },
-    { scope: sectionRef, dependencies: [variant, "COMMANDMENTS  "] },
+    { scope: sectionRef, dependencies: [variant] },
   );
 
+  if (variant === "default") {
+    return (
+      <SectionShell
+        spacing="none"
+        variant="dark"
+        ref={sectionRef}
+        aria-label="Hero"
+        className="relative flex min-h-screen flex-col justify-center overflow-hidden px-0"
+      >
+        <section className="absolute inset-0">
+          <Image
+            fill
+            priority
+            sizes="100vw"
+            aria-hidden="true"
+            alt="Hero Background"
+            src="/images/hero-bg.png"
+            className="object-cover object-center opacity-100"
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-brand-black/80 via-brand-black/20 to-transparent" />
+        </section>
+
+        <SiteContainer className="z-10 w-full">
+          <section className="flex flex-col items-start justify-center gap-12">
+            <h1
+              ref={headingRef}
+              className="font-display uppercase font-normal text-[240px] leading-[208px] tracking-normal text-white"
+            >
+              <span className="block whitespace-nowrap">Creativity With</span>
+              <span className="block whitespace-nowrap">A Conscience</span>
+            </h1>
+
+            <section className="relative flex items-center justify-between">
+              <div ref={subtextRef} className="flex flex-col gap-1">
+                <p className="text-sm text-white/70">
+                  For Brands <span className="font-bold text-white">&</span>{" "}
+                  Businesses that want to
+                </p>
+                <p className="font-display text-4xl tracking-wide text-white md:text-5xl">
+                  STAND
+                </p>
+              </div>
+            </section>
+          </section>
+
+          <aside
+            ref={badgeRef}
+            aria-label="Let's Talk Button"
+            className="ui-hero-badge absolute bottom-20 right-8 flex h-24 w-24 items-center justify-center rounded-full transition-shadow md:h-20 md:w-20 lg:bottom-[4rem] lg:right-[1rem]"
+          >
+            <svg
+              width="100%"
+              height="100%"
+              viewBox="0 0 100 100"
+              className="absolute inset-0 rotate-[-60deg]"
+            >
+              <defs>
+                <path id="badge-circle-bottom" d="M 15,50 a 35,35 0 0,0 70,0" />
+              </defs>
+              <text
+                fontSize="16"
+                fill="#FFFFFF"
+                letterSpacing="1"
+                fontWeight="bold"
+                fontFamily="sans-serif"
+              >
+                <textPath
+                  startOffset="50%"
+                  textAnchor="middle"
+                  href="#badge-circle-bottom"
+                >
+                  LET&apos;S TALK
+                </textPath>
+              </text>
+            </svg>
+            <div className="absolute left-[40%] top-[45%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+              <Image
+                width={36}
+                height={40}
+                alt="Properganda Logo"
+                src="/images/svg/logo.svg"
+              />
+            </div>
+          </aside>
+        </SiteContainer>
+      </SectionShell>
+    );
+  }
+
   return (
-    <section
+    <SectionShell
       ref={sectionRef}
-      className={`relative flex min-h-screen flex-col bg-brand-black px-4 sm:px-6 md:px-10 lg:px-16 ${
-        isCommandments
-          ? "items-center justify-center overflow-hidden"
-          : "justify-end overflow-visible"
-      }`}
+      spacing="none"
+      variant="dark"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-0"
       aria-label="Hero"
     >
-      {/* Background image */}
       <div className="absolute inset-0">
         <Image
           src="/images/hero-bg.png"
           alt=""
           fill
           priority
+          sizes="100vw"
           className="object-cover object-center opacity-100"
           aria-hidden="true"
         />
-        <div
-          className={`absolute inset-0 ${isCommandments ? "bg-black/60" : "bg-gradient-to-t from-brand-black/80 via-brand-black/20 to-transparent"}`}
-        />
+        <div className="absolute inset-0 bg-black/60" />
       </div>
 
-      <div
-        className={`relative z-10 mx-auto w-full max-w-[1400px] ${
-          isCommandments ? "flex flex-col items-center justify-center" : ""
-        } ${isMinimal ? "pb-10 pt-10" : "pt-32"}`}
-      >
-        {isCommandments ? (
-          <div className="relative flex items-center justify-center pt-20">
-            {/* Letter by Letter Orbit */}
-            <div
-              ref={orbitContainerRef}
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[2400px] h-[800px] flex items-center justify-center pointer-events-none z-20"
-            >
-              {"COMMANDMENTS  ".split("").map((char, i) => (
-                <div
-                  key={i}
-                  className="char-orbit absolute font-black tracking-widest text-brand-green uppercase"
-                  style={{
-                    fontSize: "clamp(1.5rem, 4vw, 3rem)",
-                    textShadow: "0 0 20px rgba(22, 157, 82, 0.4)",
-                    opacity: 0.9,
-                  }}
-                >
-                  {char}
-                </div>
-              ))}
-            </div>
-
-            {/* Large 10 */}
-            <h1
-              className="text-[25rem] md:text-[35rem] leading-none font-black text-white mix-blend-overlay select-none"
-              style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-            >
-              10
-            </h1>
-          </div>
-        ) : (
-          !isMinimal && (
-            <>
-              <h1
-                ref={headingRef}
-                className="relative top-14 text-[clamp(4rem,11vw,13rem)] uppercase leading-[0.85] tracking-wide text-white"
-                style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+      <SiteContainer className="z-10 flex w-full flex-1 flex-col items-center justify-center">
+        <div className="relative flex items-center justify-center pt-20">
+          <div
+            ref={orbitContainerRef}
+            className="pointer-events-none absolute left-1/2 top-1/2 z-20 flex h-[800px] w-[2400px] -translate-x-1/2 -translate-y-1/2 items-center justify-center"
+          >
+            {orbitCharacters.map(({ id, char }) => (
+              <div
+                key={id}
+                className="ui-text-shadow-brand char-orbit absolute text-[clamp(1.5rem,4vw,3rem)] font-black uppercase tracking-widest text-green-500 opacity-90"
               >
-                <span className="block whitespace-nowrap">Creativity With</span>
-                <span className="block whitespace-nowrap">
-                  A{" "}
-                  <span className="transition-colors duration-300 hover:text-brand-green">
-                    Conscience
-                  </span>
-                </span>
-              </h1>
-
-              <div className="relative mt-24 md:mt-32 flex items-center justify-between">
-                <div ref={subtextRef} className="flex flex-col gap-1">
-                  <p className="text-sm text-white/70">
-                    For Brands{" "}
-                    <span className="font-bold text-white">& Businesses</span>{" "}
-                    that want to
-                  </p>
-                  <p className="font-display text-4xl tracking-wide text-white md:text-5xl">
-                    STAND
-                  </p>
-                </div>
+                {char}
               </div>
-            </>
-          )
-        )}
+            ))}
+          </div>
+
+          <h1 className="font-display text-[25rem] leading-none font-black text-white mix-blend-overlay select-none md:text-[35rem]">
+            10
+          </h1>
+        </div>
 
         <div
           ref={badgeRef}
-          className="absolute bottom-[5rem] right-[2rem] flex h-24 w-24 items-center justify-center rounded-full bg-[#169D52] shadow-[0_0_40px_rgba(0,224,74,0.3)] transition-shadow hover:shadow-[0_0_50px_rgba(0,224,74,0.5)] md:h-20 md:w-20 lg:bottom-[4rem] lg:right-[1rem]"
+          className="ui-hero-badge absolute bottom-[5rem] right-[2rem] flex h-24 w-24 items-center justify-center rounded-full transition-shadow md:h-20 md:w-20 lg:bottom-[4rem] lg:right-[1rem]"
           aria-label="Let's Talk"
         >
           <svg
@@ -209,11 +255,10 @@ export default function Hero({
                 textAnchor="middle"
                 startOffset="50%"
               >
-                LET'S TALK
+                LET&apos;S TALK
               </textPath>
             </text>
           </svg>
-          {/* Center icon - The properganda logo left aligned */}
           <div className="absolute left-[40%] top-[45%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
             <Image
               src="/images/svg/logo.svg"
@@ -223,7 +268,7 @@ export default function Hero({
             />
           </div>
         </div>
-      </div>
-    </section>
+      </SiteContainer>
+    </SectionShell>
   );
 }

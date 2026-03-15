@@ -1,29 +1,42 @@
 "use client";
 
-import Image from "next/image";
 import { useRef, useState } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { ChevronDown } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { SectionEyebrow } from "@/components/ui/section-eyebrow";
+import { SectionShell } from "@/components/ui/section-shell";
+import { SiteContainer } from "@/components/ui/site-container";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+const SERVICES = [
+  { value: "branding", label: "Branding" },
+  { value: "marketing", label: "Marketing" },
+  { value: "design", label: "Design" },
+];
 
 export default function CTA() {
   const sectionRef = useRef<HTMLElement>(null);
   const [selectedService, setSelectedService] = useState("");
 
-  const services = [
-    { value: "branding", label: "Branding" },
-    { value: "marketing", label: "Marketing" },
-    { value: "design", label: "Design" },
-  ];
+  const selectedServiceLabel = SERVICES.find(
+    (service) => service.value === selectedService,
+  )?.label;
 
   useGSAP(
     () => {
@@ -68,38 +81,39 @@ export default function CTA() {
   );
 
   return (
-    <section
+    <SectionShell
       ref={sectionRef}
       id="contact"
-      className="relative bg-white font-inter-google"
+      variant="light"
+      spacing="none"
+      className="relative min-h-screen overflow-hidden font-inter-google"
       aria-label="Get in touch"
     >
-      {/* Split Background Effect */}
       <div className="absolute inset-0 flex flex-col pointer-events-none">
-        <div className="h-1/2 bg-[#F5F5F5]" />
-        <div className="h-1/2 bg-[#169D52]" />
+        <div className="ui-surface-soft h-1/2" />
+        <div className="ui-surface-accent h-1/2" />
       </div>
 
-      <div className="relative mx-auto flex min-h-screen items-center justify-center px-4 py-20 sm:px-6 md:px-10 lg:px-16">
-        <div className="cta-card overflow-hidden rounded-[16px] bg-white p-8 md:p-16 lg:p-[100px] shadow-2xl w-full max-w-[1400px] lg:h-[798px]">
-          <div className="flex flex-col lg:flex-row lg:justify-between h-full gap-12 lg:gap-0">
-            {/* Left Column: Info */}
-            <div className="cta-content flex flex-col h-full w-full lg:w-[385px]">
-              <span className="mb-8 text-sm font-bold tracking-[0.2em] text-[#169D52] uppercase">
-                Contact
-              </span>
-              <h2 className="mb-10 w-[300px] h-[92px] font-inter font-bold text-[42px] leading-[42px] tracking-[0%] text-brand-black">
+      <SiteContainer className="relative flex min-h-screen items-center justify-center py-20">
+        <Card
+          variant="raised"
+          className="cta-card w-full overflow-hidden px-8 py-10 md:p-16 lg:min-h-[798px] lg:px-[100px] lg:py-20"
+        >
+          <div className="flex h-full flex-col gap-12 lg:flex-row lg:justify-between">
+            <div className="cta-content flex w-full flex-col lg:max-w-[385px]">
+              <SectionEyebrow className="mb-8">Contact</SectionEyebrow>
+
+              <h2 className="ui-type-heading-xl mb-10 max-w-[300px] text-brand-black">
                 Let&apos;s
                 <br />
                 get started!
               </h2>
 
-              <div className="mb-12 w-[385px] h-[129px]">
-                <p className="font-inter font-bold text-[20px] leading-[26px] tracking-[0%] text-brand-black">
+              <div className="mb-12 max-w-[385px] space-y-3">
+                <p className="ui-type-body-lg font-bold text-brand-black">
                   Need to make a mark?
-                  </p>
-                  <br />
-                  <p className="font-inter font-regular text-[20px] leading-[26px] tracking-[0%] text-brand-black">
+                </p>
+                <p className="ui-type-body-lg font-normal text-brand-black">
                   Our team delivers impressive results
                   <br />
                   and expert execution. Visionary
@@ -112,7 +126,7 @@ export default function CTA() {
 
               <div className="mt-auto space-y-6">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-[40px] w-[40px] items-center justify-center">
+                  <div className="flex size-10 items-center justify-center">
                     <Image
                       src="/images/svg/mail.svg"
                       alt="Mail"
@@ -120,15 +134,13 @@ export default function CTA() {
                       height={20}
                     />
                   </div>
-                  <a
-                    href="mailto:ping@properganda.in"
-                    className="text-[20px] font-semibold leading-[26px] text-brand-black hover:text-[#169D52] transition-colors font-inter"
-                  >
+                  <a href="mailto:ping@properganda.in" className="ui-contact-link">
                     ping@properganda.in
                   </a>
                 </div>
+
                 <div className="flex items-center gap-4">
-                  <div className="flex h-[40px] w-[40px] items-center justify-center">
+                  <div className="flex size-10 items-center justify-center">
                     <Image
                       src="/images/svg/phone.svg"
                       alt="Phone"
@@ -136,126 +148,110 @@ export default function CTA() {
                       height={30}
                     />
                   </div>
-                  <span className="text-[20px] font-semibold leading-[26px] text-brand-black font-inter">
+                  <span className="ui-type-body-lg font-semibold text-brand-black">
                     00000 00000
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Right Column: Form */}
-            <form className="flex flex-col gap-8 w-full lg:w-[797px] h-full">
-              <div className="grid grid-cols-1 gap-y-6 gap-x-14 md:grid-cols-2">
-                {/* Name */}
+            <form className="flex h-full w-full flex-1 flex-col gap-8 lg:max-w-[797px]">
+              <div className="grid grid-cols-1 gap-x-14 gap-y-6 md:grid-cols-2">
                 <div className="cta-form-item flex flex-col gap-2">
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-bold text-brand-black font-inter"
-                  >
+                  <label htmlFor="name" className="ui-form-label">
                     Name<span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="text"
+                  <Input
                     id="name"
                     placeholder="Enter your Name"
-                    className="w-[370px] h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm text-brand-black placeholder:text-brand-gray/50 outline-none focus:border-[#169D52] transition-colors font-inter"
+                    className="w-full"
                     required
                   />
                 </div>
-                {/* Email */}
+
                 <div className="cta-form-item flex flex-col gap-2">
-                  <label
-                    htmlFor="email"
-                    className="text-sm font-bold text-brand-black font-inter"
-                  >
+                  <label htmlFor="email" className="ui-form-label">
                     Email<span className="text-red-500">*</span>
                   </label>
-                  <input
+                  <Input
                     type="email"
                     id="email"
                     placeholder="Enter your email ID"
-                    className="w-[370px] h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm text-brand-black placeholder:text-brand-gray/50 outline-none focus:border-[#169D52] transition-colors font-inter"
+                    className="w-full"
                     required
                   />
                 </div>
-                {/* Mobile */}
+
                 <div className="cta-form-item flex flex-col gap-2">
-                  <label
-                    htmlFor="mobile"
-                    className="text-sm font-bold text-brand-black font-inter"
-                  >
+                  <label htmlFor="mobile" className="ui-form-label">
                     Mobile<span className="text-red-500">*</span>
                   </label>
-                  <input
+                  <Input
                     type="tel"
                     id="mobile"
                     placeholder="Enter your Mobile number"
-                    className="w-[370px] h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm text-brand-black placeholder:text-brand-gray/50 outline-none focus:border-[#169D52] transition-colors font-inter"
+                    className="w-full"
                     required
                   />
                 </div>
-                {/* Service */}
+
                 <div className="cta-form-item flex flex-col gap-2">
-                  <label
-                    htmlFor="service"
-                    className="text-sm font-bold text-brand-black font-inter"
-                  >
+                  <label htmlFor="service" className="ui-form-label">
                     Service <span className="text-red-500">*</span>
                   </label>
-                  <div className="relative w-[370px]">
+
+                  <div className="relative">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <button
                           type="button"
-                          className="flex w-full items-center justify-between h-[62px] rounded-[4px] border border-brand-black/20 px-4 text-sm outline-none focus:border-[#169D52] transition-colors bg-white font-inter text-left"
+                          className="ui-field ui-input ui-field-trigger w-full bg-white"
                         >
-                          <span className={selectedService ? "text-brand-black" : "text-brand-gray-dark/50"}>
-                            {selectedService 
-                              ? services.find(s => s.value === selectedService)?.label 
-                              : "Select your Service"}
+                          <span
+                            className={cn(
+                              selectedService
+                                ? "text-brand-black"
+                                : "text-brand-gray-dark/50",
+                            )}
+                          >
+                            {selectedServiceLabel ?? "Select your Service"}
                           </span>
                           <ChevronDown className="size-6 text-brand-black opacity-80" />
                         </button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-[370px] bg-white border-brand-black/20">
-                        {services.map((service) => (
+
+                      <DropdownMenuContent
+                        style={{ width: "var(--radix-dropdown-menu-trigger-width)" }}
+                      >
+                        {SERVICES.map((service) => (
                           <DropdownMenuItem
                             key={service.value}
                             onClick={() => setSelectedService(service.value)}
-                            className="cursor-pointer hover:bg-[#169D52]/10 focus:bg-[#169D52]/10"
                           >
                             {service.label}
                           </DropdownMenuItem>
                         ))}
                       </DropdownMenuContent>
                     </DropdownMenu>
-                    {/* Hidden input for form submission */}
+
                     <input type="hidden" name="service" value={selectedService} required />
                   </div>
                 </div>
               </div>
 
-              {/* Message */}
               <div className="cta-form-item flex flex-col gap-2">
-                <label
-                  htmlFor="message"
-                  className="text-sm font-bold text-brand-black font-inter"
-                >
+                <label htmlFor="message" className="ui-form-label">
                   How can we help?<span className="text-red-500">*</span>
                 </label>
-                <textarea
-                  id="message"
-                  className="w-full lg:w-[797px] h-[162px] resize-none rounded-[4px] border border-brand-black/20 p-4 text-sm text-brand-black placeholder:text-brand-gray/50 outline-none focus:border-[#169D52] transition-colors font-inter"
-                  placeholder=""
-                  required
-                ></textarea>
+                <Textarea id="message" className="w-full resize-none" required />
               </div>
 
-              {/* Submit */}
-              <div className="cta-form-item mt-4">
-                <button
+              <div>
+                <Button
                   type="submit"
-                  className="group flex items-center justify-between gap-4 rounded-xl bg-[#169D52] px-8 py-4 font-medium text-white transition-all hover:bg-[#169D52] active:scale-[0.98] w-fit font-inter"
+                  variant="accent"
+                  size="lg"
+                  className="cta-form-item group mt-4 w-fit rounded-xl px-8 py-4"
                 >
                   Request For Free Consultation
                   <svg
@@ -270,12 +266,12 @@ export default function CTA() {
                     <line x1="7" y1="17" x2="17" y2="7" />
                     <polyline points="7 7 17 7 17 17" />
                   </svg>
-                </button>
+                </Button>
               </div>
             </form>
           </div>
-        </div>
-      </div>
-    </section>
+        </Card>
+      </SiteContainer>
+    </SectionShell>
   );
 }
