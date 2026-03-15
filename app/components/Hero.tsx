@@ -210,14 +210,14 @@ export default function Hero({
             </h1>
 
             <section className="relative flex items-center justify-between">
-              <div ref={subtextRef} className="flex flex-col gap-1">
-                <p className="text-sm text-white/70">
-                  For Brands <span className="font-bold text-white">&</span>{" "}
+              <div ref={subtextRef} className="flex flex-col gap-1 text-2xl">
+                <p className="text-white">
+                  For Brands <span className="font-bold">&</span>{" "}
                   Businesses that want to
                 </p>
                 <p
                   ref={standRef}
-                  className="relative overflow-hidden h-[1.1em] font-bebas-neue text-4xl tracking-wide text-white md:text-5xl"
+                  className="relative overflow-hidden h-[1.1em] text-4xl tracking-wide text-white font-bold"
                 >
                   {SLOT_WORDS.map((word, i) => (
                     <span
