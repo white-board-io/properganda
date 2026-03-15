@@ -497,7 +497,7 @@
   position: relative;
   z-index: 0;
   display: inline-flex;
-  width: min(100%, 25rem);
+  width: min(100%, 44rem);
   align-items: center;
   justify-content: center;
   white-space: nowrap;

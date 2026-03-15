@@ -50,14 +50,14 @@ export default function LogoBar() {
       aria-label="Trusted by"
     >
       <SiteContainer>
-        <div className="flex flex-wrap items-center justify-between gap-8">
+        <div className="flex flex-wrap items-center justify-center gap-8 lg:justify-between">
           {LOGOS.map((logo) => (
             <div key={logo.name} className="logo-item flex items-center justify-center">
               <Image
-                src={logo.src}
-                alt={logo.name}
                 width={120}
                 height={48}
+                src={logo.src}
+                alt={logo.name}
                 className="h-10 w-auto object-contain"
               />
             </div>

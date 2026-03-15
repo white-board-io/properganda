@@ -2,7 +2,7 @@
 
 import Header from "../components/Header";
 import Hero from "../components/Hero";
-import CreativeCollective from "../components/CreativeCollective";
+import Commandments from "../components/Commandments";
 import CTA from "../components/CTA";
 import Footer from "../components/Footer";
 import { COMMANDMENTS } from "./data";
@@ -32,10 +32,7 @@ export default function CommandmentsPageClient() {
 
       <main ref={containerRef}>
         <Hero variant="commandments" />
-        <CreativeCollective
-          variant="commandments"
-          commandments={COMMANDMENTS}
-        />
+        <Commandments commandments={COMMANDMENTS} />
         <CTA />
       </main>
 

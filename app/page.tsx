@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import LogoBar from "./components/LogoBar";
-import CreativeCollective from "./components/CreativeCollective";
+import AboutUs from "./components/AboutUs";
 import Services from "./components/Services";
 import CaseStudies from "./components/CaseStudies";
 import Manifesto from "./components/Manifesto";
@@ -31,7 +31,7 @@ export default function Home() {
       <main>
         <Hero />
         <LogoBar />
-        <CreativeCollective />
+        <AboutUs />
         <Services />
         <CaseStudies />
         <Manifesto />

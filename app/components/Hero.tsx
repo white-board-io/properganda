@@ -191,7 +191,7 @@ export default function Hero({
           <section className="flex flex-col items-start justify-center gap-12">
             <h1
               ref={headingRef}
-              className="font-bebas-neue uppercase font-normal text-[240px] leading-[208px] tracking-normal text-white"
+              className="font-bebas-neue uppercase font-normal xl:text-[240px] xl:leading-[208px] tracking-normal text-white lg:text-[180px] lg:leading-[170px] md:text-[140px] md:leading-[130px] sm:text-[100px] sm:leading-[90px] text-[60px] leading-[50px]"
             >
               <span className="block whitespace-nowrap">Creativity With</span>
               <span className="block whitespace-nowrap">
@@ -204,7 +204,7 @@ export default function Hero({
                 {/* Blinking underscore cursor — moves after each typed char */}
                 <span
                   ref={cursorRef}
-                  className="inline-block w-[48px] h-[18px] bg-green-500 align-bottom translate-y-[-0.13em]"
+                  className="inline-block xl:w-[48px] h-2 w-4 xl:h-[18px] bg-green-500 align-bottom xl:translate-y-[-0.13em] translate-y-[-0.10em] sm:translate-y-[-0.14em] lg:translate-y-[-0.17em] lg:h-[18px] lg:w-[32px] md:translate-y-[-0.16em] md:h-[14px] md:w-[24px]"
                 />
               </span>
             </h1>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Bebas_Neue } from "next/font/google";
+import BreakpointIndicator from "./components/BreakpointIndicator";
 import { metadataBase, siteConfig } from "@/lib/seo";
 import "./globals.css";
 
@@ -52,6 +53,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${bebasNeue.variable} antialiased`}>
         {children}
+        {process.env.NODE_ENV === "development" ? <BreakpointIndicator /> : null}
       </body>
     </html>
   );
