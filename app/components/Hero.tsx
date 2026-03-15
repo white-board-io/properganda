@@ -31,35 +31,25 @@ export default function Hero({
 
   useGSAP(
     () => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      if (variant !== "default") return;
 
-      if (headingRef.current) {
-        tl.from(headingRef.current, { y: 120, opacity: 0, duration: 1.2 });
-      }
+      const textTargets = [headingRef.current, subtextRef.current].filter(
+        Boolean,
+      );
 
-      if (subtextRef.current) {
-        tl.from(
-          subtextRef.current,
-          { y: 40, opacity: 0, duration: 0.8 },
-          "-=0.6",
-        );
-      }
+      gsap.set(textTargets, { opacity: 0 });
+      gsap.to(textTargets, {
+        opacity: 1,
+        duration: 1,
+        ease: "circ.out",
+        delay: 0.1,
+      });
+    },
+    { scope: sectionRef, dependencies: [variant] },
+  );
 
-      if (badgeRef.current) {
-        tl.from(
-          badgeRef.current,
-          {
-            scale: 0,
-            opacity: 0,
-            duration: 1,
-            rotation: -180,
-            ease: "back.out(1.7)",
-            clearProps: "all",
-          },
-          "-=0.8",
-        );
-      }
-
+  useGSAP(
+    () => {
       if (variant === "commandments" && orbitContainerRef.current) {
         const chars = orbitContainerRef.current.querySelectorAll(".char-orbit");
         const radiusX = 240;
