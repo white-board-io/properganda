@@ -86,7 +86,7 @@ export default function CTA() {
       id="contact"
       variant="light"
       spacing="none"
-      className="relative min-h-screen overflow-hidden font-inter-google"
+      className="relative min-h-screen overflow-hidden font-inter"
       aria-label="Get in touch"
     >
       <div className="absolute inset-0 flex flex-col pointer-events-none">

@@ -135,7 +135,7 @@ export default function CreativeCollective({
             <div className="relative z-10">
               <div className="grid grid-cols-3 gap-x-10">
                 <div className="cc-text-item flex flex-col justify-start">
-                  <h2 className="font-display text-[clamp(4rem,6vw,5.5rem)] leading-[0.89] font-normal uppercase text-white">
+                  <h2 className="font-bebas-neue text-[clamp(4rem,6vw,5.5rem)] leading-[0.89] font-normal uppercase text-white">
                     Creative
                     <br />
                     Collective
@@ -230,10 +230,10 @@ export default function CreativeCollective({
                       key={`${commandment.number}-${commandment.title}`}
                       className="commandment-item flex h-full w-full snap-center flex-col items-center justify-center px-4"
                     >
-                      <span className="font-display mb-6 text-[100px] leading-none font-bold text-green-500">
+                      <span className="font-bebas-neue mb-6 text-[100px] leading-none font-bold text-green-500">
                         {commandment.number}
                       </span>
-                      <h3 className="font-display mb-4 w-full max-w-4xl text-[clamp(2.75rem,5vw,3.75rem)] leading-[1.08] font-normal uppercase text-white">
+                      <h3 className="font-bebas-neue mb-4 w-full max-w-4xl text-[clamp(2.75rem,5vw,3.75rem)] leading-[1.08] font-normal uppercase text-white">
                         {commandment.title}
                       </h3>
                       <p className="max-w-2xl text-2xl leading-[1.44] font-light tracking-[0.02em] text-white/70">

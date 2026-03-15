@@ -124,7 +124,7 @@ export default function Hero({
           <section className="flex flex-col items-start justify-center gap-12">
             <h1
               ref={headingRef}
-              className="font-display uppercase font-normal text-[240px] leading-[208px] tracking-normal text-white"
+              className="font-bebas-neue uppercase font-normal text-[240px] leading-[208px] tracking-normal text-white"
             >
               <span className="block whitespace-nowrap">Creativity With</span>
               <span className="block whitespace-nowrap">A Conscience</span>
@@ -136,7 +136,7 @@ export default function Hero({
                   For Brands <span className="font-bold text-white">&</span>{" "}
                   Businesses that want to
                 </p>
-                <p className="font-display text-4xl tracking-wide text-white md:text-5xl">
+                <p className="font-bebas-neue text-4xl tracking-wide text-white md:text-5xl">
                   STAND
                 </p>
               </div>
@@ -224,7 +224,7 @@ export default function Hero({
             ))}
           </div>
 
-          <h1 className="font-display text-[25rem] leading-none font-black text-white mix-blend-overlay select-none md:text-[35rem]">
+          <h1 className="font-bebas-neue text-[25rem] leading-none font-black text-white mix-blend-overlay select-none md:text-[35rem]">
             10
           </h1>
         </div>

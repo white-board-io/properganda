@@ -211,12 +211,12 @@ export default function CaseStudies() {
             />
 
             <div className="absolute" style={mosaicStyles.cardFiveCopy}>
-              <p className="font-body text-[clamp(10px,1.45vw,20px)] leading-[1.15] font-bold text-white">
+              <p className="font-inter text-[clamp(10px,1.45vw,20px)] leading-[1.15] font-bold text-white">
                 when the
                 <br />
                 waters rose,
               </p>
-              <p className="mt-[0.15em] whitespace-nowrap font-body text-[clamp(11px,1.55vw,22px)] leading-[1.1] font-bold text-orange-500">
+              <p className="mt-[0.15em] whitespace-nowrap font-inter text-[clamp(11px,1.55vw,22px)] leading-[1.1] font-bold text-orange-500">
                 SO DID WE.
               </p>
             </div>

@@ -54,7 +54,7 @@ export default function Footer() {
   return (
     <footer
       ref={sectionRef}
-      className="bg-brand-black pb-12 pt-20 text-white font-inter-google"
+      className="bg-brand-black pb-12 pt-20 text-white font-inter"
       role="contentinfo"
     >
       <SiteContainer>

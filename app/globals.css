@@ -83,15 +83,16 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-inter-google), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-inter-google);
-  --font-display: var(--font-bebas-neue);
-  --font-inter: var(--font-inter-google);
-  --font-inter-google: var(--font-inter-google);
+  --font-sans: var(--font-runtime-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-inter: var(--font-runtime-inter);
+  --font-bebas-neue: var(--font-runtime-bebas-neue);
+  --font-body: var(--font-runtime-inter);
+  --font-display: var(--font-runtime-bebas-neue);
+  --font-inter-google: var(--font-runtime-inter);
 }
 
 @utility font-inter-google {
-  font-family: var(--font-inter-google), ui-sans-serif, system-ui, sans-serif !important;
+  font-family: var(--font-runtime-inter), ui-sans-serif, system-ui, sans-serif !important;
 }
 
 .ui-site-container {
@@ -125,7 +126,7 @@
   z-index: 10;
   display: inline-block;
   margin-bottom: 1.25rem;
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-size: var(--text-eyebrow);
   line-height: var(--text-eyebrow--line-height);
   font-weight: var(--text-eyebrow--font-weight);
@@ -185,7 +186,7 @@
 }
 
 .ui-type-heading-xl {
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-size: var(--text-heading-xl);
   line-height: var(--text-heading-xl--line-height);
   font-weight: var(--text-heading-xl--font-weight);
@@ -193,21 +194,21 @@
 }
 
 .ui-type-body-lg {
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-size: var(--text-body-lg);
   line-height: var(--text-body-lg--line-height);
   letter-spacing: var(--tracking-flat);
 }
 
 .ui-copy {
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-size: 0.9375rem;
   line-height: 1.625rem;
   color: var(--color-brand-black);
 }
 
 .ui-nav-link {
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-size: var(--text-nav);
   line-height: var(--text-nav--line-height);
   font-weight: var(--text-nav--font-weight);
@@ -219,7 +220,7 @@
 }
 
 .ui-caption {
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-size: var(--text-caption);
   line-height: var(--text-caption--line-height);
   font-weight: var(--text-caption--font-weight);
@@ -228,7 +229,7 @@
 }
 
 .ui-form-label {
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 700;
@@ -236,7 +237,7 @@
 }
 
 .ui-contact-link {
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-size: var(--text-body-lg);
   line-height: var(--text-body-lg--line-height);
   font-weight: 600;
@@ -249,7 +250,7 @@
 }
 
 .ui-footer-link {
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-size: var(--text-body-lg);
   line-height: var(--text-body-lg--line-height);
   font-weight: 500;
@@ -261,7 +262,7 @@
 }
 
 .ui-footer-heading {
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-size: 1.9375rem;
   line-height: 1.15;
   font-weight: 700;
@@ -306,7 +307,7 @@
 }
 
 .ui-case-stamp-title {
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 700;
@@ -317,7 +318,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-size: 0.6875rem;
   line-height: 1rem;
   color: var(--color-brand-gray);
@@ -330,7 +331,7 @@
   gap: 0.75rem;
   border: 1px solid transparent;
   border-radius: var(--radius-pill);
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-weight: 500;
   line-height: 1;
   white-space: nowrap;
@@ -421,7 +422,7 @@
   border-radius: var(--radius-field);
   background: var(--color-brand-white);
   color: var(--color-brand-black);
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-size: 0.875rem;
   line-height: 1.25rem;
   transition:
@@ -479,7 +480,7 @@
   gap: 0.5rem;
   border-radius: calc(var(--radius-field) - 1px);
   padding: 0.375rem 0.5rem;
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   font-size: 0.875rem;
   line-height: 1.25rem;
   outline: none;
@@ -535,7 +536,7 @@
 }
 
 .ui-commandments-link__label {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-runtime-bebas-neue), sans-serif;
   font-size: clamp(2rem, 3vw, 3rem);
   line-height: 1;
   font-weight: 400;
@@ -590,9 +591,11 @@ html {
 }
 
 body {
+  --font-runtime-inter: var(--font-inter-google);
+  --font-runtime-bebas-neue: var(--font-bebas-neue);
   background: var(--color-brand-black);
   color: var(--color-brand-white);
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-runtime-inter), system-ui, sans-serif;
   overflow-x: hidden;
 }
 
