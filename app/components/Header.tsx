@@ -1,11 +1,29 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
+import { buttonVariants } from "@/components/ui/button";
+import { SiteContainer } from "@/components/ui/site-container";
+import { cn } from "@/lib/utils";
+
 gsap.registerPlugin(useGSAP);
+
+const NAV_ITEMS = [
+  { name: "About Us", href: "#about" },
+  { name: "What We Do", href: "#services" },
+  { name: "Clients", href: "#manifesto" },
+  { name: "Contact", href: "#contact" },
+];
+
+const SOCIAL_LINKS = [
+  { name: "Instagram", href: "https://instagram.com", icon: "/images/svg/insta.svg" },
+  { name: "X", href: "https://x.com", icon: "/images/svg/x.svg" },
+  { name: "LinkedIn", href: "https://linkedin.com", icon: "/images/svg/linkedin.svg" },
+];
 
 export default function Header({
   variant = "default",
@@ -19,6 +37,7 @@ export default function Header({
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -39,126 +58,97 @@ export default function Header({
 
   return (
     <div
-      className={`fixed top-0 left-0 right-0 z-50 flex flex-col items-center bg-[#000000] ${isCommandments ? "pt-8 px-4 sm:px-6 md:px-10 lg:px-16" : "pointer-events-none"}`}
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 flex flex-col items-center bg-black",
+        isCommandments ? "pt-8" : "pointer-events-none",
+      )}
     >
       {isCommandments && (
-        <div className="flex w-full max-w-[1400px] justify-end gap-5 mb-4 px-10">
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:opacity-70 transition-opacity"
-          >
-            <Image
-              src="/images/svg/insta.svg"
-              alt="Instagram"
-              width={28}
-              height={28}
-              className=""
-            />
-          </a>
-          <a
-            href="https://x.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:opacity-70 transition-opacity"
-          >
-            <Image
-              src="/images/svg/x.svg"
-              alt="X"
-              width={28}
-              height={28}
-              className=""
-            />
-          </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:opacity-70 transition-opacity"
-          >
-            <Image
-              src="/images/svg/linkedin.svg"
-              alt="LinkedIn"
-              width={28}
-              height={28}
-              className=""
-            />
-          </a>
-        </div>
+        <SiteContainer className="mb-4 flex justify-end gap-5">
+          {SOCIAL_LINKS.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ui-icon-link"
+            >
+              <Image src={link.icon} alt={link.name} width={28} height={28} />
+            </a>
+          ))}
+        </SiteContainer>
       )}
 
       <header
         ref={containerRef}
-        className={`w-full transition-all duration-300 pointer-events-auto ${
+        className={cn(
+          "w-full pointer-events-auto transition-all duration-300",
           isCommandments
-            ? "bg-white rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-black/5"
+            ? "ui-card--floating rounded-full border border-black/5 bg-white"
             : isScrolled
-              ? "bg-brand-black/95 backdrop-blur-md border-b border-white/5"
-              : "bg-transparent"
-        }`}
+              ? "border-b border-white/5 bg-brand-black/95 backdrop-blur-md"
+              : "bg-transparent",
+        )}
         role="banner"
       >
-        <div
-          className={`mx-auto flex w-full max-w-[1400px] items-center justify-between ${isCommandments ? "py-4 px-10" : "py-5 px-4 sm:px-6 md:px-10 lg:px-16"}`}
-        >
-          <a
-            href="/"
-            className="flex items-center gap-2"
-            aria-label="Properganda - Home"
-          >
+        <SiteContainer className={cn("flex items-center justify-between", isCommandments ? "py-4" : "py-5")}>
+          <Link href="/" className="flex items-center gap-2" aria-label="Properganda - Home">
             <Image
               src="/images/svg/logo.svg"
               alt="Properganda"
               width={32}
               height={22}
               priority
-              className={`h-8 w-auto ${isCommandments ? "invert brightness-0" : ""}`}
+              className={cn("h-8 w-auto", isCommandments && "invert brightness-0")}
             />
             <span
-              className={`font-inter text-[20px] font-medium tracking-[0.2em] uppercase ${isCommandments ? "text-brand-black" : "text-white"}`}
+              className={cn(
+                "ui-type-body-lg font-medium uppercase tracking-[0.2em]",
+                isCommandments ? "text-brand-black" : "text-white",
+              )}
             >
               Properganda
             </span>
-          </a>
+          </Link>
 
-          <nav
-            aria-label="Main navigation"
-            className="hidden items-center gap-10 md:flex"
-          >
-            {[
-              { name: "About Us", href: "#about" },
-              { name: "What We Do", href: "#services" },
-              { name: "Clients", href: "#manifesto" },
-              { name: "Contact", href: "#contact" },
-            ].map((item) => (
-              <a
+          <nav aria-label="Main navigation" className="hidden items-center gap-10 md:flex">
+            {NAV_ITEMS.map((item) => (
+              <Link
                 key={item.name}
                 href={item.href}
-                className={`font-inter text-[15px] font-medium transition-colors hover:text-brand-green ${
-                  isCommandments ? "text-brand-black" : "text-white"
-                }`}
+                className={cn(
+                  "ui-nav-link",
+                  isCommandments ? "text-brand-black" : "text-white",
+                )}
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
 
-            <a
+            <Link
               href="#canopy"
-              className={`flex items-center justify-center gap-3 rounded-full px-6 py-2.5 transition-all ${
-                isCommandments
-                  ? "bg-[#FFCC00] hover:bg-[#E6B800]"
-                  : "border-[#FFCC00] hover:bg-[#FFCC00]/10 border"
-              }`}
+              className={cn(
+                buttonVariants({
+                  variant: isCommandments ? "canopySolid" : "canopyOutline",
+                  size: "sm",
+                }),
+                "gap-3 px-6 py-2.5",
+              )}
             >
               <div className="flex flex-col text-left leading-tight">
                 <span
-                  className={`text-[8px] font-black uppercase tracking-wider ${isCommandments ? "text-brand-black" : "text-[#FFCC00]"}`}
+                  className={cn(
+                    "ui-caption font-black tracking-wider",
+                    isCommandments ? "text-brand-black" : "text-yellow-400",
+                  )}
                 >
                   Our
                 </span>
                 <span
-                  className={`text-[8px] font-black uppercase tracking-wider ${isCommandments ? "text-brand-black" : "text-[#FFCC00]"}`}
+                  className={cn(
+                    "ui-caption font-black tracking-wider",
+                    isCommandments ? "text-brand-black" : "text-yellow-400",
+                  )}
                 >
                   Studio
                 </span>
@@ -168,9 +158,9 @@ export default function Header({
                 alt="CANOPY"
                 width={100}
                 height={14}
-                className={`w-auto h-3.5 ${isCommandments ? "brightness-0" : ""}`}
+                className={cn("h-3.5 w-auto", isCommandments && "brightness-0")}
               />
-            </a>
+            </Link>
           </nav>
 
           <button
@@ -179,14 +169,20 @@ export default function Header({
             type="button"
           >
             <span
-              className={`block h-0.5 w-6 ${isCommandments ? "bg-brand-black" : "bg-white"}`}
+              className={cn(
+                "block h-0.5 w-6",
+                isCommandments ? "bg-brand-black" : "bg-white",
+              )}
             />
             <span
-              className={`block h-0.5 w-6 ${isCommandments ? "bg-brand-black" : "bg-white"}`}
+              className={cn(
+                "block h-0.5 w-6",
+                isCommandments ? "bg-brand-black" : "bg-white",
+              )}
             />
             <span className="block h-0.5 w-4 bg-brand-green" />
           </button>
-        </div>
+        </SiteContainer>
       </header>
     </div>
   );

@@ -6,9 +6,12 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
+import { SectionShell } from "@/components/ui/section-shell";
+import { SiteContainer } from "@/components/ui/site-container";
+
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const logos = [
+const LOGOS = [
   { name: "HCC", src: "/images/svg/hcc.svg" },
   { name: "Hero Future Energies", src: "/images/svg/hfe.svg" },
   { name: "UK India Business Council", src: "/images/svg/uki.svg" },
@@ -18,7 +21,7 @@ const logos = [
 ];
 
 export default function LogoBar() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
@@ -35,33 +38,32 @@ export default function LogoBar() {
         },
       });
     },
-    { scope: containerRef }
+    { scope: containerRef },
   );
 
   return (
-    <section
+    <SectionShell
       ref={containerRef}
-      className="bg-white py-12 px-4 sm:px-6 md:px-10 lg:px-16"
+      variant="light"
+      spacing="none"
+      className="py-12"
       aria-label="Trusted by"
     >
-      <div className="mx-auto max-w-[1400px]">
-        <div className="flex flex-wrap items-center justify-between gap-8">
-          {logos.map((logo) => (
-            <div
-              key={logo.name}
-              className="logo-item flex items-center justify-center"
-            >
+      <SiteContainer>
+        <div className="flex flex-wrap items-center justify-center gap-8 lg:justify-between">
+          {LOGOS.map((logo) => (
+            <div key={logo.name} className="logo-item flex items-center justify-center">
               <Image
-                src={logo.src}
-                alt={logo.name}
                 width={120}
                 height={48}
+                src={logo.src}
+                alt={logo.name}
                 className="h-10 w-auto object-contain"
               />
             </div>
           ))}
         </div>
-      </div>
-    </section>
+      </SiteContainer>
+    </SectionShell>
   );
 }

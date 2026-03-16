@@ -1,42 +1,21 @@
-"use client";
+import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/seo";
+import CommandmentsPageClient from "./CommandmentsPageClient";
 
-import Header from "../components/Header";
-import Hero from "../components/Hero";
-import CreativeCollective from "../components/CreativeCollective";
-import CTA from "../components/CTA";
-import Footer from "../components/Footer";
-import { COMMANDMENTS } from "./data";
-import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
+export const metadata: Metadata = createPageMetadata({
+  title: "10 Commandments for Conscious Creativity",
+  description:
+    "Explore Properganda's 10 Commandments, a concise creative philosophy for building brands, campaigns, and stories with clarity, honesty, and real-world impact.",
+  path: "/commandments",
+  keywords: [
+    "creative philosophy",
+    "brand manifesto",
+    "creative principles",
+    "conscious creativity",
+    "Properganda commandments",
+  ],
+});
 
 export default function CommandmentsPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    gsap.from(".commandment-item", {
-      opacity: 0,
-      y: 40,
-      stagger: 0.1,
-      duration: 0.8,
-      ease: "power3.out",
-    });
-  }, { scope: containerRef });
-
-  return (
-    <div className="bg-brand-black min-h-screen">
-      <Header variant="commandments" />
-      
-      <main ref={containerRef}>
-        {/* We use Hero but we need to ensure it shows the bg and badge as requested */}
-        <Hero variant="commandments" />
-
-        {/* The 10 Commandments Scroll Section using CreativeCollective variant */}
-        <CreativeCollective variant="commandments" commandments={COMMANDMENTS} />
-        <CTA />
-      </main>
-
-      <Footer />
-    </div>
-  );
+  return <CommandmentsPageClient />;
 }

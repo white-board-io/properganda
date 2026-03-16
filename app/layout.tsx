@@ -1,23 +1,47 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Bebas_Neue } from "next/font/google";
+import BreakpointIndicator from "./components/BreakpointIndicator";
+import { metadataBase, siteConfig } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
-  variable: "--font-inter-google",
   subsets: ["latin"],
+  variable: "--font-inter-google",
 });
 
 const bebasNeue = Bebas_Neue({
-  variable: "--font-bebas-neue",
-  subsets: ["latin"],
   weight: "400",
+  subsets: ["latin"],
+  variable: "--font-bebas-neue",
 });
 
 export const metadata: Metadata = {
-  title: "Properganda | Creativity With A Conscience",
-  description:
-    "We build brands. We design campaigns. We craft stories. We shape conversations.",
+  metadataBase,
+  category: "business",
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  applicationName: siteConfig.name,
+  keywords: [...siteConfig.defaultKeywords],
+  description: siteConfig.defaultDescription,
+  icons: {
+    icon: "/favicon.ico",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+    },
+  },
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
 };
 
 export default function RootLayout({
@@ -29,6 +53,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${bebasNeue.variable} antialiased`}>
         {children}
+        {process.env.NODE_ENV === "development" ? <BreakpointIndicator /> : null}
       </body>
     </html>
   );

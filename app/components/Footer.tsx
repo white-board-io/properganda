@@ -1,13 +1,33 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
+import { SiteContainer } from "@/components/ui/site-container";
+
 gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+const NAV_LINKS = [
+  { href: "#about", label: "About Us" },
+  { href: "#services", label: "What We Do" },
+  { href: "#manifesto", label: "Clients" },
+  { href: "#contact", label: "Contact" },
+];
+
+const SOCIAL_LINKS = [
+  { href: "#", label: "Instagram", icon: "/images/svg/insta.svg" },
+  { href: "#", label: "X (formerly Twitter)", icon: "/images/svg/x.svg" },
+  { href: "#", label: "LinkedIn", icon: "/images/svg/linkedin.svg" },
+];
+
+const OTHER_LINKS = [
+  { href: "/brand-book", label: "Brand Book" },
+  { href: "/employee-hand-book", label: "Employee Hand Book" },
+];
 
 export default function Footer() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -34,136 +54,80 @@ export default function Footer() {
   return (
     <footer
       ref={sectionRef}
-      className="bg-brand-black pt-20 pb-12 text-white font-inter-google"
+      className="bg-brand-black pb-12 pt-20 text-white font-inter"
       role="contentinfo"
     >
-      {/* Content Container */}
-      <div className="mx-auto max-w-[1400px]">
+      <SiteContainer>
         <div className="footer-content grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-36">
-          {/* First Column: Logo (sub-col 1) and Text/Icons (sub-col 2) */}
-          <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-8 lg:gap-12 items-start">
-            <Link href="/" className="inline-block mt-2">
+          <div className="grid items-start gap-8 sm:grid-cols-[auto_1fr] lg:gap-12">
+            <Link href="/" className="mt-2 inline-block">
               <Image
                 src="/images/svg/logo.svg"
                 alt="Properganda Logo"
                 width={207}
                 height={168}
-                className="w-auto h-auto min-w-[207px]"
+                className="h-auto min-w-[207px] w-auto"
               />
             </Link>
 
             <div className="flex flex-col gap-8">
-              <h2 className="text-[30px] font-bold leading-tight text-brand-green sm:text-4xl lg:h-[102px] lg:w-[332px] lg:text-[40px] lg:leading-[51px]">
+              <h2 className="text-3xl font-bold leading-tight text-brand-green sm:text-4xl lg:h-[102px] lg:w-[332px] lg:text-[40px] lg:leading-[51px]">
                 We&apos;re not big.
                 <br />
                 But we&apos;re Proper.
               </h2>
 
               <div className="flex gap-4">
-                <Link href="#" className="hover:scale-110 transition-transform">
-                  <Image
-                    src="/images/svg/insta.svg"
-                    alt="Instagram"
-                    width={48}
-                    height={48}
-                  />
-                </Link>
-                <Link href="#" className="hover:scale-110 transition-transform">
-                  <Image
-                    src="/images/svg/x.svg"
-                    alt="X (formerly Twitter)"
-                    width={48}
-                    height={48}
-                  />
-                </Link>
-                <Link href="#" className="hover:scale-110 transition-transform">
-                  <Image
-                    src="/images/svg/linkedin.svg"
-                    alt="LinkedIn"
-                    width={48}
-                    height={48}
-                  />
-                </Link>
+                {SOCIAL_LINKS.map((link) => (
+                  <a key={link.label} href={link.href} className="ui-icon-link" aria-label={link.label}>
+                    <Image src={link.icon} alt={link.label} width={48} height={48} />
+                  </a>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Second Column: Navigation and Info */}
           <div className="flex flex-col gap-24">
-            {/* First Row: Nav Links - Full Width Distribution */}
             <nav className="flex flex-wrap justify-between gap-y-4">
-              <Link
-                href="#about"
-                className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors"
-              >
-                About Us
-              </Link>
-              <Link
-                href="#services"
-                className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors"
-              >
-                What We Do
-              </Link>
-              <Link
-                href="#manifesto"
-                className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors"
-              >
-                Clients
-              </Link>
-              <Link
-                href="#contact"
-                className="text-[20px] leading-tight font-medium hover:text-brand-green transition-colors"
-              >
-                Contact
-              </Link>
+              {NAV_LINKS.map((link) => (
+                <Link key={link.label} href={link.href} className="ui-footer-link">
+                  {link.label}
+                </Link>
+              ))}
             </nav>
 
-            {/* Second Row: Detailed Info - Spread out */}
             <div className="flex flex-wrap justify-between gap-12">
               <div className="space-y-6">
-                <h3 className="font-bold tracking-wider text-[31px] text-white">
-                  Locations
-                </h3>
+                <h3 className="ui-footer-heading">Locations</h3>
                 <div className="space-y-2 text-lg text-brand-gray">
                   <p>Sao Tome and Principe</p>
                   <p>(208) 555-0112</p>
                 </div>
               </div>
+
               <div className="space-y-6 lg:min-w-[300px]">
-                <h3 className="font-bold tracking-wider text-[31px] text-white">
-                  Other
-                </h3>
+                <h3 className="ui-footer-heading">Other</h3>
                 <div className="space-y-2 text-lg text-brand-gray">
-                  <p>
-                    <Link
-                      href="/brand-book"
-                      className="hover:text-brand-green underline transition-colors"
-                    >
-                      Brand Book
-                    </Link>
-                  </p>
-                  <p>
-                    <Link
-                      href="/employee-hand-book"
-                      className="hover:text-brand-green underline transition-colors"
-                    >
-                      Employee Hand Book
-                    </Link>
-                  </p>
+                  {OTHER_LINKS.map((link) => (
+                    <p key={link.label}>
+                      <Link href={link.href} className="underline transition-colors hover:text-brand-green">
+                        {link.label}
+                      </Link>
+                    </p>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </SiteContainer>
 
-      {/* Bottom Bar with Full-Width Border */}
       <div className="mt-20 border-t border-white/10 pt-8">
-        <div className="mx-auto max-w-[1400px] px-4 sm:px-6 md:px-10 lg:px-16 text-center sm:text-left">
+        <SiteContainer className="text-center sm:text-left">
           <p className="text-sm text-brand-gray">
             Copyright &copy; {currentYear} Properganda - All Rights Reserved.
           </p>
-        </div>
+        </SiteContainer>
       </div>
     </footer>
   );

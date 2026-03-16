@@ -1,17 +1,20 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
+import { SectionEyebrow } from "@/components/ui/section-eyebrow";
+import { SectionShell } from "@/components/ui/section-shell";
+import { SiteContainer } from "@/components/ui/site-container";
+
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const services = [
+const SERVICES = [
   {
     id: "brand",
     text: "We build brands.",
-    bold: false,
     subItems: [
       "Brand identity & strategy",
       "Visual systems",
@@ -23,7 +26,6 @@ const services = [
   {
     id: "campaigns",
     text: "We design campaigns.",
-    bold: true,
     subItems: [
       "Digital & social campaigns",
       "Impact storytelling",
@@ -35,7 +37,6 @@ const services = [
   {
     id: "stories",
     text: "We craft stories.",
-    bold: false,
     subItems: [
       "Content creation",
       "Scriptwriting & copywriting",
@@ -47,7 +48,6 @@ const services = [
   {
     id: "conversations",
     text: "We shape conversations.",
-    bold: false,
     subItems: [
       "Public relations",
       "Community engagement",
@@ -58,58 +58,75 @@ const services = [
   },
 ];
 
+const DEFAULT_ACTIVE = 1;
+
 export default function Services() {
   const sectionRef = useRef<HTMLElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const subRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const DEFAULT_ACTIVE = 1;
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(DEFAULT_ACTIVE);
 
-  // Compute opacity for item i relative to activeIndex (null = all equal)
-  const getOpacityFor = (activeIndex: number | null, i: number): number => {
+  const getOpacityFor = (activeIndex: number | null, index: number): number => {
     if (activeIndex === null) return 1;
-    if (i === activeIndex) return 1;
-    const diff = Math.abs(activeIndex - i);
+    if (index === activeIndex) return 1;
+
+    const diff = Math.abs(activeIndex - index);
     return diff === 1 ? 0.3 : 0.1;
   };
 
-  // Apply opacity + sub-text state for a given active index
   const applyActive = (activeIndex: number, animate = true) => {
-    itemRefs.current.forEach((el, i) => {
+    itemRefs.current.forEach((el, index) => {
       if (!el) return;
-      const op = getOpacityFor(activeIndex, i);
-      animate
-        ? gsap.to(el, { opacity: op, duration: 0.35, ease: "power2.out" })
-        : gsap.set(el, { opacity: op });
+
+      const opacity = getOpacityFor(activeIndex, index);
+      if (animate) {
+        gsap.to(el, { opacity, duration: 0.35, ease: "power2.out" });
+      } else {
+        gsap.set(el, { opacity });
+      }
     });
 
-    subRefs.current.forEach((el, i) => {
+    subRefs.current.forEach((el, index) => {
       if (!el) return;
-      if (i === activeIndex) {
-        animate
-          ? gsap.to(el, { height: "auto", opacity: 1, duration: 0.4, ease: "power2.out" })
-          : gsap.set(el, { height: "auto", opacity: 1, overflow: "hidden" });
+
+      if (index === activeIndex) {
+        if (animate) {
+          gsap.to(el, {
+            height: "auto",
+            opacity: 1,
+            duration: 0.4,
+            ease: "power2.out",
+          });
+        } else {
+          gsap.set(el, { height: "auto", opacity: 1, overflow: "hidden" });
+        }
+        return;
+      }
+
+      if (animate) {
+        gsap.to(el, {
+          height: 0,
+          opacity: 0,
+          duration: 0.3,
+          ease: "power2.in",
+        });
       } else {
-        animate
-          ? gsap.to(el, { height: 0, opacity: 0, duration: 0.3, ease: "power2.in" })
-          : gsap.set(el, { height: 0, opacity: 0, overflow: "hidden" });
+        gsap.set(el, { height: 0, opacity: 0, overflow: "hidden" });
       }
     });
   };
 
   useGSAP(
     () => {
-      // Sub-text: open index 1 by default, hide rest
-      subRefs.current.forEach((el, i) => {
+      subRefs.current.forEach((el, index) => {
         if (!el) return;
-        if (i === DEFAULT_ACTIVE) {
+
+        if (index === DEFAULT_ACTIVE) {
           gsap.set(el, { height: "auto", opacity: 1, overflow: "hidden" });
         } else {
           gsap.set(el, { height: 0, opacity: 0, overflow: "hidden" });
         }
       });
 
-      // Entrance animation — only translate Y, no opacity (opacity managed separately)
       gsap.from(".service-item", {
         y: 60,
         stagger: 0.18,
@@ -122,47 +139,40 @@ export default function Services() {
         },
       });
     },
-    { scope: sectionRef }
+    { scope: sectionRef },
   );
 
   const handleMouseEnter = (index: number) => {
-    setHoveredIndex(index);
     applyActive(index, true);
   };
 
-  // Only called when mouse leaves the ENTIRE list — not between items
   const handleListMouseLeave = () => {
-    setHoveredIndex(DEFAULT_ACTIVE);
     applyActive(DEFAULT_ACTIVE, true);
   };
 
   return (
-    <section
+    <SectionShell
       ref={sectionRef}
       id="services"
-      className="bg-brand-black px-4 py-24 sm:px-6 md:px-10 md:py-32 lg:px-16"
+      variant="dark"
       aria-label="Our services"
     >
-      <div className="mx-auto max-w-[1400px]">
-       <p className="cc-text-item relative z-10 mb-5 text-xs font-bold tracking-[0.2em] text-[#169D52] uppercase">
-          What We Do
-        </p>
+      <SiteContainer>
+        <SectionEyebrow>What We Do</SectionEyebrow>
 
-        <div
-          className="flex flex-col gap-1"
-          onMouseLeave={handleListMouseLeave}
-        >
-          {services.map((service, index) => (
+        <div className="flex flex-col gap-1" onMouseLeave={handleListMouseLeave}>
+          {SERVICES.map((service, index) => (
             <div
               key={service.id}
-              ref={(el) => { itemRefs.current[index] = el; }}
+              ref={(el) => {
+                itemRefs.current[index] = el;
+              }}
               className="service-item cursor-default"
               style={{ opacity: getOpacityFor(DEFAULT_ACTIVE, index) }}
               onMouseEnter={() => handleMouseEnter(index)}
             >
-              {/* Main heading */}
               <p
-                className="text-white whitespace-nowrap"
+                className="whitespace-nowrap text-white"
                 style={{
                   fontFamily: "Inter, sans-serif",
                   fontWeight: 700,
@@ -174,18 +184,19 @@ export default function Services() {
                 {service.text}
               </p>
 
-              {/* Sub-text — GSAP animated */}
               <div
-                ref={(el) => { subRefs.current[index] = el; }}
+                ref={(el) => {
+                  subRefs.current[index] = el;
+                }}
                 style={{ height: 0, opacity: 0, overflow: "hidden" }}
               >
-                <p className="text-[0.75rem] text-white tracking-wide leading-relaxed">
-                  {service.subItems.slice(0, 3).map((item, i) => (
+                <p className="text-[0.75rem] leading-relaxed tracking-wide text-white">
+                  {service.subItems.slice(0, 3).map((item, itemIndex) => (
                     <span key={item}>
-                      <span className="underline underline-offset-2 cursor-pointer hover:opacity-70 transition-opacity">
+                      <span className="cursor-pointer underline underline-offset-2 transition-opacity hover:opacity-70">
                         {item}
                       </span>
-                      {i < Math.min(service.subItems.length, 3) - 1 && (
+                      {itemIndex < Math.min(service.subItems.length, 3) - 1 && (
                         <span className="mx-2 opacity-40">|</span>
                       )}
                     </span>
@@ -193,12 +204,12 @@ export default function Services() {
                   {service.subItems.length > 3 && (
                     <>
                       <br />
-                      {service.subItems.slice(3).map((item, i) => (
+                      {service.subItems.slice(3).map((item, itemIndex) => (
                         <span key={item}>
-                          <span className="underline underline-offset-2 cursor-pointer hover:opacity-70 transition-opacity">
+                          <span className="cursor-pointer underline underline-offset-2 transition-opacity hover:opacity-70">
                             {item}
                           </span>
-                          {i < service.subItems.slice(3).length - 1 && (
+                          {itemIndex < service.subItems.slice(3).length - 1 && (
                             <span className="mx-2 opacity-40">|</span>
                           )}
                         </span>
@@ -210,7 +221,7 @@ export default function Services() {
             </div>
           ))}
         </div>
-      </div>
-    </section>
+      </SiteContainer>
+    </SectionShell>
   );
 }
