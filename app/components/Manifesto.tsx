@@ -131,7 +131,7 @@ export default function Manifesto() {
             </svg>
           </button>
 
-          <div className="cursor-grab overflow-hidden active:cursor-grabbing" ref={emblaRef}>
+          <div className="cursor-grab overflow-hidden active:cursor-grabbing bg-neutral-cool-50" ref={emblaRef}>
             <div className="flex">
               {MANIFESTO_DATA.map((slide) => (
                 <div className="min-w-0 flex-[0_0_100%]" key={slide.id}>

@@ -535,7 +535,24 @@
   mask-composite: exclude;
 }
 
+.ui-commandments-link__orbit {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.ui-commandments-link__orbit-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
 .ui-commandments-link__label {
+  position: relative;
+  z-index: 2;
   font-family: var(--font-runtime-bebas-neue), sans-serif;
   font-size: clamp(2rem, 3vw, 3rem);
   line-height: 1;
@@ -548,6 +565,12 @@
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-commandments-link__orbit {
+    display: none;
+  }
 }
 
 .ui-no-scrollbar::-webkit-scrollbar {
