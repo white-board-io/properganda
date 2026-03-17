@@ -1,10 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 import { ChevronDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -22,8 +19,6 @@ import { SiteContainer } from "@/components/ui/site-container";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
-
 const SERVICES = [
   { value: "branding", label: "Branding" },
   { value: "marketing", label: "Marketing" },
@@ -31,58 +26,14 @@ const SERVICES = [
 ];
 
 export default function CTA() {
-  const sectionRef = useRef<HTMLElement>(null);
   const [selectedService, setSelectedService] = useState("");
 
   const selectedServiceLabel = SERVICES.find(
     (service) => service.value === selectedService,
   )?.label;
 
-  useGSAP(
-    () => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 60%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      tl.from(".cta-card", {
-        opacity: 0,
-        y: 60,
-        duration: 0.8,
-        ease: "power3.out",
-      })
-        .from(
-          ".cta-content > *",
-          {
-            opacity: 0,
-            y: 20,
-            stagger: 0.1,
-            duration: 0.5,
-            ease: "power2.out",
-          },
-          "-=0.4",
-        )
-        .from(
-          ".cta-form-item",
-          {
-            opacity: 0,
-            y: 20,
-            stagger: 0.05,
-            duration: 0.5,
-            ease: "power2.out",
-          },
-          "-=0.3",
-        );
-    },
-    { scope: sectionRef },
-  );
-
   return (
     <SectionShell
-      ref={sectionRef}
       id="contact"
       variant="light"
       spacing="none"
@@ -246,12 +197,11 @@ export default function CTA() {
                 <Textarea id="message" className="w-full resize-none" required />
               </div>
 
-              <div>
+              <div className="cta-form-item">
                 <Button
                   type="submit"
                   variant="accent"
-                  size="lg"
-                  className="cta-form-item group mt-4 w-fit rounded-xl px-8 py-4"
+                  className="group mt-4 h-[62px] w-[342px] rounded-[20px] font-inter text-[16px] font-semibold leading-none tracking-[0.02em] opacity-100"
                 >
                   Request For Free Consultation
                   <svg

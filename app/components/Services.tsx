@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { SectionShell } from "@/components/ui/section-shell";
@@ -61,6 +62,7 @@ const SERVICES = [
 const DEFAULT_ACTIVE = 1;
 
 export default function Services() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(DEFAULT_ACTIVE);
   const sectionRef = useRef<HTMLElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const subRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -73,11 +75,13 @@ export default function Services() {
     return diff === 1 ? 0.3 : 0.1;
   };
 
-  const applyActive = (activeIndex: number, animate = true) => {
+  const applyActive = (newActiveIndex: number | null, animate = true) => {
+    setActiveIndex(newActiveIndex);
+
     itemRefs.current.forEach((el, index) => {
       if (!el) return;
 
-      const opacity = getOpacityFor(activeIndex, index);
+      const opacity = getOpacityFor(newActiveIndex, index);
       if (animate) {
         gsap.to(el, { opacity, duration: 0.35, ease: "power2.out" });
       } else {
@@ -88,7 +92,7 @@ export default function Services() {
     subRefs.current.forEach((el, index) => {
       if (!el) return;
 
-      if (index === activeIndex) {
+      if (index === newActiveIndex) {
         if (animate) {
           gsap.to(el, {
             height: "auto",
@@ -143,11 +147,24 @@ export default function Services() {
   );
 
   const handleMouseEnter = (index: number) => {
-    applyActive(index, true);
+    // Only apply hover effects on wider screens to avoid mobile touch conflicts
+    if (window.innerWidth >= 768) {
+      applyActive(index, true);
+    }
   };
 
   const handleListMouseLeave = () => {
-    applyActive(DEFAULT_ACTIVE, true);
+    if (window.innerWidth >= 768) {
+      applyActive(DEFAULT_ACTIVE, true);
+    }
+  };
+
+  const handleClick = (index: number) => {
+    if (activeIndex === index) {
+      applyActive(null, true);
+    } else {
+      applyActive(index, true);
+    }
   };
 
   return (
@@ -160,29 +177,40 @@ export default function Services() {
       <SiteContainer>
         <SectionEyebrow>What We Do</SectionEyebrow>
 
-        <div className="flex flex-col gap-1" onMouseLeave={handleListMouseLeave}>
+        <div className="flex flex-col gap-4" onMouseLeave={handleListMouseLeave}>
           {SERVICES.map((service, index) => (
             <div
               key={service.id}
               ref={(el) => {
                 itemRefs.current[index] = el;
               }}
-              className="service-item cursor-default"
+              className="service-item cursor-pointer md:cursor-default"
               style={{ opacity: getOpacityFor(DEFAULT_ACTIVE, index) }}
               onMouseEnter={() => handleMouseEnter(index)}
+              onClick={() => handleClick(index)}
             >
-              <p
-                className="whitespace-nowrap text-white"
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontWeight: 700,
-                  fontSize: "clamp(2.5rem, 7vw, 100px)",
-                  lineHeight: "1.2",
-                  letterSpacing: "0%",
-                }}
-              >
-                {service.text}
-              </p>
+                <div className="flex w-full items-center justify-between gap-4">
+                  <p
+                    className="text-white break-words w-[calc(100%-3rem)] md:w-full"
+                    style={{
+                      fontFamily: "Inter, sans-serif",
+                      fontWeight: 700,
+                      fontSize: "clamp(2.5rem, 7vw, 100px)",
+                      lineHeight: "1.2",
+                      letterSpacing: "0%",
+                    }}
+                  >
+                    {service.text}
+                  </p>
+
+                  <div className="md:hidden flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white text-black">
+                    {activeIndex === index ? (
+                      <ChevronUp className="h-5 w-5" strokeWidth={3} />
+                    ) : (
+                      <ChevronDown className="h-5 w-5" strokeWidth={3} />
+                    )}
+                  </div>
+                </div>
 
               <div
                 ref={(el) => {

@@ -28,7 +28,7 @@ export default function Hero({
   const sectionRef = useRef<HTMLElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
   const subtextRef = useRef<HTMLDivElement>(null);
-  const cursorRef = useRef<HTMLSpanElement>(null);
+  const conscienceRef = useRef<HTMLSpanElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const standRef = useRef<HTMLParagraphElement>(null);
   const orbitContainerRef = useRef<HTMLDivElement>(null);
@@ -40,53 +40,35 @@ export default function Hero({
       const textTargets = [headingRef.current, subtextRef.current].filter(
         Boolean,
       );
-      const chars = Array.from(
-        headingRef.current?.querySelectorAll<HTMLElement>(".typewriter-char") ??
-          [],
-      );
-      const cursor = cursorRef.current;
+      const conscience = conscienceRef.current;
 
-      // Initial states — chars + cursor stay hidden while the h1 fades in
+      // Initial state
       gsap.set(textTargets, { opacity: 0 });
-      gsap.set(chars, { opacity: 0 });
-      gsap.set(cursor, { opacity: 0 });
-
-      // Cursor blink tween — started manually after opacity reveal
-      const cursorBlink = gsap.to(cursor, {
-        opacity: 0,
-        yoyo: true,
-        repeat: -1,
-        paused: true,
-        duration: 0.6,
-        ease: "expo.inOut",
-      });
 
       const tl = gsap.timeline({ delay: 0.1 });
 
-      // 1. Fade-in "Creativity With A" + subtext; pin "typing" label at its START
-      tl.to(textTargets, { opacity: 1, duration: 1, ease: "circ.out" }).addLabel(
-        "typing",
-        "<",
-      );
+      tl.to(textTargets, { opacity: 1, duration: 1, ease: "circ.out" });
 
-      // 2. Cursor appears at t=0 of the opacity tween — fully parallel, zero wait
-      tl.call(
-        () => {
-          if (!cursor) return;
-          chars[0]?.before(cursor);
-          gsap.set(cursor, { opacity: 1 });
-          cursorBlink.play();
-        },
-        [],
-        "typing",
-      );
+      if (conscience) {
+        gsap.to(conscience, {
+          color: "#ffffff",
+          duration: 0.8,
+          repeat: -1,
+          yoyo: true,
+          ease: "power1.inOut",
+        });
 
-      // 3. Each char + cursor move anchored to "typing" — C_ → Co_ → Con_ …
-      chars.forEach((char, i) => {
-        const t = `typing+=${i * 0.07}`;
-        tl.set(char, { opacity: 1 }, t);
-        tl.call(() => { if (cursor) char.after(cursor); }, [], t);
-      });
+        gsap.to(conscience, {
+          keyframes: [
+            { scale: 1.08, duration: 0.1, ease: "power1.out" },
+            { scale: 1, duration: 0.1, ease: "power1.in" },
+            { scale: 1.08, duration: 0.1, ease: "power1.out" },
+            { scale: 1, duration: 0.5, ease: "power1.in" },
+          ],
+          repeat: -1,
+          transformOrigin: "center center",
+        });
+      }
     },
     { scope: sectionRef, dependencies: [variant] },
   );
@@ -136,24 +118,40 @@ export default function Hero({
           { progress: 0 },
           {
             progress: 1,
-            duration: 30,
+            duration: 15,
             repeat: -1,
             ease: "none",
             onUpdate: function () {
               const progress = this.targets()[0].progress;
               chars.forEach((char, i) => {
-                const charOffset = (i / chars.length) * Math.PI * 2;
-                // Anticlockwise by subtracting progress
-                const angle = charOffset - progress * Math.PI * 2;
+                const charOffset = (-i / chars.length) * Math.PI * 2;
+                const angle = charOffset + progress * Math.PI * 2;
                 const x = Math.cos(angle) * radiusX;
                 const y = Math.sin(angle) * radiusY;
+
+                // When y is negative, the character is in the top/back half of the ellipse.
+                // We use Math.sin(angle) to smoothly interpolate opacity.
+                // At sin(angle) = 1 (front center), opacity is 1.
+                // At sin(angle) = 0 (edges), opacity is still decent (e.g., 0.8).
+                // At sin(angle) = -1 (back center), opacity should be 0.
+                const sinValue = Math.sin(angle);
+                
+                // Opacity mapping: 
+                // Front half (sinValue > 0): 0.6 to 1.0
+                // Back half (sinValue < 0): 0 at the very back (-1), but fades out quickly.
+                // Using a sharp fade out when going into the negative.
+                let targetOpacity = 0;
+                if (sinValue >= -0.2) {
+                   // Map [-0.2, 1] to [0, 1]
+                   targetOpacity = (sinValue + 0.2) / 1.2;
+                }
 
                 gsap.set(char, {
                   x: x,
                   y: y,
-                  scale: 1,
-                  opacity: 1,
-                  zIndex: 100,
+                  scale: 0.8 + Math.max(0, sinValue) * 0.2, // slight scale effect for depth
+                  opacity: targetOpacity,
+                  zIndex: sinValue > 0 ? 100 : 10, // send to back properly
                   rotation: 0,
                 });
               });
@@ -187,7 +185,7 @@ export default function Hero({
           <div className="absolute inset-0 bg-linear-to-t from-brand-black/80 via-brand-black/20 to-transparent" />
         </section>
 
-        <SiteContainer className="z-10 w-full">
+        <SiteContainer className="z-10 w-full mt-24 lg:mt-64">
           <section className="flex flex-col items-start justify-center gap-12">
             <h1
               ref={headingRef}
@@ -196,16 +194,9 @@ export default function Hero({
               <span className="block whitespace-nowrap">Creativity With</span>
               <span className="block whitespace-nowrap">
                 {"A "}
-                {"Conscience".split("").map((char, i) => (
-                  <span key={i} className="typewriter-char text-green-500">
-                    {char}
-                  </span>
-                ))}
-                {/* Blinking underscore cursor — moves after each typed char */}
-                <span
-                  ref={cursorRef}
-                  className="inline-block xl:w-[48px] h-2 w-4 xl:h-[18px] bg-green-500 align-bottom xl:translate-y-[-0.13em] translate-y-[-0.10em] sm:translate-y-[-0.14em] lg:translate-y-[-0.17em] lg:h-[18px] lg:w-[32px] md:translate-y-[-0.16em] md:h-[14px] md:w-[24px]"
-                />
+                <span ref={conscienceRef} className="text-green-500 inline-block">
+                  Conscience
+                </span>
               </span>
             </h1>
 
@@ -238,7 +229,7 @@ export default function Hero({
           <aside
             ref={badgeRef}
             aria-label="Let's Talk Button"
-            className="ui-hero-badge absolute bottom-20 right-8 flex h-24 w-24 items-center justify-center rounded-full transition-shadow md:h-20 md:w-20 lg:bottom-[4rem] lg:right-[1rem]"
+            className="ui-hero-badge fixed bottom-20 right-8 z-50 flex h-24 w-24 items-center justify-center rounded-full transition-shadow md:h-20 md:w-20 lg:bottom-[4rem] lg:right-[1rem]"
           >
             <svg
               width="100%"
@@ -300,7 +291,7 @@ export default function Hero({
         <div className="absolute inset-0 bg-black/60" />
       </div>
 
-      <SiteContainer className="z-10 flex w-full flex-1 flex-col items-center justify-center">
+      <SiteContainer className="z-10 flex w-full flex-1 flex-col items-center justify-center mt-24 lg:mt-32">
         <div className="relative flex items-center justify-center pt-20">
           <div
             ref={orbitContainerRef}
@@ -323,7 +314,7 @@ export default function Hero({
 
         <div
           ref={badgeRef}
-          className="ui-hero-badge absolute bottom-[5rem] right-[2rem] flex h-24 w-24 items-center justify-center rounded-full transition-shadow md:h-20 md:w-20 lg:bottom-[4rem] lg:right-[1rem]"
+          className="ui-hero-badge fixed bottom-[5rem] right-[2rem] z-50 flex h-24 w-24 items-center justify-center rounded-full transition-shadow md:h-20 md:w-20 lg:bottom-[4rem] lg:right-[1rem]"
           aria-label="Let's Talk"
         >
           <svg

@@ -71,7 +71,7 @@ export default function Footer() {
             </Link>
 
             <div className="flex flex-col gap-8">
-              <h2 className="text-3xl font-bold leading-tight text-brand-green sm:text-4xl lg:h-[102px] lg:w-[332px] lg:text-[40px] lg:leading-[51px]">
+              <h2 className="text-3xl font-bold leading-tight text-[#169D52] sm:text-4xl lg:h-[102px] lg:w-[332px] lg:text-[40px] lg:leading-[51px]">
                 We&apos;re not big.
                 <br />
                 But we&apos;re Proper.
