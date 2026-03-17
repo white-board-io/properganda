@@ -1,0 +1,292 @@
+# Instincts generated from https://github.com/white-board-io/properganda
+# Generated: 2026-03-17T15:35:37.942Z
+# Version: 2.0
+
+---
+id: properganda-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: feat, style, chore, perf
+
+## Evidence
+
+- 21 commits analyzed
+- Detected conventional commit pattern
+- Examples: feat: Implement mobile accordion for services, add new black logo, update global fonts, and refine component styling., style: adjust TorriStatementGraphic viewBox and AboutUs layout spacing
+
+---
+id: properganda-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Commit Length
+
+## Action
+
+Write moderate-length commit messages (~50 characters)
+
+## Evidence
+
+- Average commit message length: 73 chars
+- Based on 21 commits
+
+---
+id: properganda-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Naming Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: camelCase
+
+---
+id: properganda-import-alias
+trigger: "when importing modules"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Import Alias
+
+## Action
+
+Use path aliases (@/, ~/) instead of relative imports
+
+## Evidence
+
+- Import analysis shows alias pattern
+- Example: import { x } from '@/lib/x'
+
+---
+id: properganda-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Export Style
+
+## Action
+
+Prefer default exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: default
+
+---
+id: properganda-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: properganda-workflow-feature-development
+trigger: "when implementing a new feature"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Workflow Feature Development
+
+## Action
+
+Follow the feature-development workflow:
+1. Add feature implementation
+2. Add tests for feature
+3. Update documentation
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~20x per month
+- Files: app/components/*, app/*, components/ui/*
+
+---
+id: properganda-workflow-refactoring
+trigger: "when refactoring code"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Workflow Refactoring
+
+## Action
+
+Follow the refactoring workflow:
+1. Ensure tests pass before refactor
+2. Refactor code structure
+3. Verify tests still pass
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~7x per month
+- Files: src/**/*
+
+---
+id: properganda-workflow-feature-development-across-multiple-components
+trigger: "when doing feature development across multiple components"
+confidence: 0.7
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Workflow Feature Development Across Multiple Components
+
+## Action
+
+Follow the feature-development-across-multiple-components workflow:
+1. Edit or create multiple files in app/components/ (e.g., AboutUs.tsx, Hero.tsx, Footer.tsx, etc.)
+2. Update app/globals.css for global style changes
+3. Modify app/layout.tsx or app/page.tsx if layout or routing is affected
+4. Add or update assets in public/images/ or public/images/svg/ if needed
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~4x per month
+- Files: app/components/*.tsx, app/globals.css, app/layout.tsx
+
+---
+id: properganda-workflow-component-refactor-and-splitting
+trigger: "when doing component refactor and splitting"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Workflow Component Refactor And Splitting
+
+## Action
+
+Follow the component-refactor-and-splitting workflow:
+1. Split an existing file in app/components/ into multiple new files (e.g., CreativeCollective.tsx → AboutUs.tsx, Commandments.tsx)
+2. Update references in other components or pages to use the new components
+3. Adjust layout or page files if necessary
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: app/components/*.tsx, app/layout.tsx, app/page.tsx
+
+---
+id: properganda-workflow-seo-and-metadata-configuration
+trigger: "when doing seo and metadata configuration"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Workflow Seo And Metadata Configuration
+
+## Action
+
+Follow the seo-and-metadata-configuration workflow:
+1. Create or update app/robots.ts and app/sitemap.ts
+2. Edit or add lib/seo.ts for centralized SEO configuration
+3. Update metadata in app/layout.tsx and relevant page files (e.g., app/page.tsx, app/commandments/page.tsx)
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: app/robots.ts, app/sitemap.ts, lib/seo.ts
+
+---
+id: properganda-workflow-add-or-update-shared-ui-components
+trigger: "when doing add or update shared ui components"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Workflow Add Or Update Shared Ui Components
+
+## Action
+
+Follow the add-or-update-shared-ui-components workflow:
+1. Create or edit files in components/ui/ (e.g., dropdown-menu.tsx, button.tsx, card.tsx, etc.)
+2. Update usages in app/components/ as needed
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: components/ui/*.tsx, app/components/*.tsx
+
+---
+id: properganda-workflow-global-style-and-font-updates
+trigger: "when doing global style and font updates"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Workflow Global Style And Font Updates
+
+## Action
+
+Follow the global-style-and-font-updates workflow:
+1. Edit app/globals.css to update global styles or font variables
+2. Update font usage in app/components/*.tsx as needed
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: app/globals.css, app/components/*.tsx
+
