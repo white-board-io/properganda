@@ -104,7 +104,13 @@ export default function Manifesto() {
             className="absolute left-[-80px] top-[35%] z-10 hidden -translate-y-1/2 scale-150 text-brand-black/40 transition-all duration-300 hover:text-brand-black lg:block"
             aria-label="Previous slide"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
               <path
                 d="M15 18L9 12L15 6"
                 stroke="currentColor"
@@ -120,7 +126,13 @@ export default function Manifesto() {
             className="absolute right-[-80px] top-[35%] z-10 hidden -translate-y-1/2 scale-150 text-brand-black/40 transition-all duration-300 hover:text-brand-black lg:block"
             aria-label="Next slide"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
               <path
                 d="M9 18L15 12L9 6"
                 stroke="currentColor"
@@ -131,16 +143,26 @@ export default function Manifesto() {
             </svg>
           </button>
 
-          <div className="cursor-grab overflow-hidden active:cursor-grabbing bg-neutral-cool-50" ref={emblaRef}>
+          <div
+            className="cursor-grab overflow-hidden active:cursor-grabbing bg-neutral-cool-50"
+            ref={emblaRef}
+          >
             <div className="flex">
               {MANIFESTO_DATA.map((slide) => (
-                <div className="min-w-0 flex-[0_0_100%]" key={slide.id}>
-                  <Card variant="soft" className="relative mb-14 mx-4 p-10 md:p-16">
+                <div
+                  className="min-w-0 flex-[0_0_100%]"
+                  key={slide.id}
+                >
+                  <Card className="relative mb-14 p-10 md:p-16 rounded-xl">
                     <div className="ui-copy">
                       {getWordTokens(slide.text).map((token) => (
                         <span
                           key={`${slide.id}-${token.id}`}
-                          className={token.isBold ? "font-bold" : "font-normal opacity-80"}
+                          className={
+                            token.isBold
+                              ? "font-bold"
+                              : "font-normal opacity-80"
+                          }
                         >
                           {token.value}
                         </span>
@@ -174,7 +196,9 @@ export default function Manifesto() {
                         <h3 className="text-lg font-bold leading-tight tracking-tight text-brand-black">
                           {slide.author}
                         </h3>
-                        <p className="ui-caption mt-1 text-brand-gray-dark">{slide.role}</p>
+                        <p className="ui-caption mt-1 text-brand-gray-dark">
+                          {slide.role}
+                        </p>
                       </div>
                     </div>
                   </div>

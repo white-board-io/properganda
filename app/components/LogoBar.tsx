@@ -1,15 +1,9 @@
 "use client";
 
-import { useRef } from "react";
 import Image from "next/image";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const LOGOS = [
   { name: "HCC", src: "/images/svg/hcc.svg" },
@@ -21,45 +15,44 @@ const LOGOS = [
 ];
 
 export default function LogoBar() {
-  const containerRef = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      gsap.from(".logo-item", {
-        opacity: 0,
-        y: 20,
-        stagger: 0.1,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 85%",
-          toggleActions: "play none none none",
-        },
-      });
-    },
-    { scope: containerRef },
-  );
-
   return (
     <SectionShell
-      ref={containerRef}
       variant="light"
       spacing="none"
       className="py-12"
       aria-label="Trusted by"
     >
+      <style>{`
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+          animation: marquee 25s linear infinite;
+        }
+      `}</style>
       <SiteContainer>
-        <div className="flex flex-wrap items-center justify-center gap-8 lg:justify-between">
-          {LOGOS.map((logo) => (
-            <div key={logo.name} className="logo-item flex items-center justify-center">
-              <Image
-                width={120}
-                height={48}
-                src={logo.src}
-                alt={logo.name}
-                className="h-10 w-auto object-contain"
-              />
+        <div className="relative flex w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+          {[0, 1].map((i) => (
+            <div
+              key={i}
+              className="flex min-w-full shrink-0 animate-marquee items-center justify-around gap-12 pr-12 lg:gap-24 lg:pr-24"
+              aria-hidden={i === 1}
+            >
+              {LOGOS.map((logo) => (
+                <div
+                  key={logo.name}
+                  className="flex items-center justify-center opacity-70 transition-opacity hover:opacity-100"
+                >
+                  <Image
+                    width={120}
+                    height={48}
+                    src={logo.src}
+                    alt={logo.name}
+                    className="h-10 w-auto object-contain"
+                  />
+                </div>
+              ))}
             </div>
           ))}
         </div>
