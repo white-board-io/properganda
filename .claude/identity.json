@@ -1,0 +1,15 @@
+{
+  "version": "2.0",
+  "technicalLevel": "technical",
+  "preferredStyle": {
+    "verbosity": "moderate",
+    "codeComments": false,
+    "explanations": false
+  },
+  "domains": [
+    "typescript",
+    "next.js"
+  ],
+  "suggestedBy": "ecc-tools-repo-analysis",
+  "createdAt": "2026-03-17T15:35:37.942Z"
+}
