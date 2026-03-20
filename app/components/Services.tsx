@@ -4,7 +4,27 @@ import { useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  PencilRuler,
+  Image,
+  Flag,
+  FilePenLine,
+  Monitor,
+  ImagePlay,
+  BookOpen,
+  FileSignature,
+  FileText,
+  Megaphone,
+  Route,
+  Crown,
+  Lightbulb,
+  Users,
+  Drama,
+  Hand,
+  Leaf
+} from "lucide-react";
 
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { SectionShell } from "@/components/ui/section-shell";
@@ -17,44 +37,41 @@ const SERVICES = [
     id: "brand",
     text: "We build brands.",
     subItems: [
-      "Brand identity & strategy",
-      "Visual systems",
-      "Brand guidelines",
-      "Naming & positioning",
-      "Logo & mark design",
+      { text: "Brand strategy", icon: PencilRuler },
+      { text: "Visual identity", icon: Image },
+      { text: "Positioning", icon: Flag },
+      { text: "Messaging", icon: FilePenLine },
+      { text: "Digital presence", icon: Monitor },
     ],
   },
   {
     id: "campaigns",
     text: "We design campaigns.",
     subItems: [
-      "Digital & social campaigns",
-      "Impact storytelling",
-      "Thought leadership",
-      "Film & video",
-      "Strategy & narrative architecture",
+      { text: "Brand films", icon: ImagePlay },
+      { text: "Editorial content", icon: BookOpen },
+      { text: "Scriptwriting", icon: FileSignature },
+      { text: "Narrative strategy", icon: FileText },
     ],
   },
   {
     id: "stories",
-    text: "We craft stories.",
+    text: "We tell stories.",
     subItems: [
-      "Content creation",
-      "Scriptwriting & copywriting",
-      "Editorial direction",
-      "Documentary storytelling",
-      "Branded content",
+      { text: "Digital & social campaigns", icon: Megaphone },
+      { text: "Creative strategy", icon: Route },
+      { text: "Thought leadership", icon: Crown },
+      { text: "IPs", icon: Lightbulb },
     ],
   },
   {
-    id: "conversations",
-    text: "We shape conversations.",
+    id: "impact",
+    text: "We create impact.",
     subItems: [
-      "Public relations",
-      "Community engagement",
-      "Crisis communication",
-      "Media relations",
-      "Narrative management",
+      { text: "Impact communication", icon: Users },
+      { text: "Internal & Culture communication", icon: Drama },
+      { text: "Advocacy campaigns", icon: Hand },
+      { text: "ESG & Sustainability storytelling", icon: Leaf },
     ],
   },
 ];
@@ -121,10 +138,17 @@ export default function Services() {
 
   useGSAP(
     () => {
+      const isMobile = window.innerWidth < 768;
+      if (isMobile) {
+        setActiveIndex(null);
+      }
+
       subRefs.current.forEach((el, index) => {
         if (!el) return;
 
-        if (index === DEFAULT_ACTIVE) {
+        const isActive = isMobile ? false : index === DEFAULT_ACTIVE;
+
+        if (isActive) {
           gsap.set(el, { height: "auto", opacity: 1, overflow: "hidden" });
         } else {
           gsap.set(el, { height: 0, opacity: 0, overflow: "hidden" });
@@ -171,7 +195,7 @@ export default function Services() {
     <SectionShell
       ref={sectionRef}
       id="services"
-      variant="dark"
+      variant="light"
       aria-label="Our services"
     >
       <SiteContainer>
@@ -184,14 +208,14 @@ export default function Services() {
               ref={(el) => {
                 itemRefs.current[index] = el;
               }}
-              className="service-item cursor-pointer md:cursor-default"
+              className="service-item cursor-pointer md:cursor-default max-md:!opacity-100"
               style={{ opacity: getOpacityFor(DEFAULT_ACTIVE, index) }}
               onMouseEnter={() => handleMouseEnter(index)}
               onClick={() => handleClick(index)}
             >
                 <div className="flex w-full items-center justify-between gap-4">
                   <p
-                    className="text-white break-words w-[calc(100%-3rem)] md:w-full"
+                    className="text-black break-words w-[calc(100%-3rem)] md:w-full"
                     style={{
                       fontFamily: "Inter, sans-serif",
                       fontWeight: 700,
@@ -203,7 +227,7 @@ export default function Services() {
                     {service.text}
                   </p>
 
-                  <div className="md:hidden flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white text-black">
+                  <div className="md:hidden flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-black text-white">
                     {activeIndex === index ? (
                       <ChevronUp className="h-5 w-5" strokeWidth={3} />
                     ) : (
@@ -218,33 +242,17 @@ export default function Services() {
                 }}
                 style={{ height: 0, opacity: 0, overflow: "hidden" }}
               >
-                <p className="text-[0.75rem] leading-relaxed tracking-wide text-white">
-                  {service.subItems.slice(0, 3).map((item, itemIndex) => (
-                    <span key={item}>
-                      <span className="cursor-pointer underline underline-offset-2 transition-opacity hover:opacity-70">
-                        {item}
-                      </span>
-                      {itemIndex < Math.min(service.subItems.length, 3) - 1 && (
-                        <span className="mx-2 opacity-40">|</span>
-                      )}
-                    </span>
-                  ))}
-                  {service.subItems.length > 3 && (
-                    <>
-                      <br />
-                      {service.subItems.slice(3).map((item, itemIndex) => (
-                        <span key={item}>
-                          <span className="cursor-pointer underline underline-offset-2 transition-opacity hover:opacity-70">
-                            {item}
-                          </span>
-                          {itemIndex < service.subItems.slice(3).length - 1 && (
-                            <span className="mx-2 opacity-40">|</span>
-                          )}
-                        </span>
-                      ))}
-                    </>
-                  )}
-                </p>
+                <ul className="flex flex-col gap-3 md:gap-4 pt-6 pb-4 pl-2 md:pl-6 text-black">
+                  {service.subItems.map((item, itemIndex) => {
+                    const Icon = item.icon;
+                    return (
+                      <li key={itemIndex} className="flex items-center gap-3 md:gap-4 text-[#333] text-base md:text-xl md:font-medium">
+                        <Icon className="text-brand-green w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
+                        <span className="cursor-pointer transition-opacity hover:opacity-70">{item.text}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
             </div>
           ))}

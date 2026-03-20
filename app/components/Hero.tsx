@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -10,7 +10,7 @@ import { SiteContainer } from "@/components/ui/site-container";
 
 gsap.registerPlugin(useGSAP);
 
-const SLOT_WORDS = ["STAND", "SHINE", "SOAR", "THRIVE", "LEAD"] as const;
+const SLOT_WORDS = ["up", "out", "for something"] as const;
 
 const ORBIT_COPY = "COMMANDMENTS  ";
 const orbitCharacters = Array.from(ORBIT_COPY).map((char, index) => ({
@@ -33,6 +33,37 @@ export default function Hero({
   const standRef = useRef<HTMLParagraphElement>(null);
   const orbitContainerRef = useRef<HTMLDivElement>(null);
 
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [currentText, setCurrentText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    if (variant !== "default") return;
+
+    const word = SLOT_WORDS[currentWordIndex];
+    let timeoutId: NodeJS.Timeout;
+
+    if (!isDeleting && currentText === word) {
+      timeoutId = setTimeout(() => setIsDeleting(true), 1500);
+    } else if (isDeleting && currentText === "") {
+      timeoutId = setTimeout(() => {
+        setIsDeleting(false);
+        setCurrentWordIndex((prev) => (prev + 1) % SLOT_WORDS.length);
+      }, 1000);
+    } else {
+      const timeout = 250;
+      timeoutId = setTimeout(() => {
+        setCurrentText((prev) =>
+          isDeleting
+            ? word.slice(0, prev.length - 1)
+            : word.slice(0, prev.length + 1),
+        );
+      }, timeout);
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [currentText, isDeleting, currentWordIndex, variant]);
+
   useGSAP(
     () => {
       if (variant !== "default") return;
@@ -48,61 +79,6 @@ export default function Hero({
       const tl = gsap.timeline({ delay: 0.1 });
 
       tl.to(textTargets, { opacity: 1, duration: 1, ease: "circ.out" });
-
-      if (conscience) {
-        gsap.to(conscience, {
-          color: "#ffffff",
-          duration: 0.8,
-          repeat: -1,
-          yoyo: true,
-          ease: "power1.inOut",
-        });
-
-        gsap.to(conscience, {
-          keyframes: [
-            { scale: 1.08, duration: 0.1, ease: "power1.out" },
-            { scale: 1, duration: 0.1, ease: "power1.in" },
-            { scale: 1.08, duration: 0.1, ease: "power1.out" },
-            { scale: 1, duration: 0.5, ease: "power1.in" },
-          ],
-          repeat: -1,
-          transformOrigin: "center center",
-        });
-      }
-    },
-    { scope: sectionRef, dependencies: [variant] },
-  );
-
-  useGSAP(
-    () => {
-      if (variant !== "default" || !standRef.current) return;
-
-      const HOLD = 2;
-      const ROLL = 0.55;
-
-      const wordEls = Array.from(
-        standRef.current.querySelectorAll<HTMLElement>(".word-slot"),
-      );
-
-      // Initial state: first word (STAND) visible, rest queued below
-      gsap.set(wordEls[0], { y: "0%" });
-      gsap.set(wordEls.slice(1), { y: "110%" });
-
-      const cycleTl = gsap.timeline({ repeat: -1, delay: HOLD });
-
-      wordEls.forEach((_, i) => {
-        const cur = wordEls[i];
-        const nxt = wordEls[(i + 1) % wordEls.length];
-
-        cycleTl
-          // Ensure next word is staged below before it enters
-          .set(nxt, { y: "110%" })
-          // Current exits upward, next rolls in from below — fully parallel
-          .to(cur, { y: "-100%", duration: ROLL, ease: "power3.inOut" })
-          .to(nxt, { y: "0%", duration: ROLL, ease: "power3.inOut" }, "<")
-          // Hold this word before rolling to the next
-          .to({}, { duration: HOLD });
-      });
     },
     { scope: sectionRef, dependencies: [variant] },
   );
@@ -135,15 +111,15 @@ export default function Hero({
                 // At sin(angle) = 0 (edges), opacity is still decent (e.g., 0.8).
                 // At sin(angle) = -1 (back center), opacity should be 0.
                 const sinValue = Math.sin(angle);
-                
-                // Opacity mapping: 
+
+                // Opacity mapping:
                 // Front half (sinValue > 0): 0.6 to 1.0
                 // Back half (sinValue < 0): 0 at the very back (-1), but fades out quickly.
                 // Using a sharp fade out when going into the negative.
                 let targetOpacity = 0;
                 if (sinValue >= -0.2) {
-                   // Map [-0.2, 1] to [0, 1]
-                   targetOpacity = (sinValue + 0.2) / 1.2;
+                  // Map [-0.2, 1] to [0, 1]
+                  targetOpacity = (sinValue + 0.2) / 1.2;
                 }
 
                 gsap.set(char, {
@@ -173,15 +149,15 @@ export default function Hero({
         className="relative flex min-h-screen flex-col justify-center overflow-hidden px-0"
       >
         <section className="absolute inset-0">
-          <Image
-            fill
-            priority
-            sizes="100vw"
-            aria-hidden="true"
-            alt="Hero Background"
-            src="/images/hero-bg.png"
-            className="object-cover object-center opacity-100"
-          />
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="object-cover object-center w-full h-full opacity-100"
+          >
+            <source src="/videos/PPG-Home.mp4" type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-linear-to-t from-brand-black/80 via-brand-black/20 to-transparent" />
         </section>
 
@@ -194,34 +170,69 @@ export default function Hero({
               <span className="block whitespace-nowrap">Creativity With</span>
               <span className="block whitespace-nowrap">
                 {"A "}
-                <span ref={conscienceRef} className="text-green-500 inline-block">
+                <span ref={conscienceRef} className="text-white inline-block">
                   Conscience
                 </span>
               </span>
             </h1>
 
             <section className="relative flex items-center justify-between">
-              <div ref={subtextRef} className="flex flex-col gap-1 text-2xl">
-                <p className="text-white">
-                  For Brands <span className="font-bold">&</span>{" "}
+              <div ref={subtextRef} className="flex flex-col gap-1">
+                <p
+                  className="text-white opacity-50"
+                  style={{
+                    fontFamily: "var(--font-inter-google), Inter, sans-serif",
+                    fontWeight: 200,
+                    fontSize: "25px",
+                    lineHeight: "1.42",
+                    letterSpacing: "0.02em",
+                    fontStyle: "normal",
+                  }}
+                >
+                  For Brands{" "}
+                  <span
+                    style={{
+                      fontWeight: 700,
+                      fontFamily: "var(--font-inter-google), Inter, sans-serif",
+                    }}
+                  >
+                    &
+                  </span>{" "}
                   Businesses that want to
                 </p>
-                <p
-                  ref={standRef}
-                  className="relative overflow-hidden h-[1.1em] text-4xl tracking-wide text-white font-bold"
-                >
-                  {SLOT_WORDS.map((word, i) => (
-                    <span
-                      key={word}
-                      className="word-slot absolute inset-x-0 top-0 leading-none"
-                      style={{
-                        transform: i === 0 ? "translateY(0%)" : "translateY(110%)",
-                      }}
-                    >
-                      {word}
+                <div className="flex items-center gap-[0.3em]">
+                  <span
+                    className="text-white uppercase inline-block"
+                    style={{
+                      fontFamily: "var(--font-inter-google), Inter, sans-serif",
+                      fontWeight: 900,
+                      fontSize: "50px",
+                      lineHeight: "1.42",
+                      letterSpacing: "0.02em",
+                      verticalAlign: "middle",
+                    }}
+                  >
+                    STAND
+                  </span>
+                  <div
+                    ref={standRef}
+                    className="relative flex-1 text-white uppercase whitespace-nowrap"
+                    style={{
+                      height: "1.42em",
+                      fontFamily: "var(--font-inter-google), Inter, sans-serif",
+                      fontWeight: 900,
+                      fontSize: "50px",
+                      lineHeight: "1.42",
+                      letterSpacing: "0.02em",
+                      verticalAlign: "middle",
+                    }}
+                  >
+                    <span className="opacity-50">{currentText}</span>
+                    <span className="animate-cursor-blink opacity-50 ml-1">
+                      _
                     </span>
-                  ))}
-                </p>
+                  </div>
+                </div>
               </div>
             </section>
           </section>
@@ -229,7 +240,7 @@ export default function Hero({
           <aside
             ref={badgeRef}
             aria-label="Let's Talk Button"
-            className="ui-hero-badge fixed bottom-20 right-8 z-50 flex h-24 w-24 items-center justify-center rounded-full transition-shadow md:h-20 md:w-20 lg:bottom-[4rem] lg:right-[1rem]"
+            className="ui-hero-badge fixed bottom-8 right-4 z-50 flex h-16 w-16 items-center justify-center rounded-full transition-shadow md:bottom-20 md:right-8 md:h-24 md:w-24 lg:bottom-[4rem] lg:right-[1rem]"
           >
             <svg
               width="100%"
@@ -260,6 +271,7 @@ export default function Hero({
               <Image
                 width={36}
                 height={40}
+                className="h-auto w-6 md:w-9"
                 alt="Properganda Logo"
                 src="/images/svg/logo.svg"
               />
@@ -279,15 +291,15 @@ export default function Hero({
       aria-label="Hero"
     >
       <div className="absolute inset-0">
-        <Image
-          src="/images/hero-bg.png"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-100"
-          aria-hidden="true"
-        />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="object-cover object-center w-full h-full opacity-100"
+        >
+          <source src="/videos/PPG-Home.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-black/60" />
       </div>
 
@@ -314,7 +326,7 @@ export default function Hero({
 
         <div
           ref={badgeRef}
-          className="ui-hero-badge fixed bottom-[5rem] right-[2rem] z-50 flex h-24 w-24 items-center justify-center rounded-full transition-shadow md:h-20 md:w-20 lg:bottom-[4rem] lg:right-[1rem]"
+          className="ui-hero-badge fixed bottom-8 right-4 z-50 flex h-16 w-16 items-center justify-center rounded-full transition-shadow md:bottom-[5rem] md:right-[2rem] md:h-24 md:w-24 lg:bottom-[4rem] lg:right-[1rem]"
           aria-label="Let's Talk"
         >
           <svg
@@ -346,6 +358,7 @@ export default function Hero({
             <Image
               width={36}
               height={40}
+              className="h-auto w-6 md:w-9"
               alt="Properganda Logo"
               src="/images/svg/logo.svg"
             />

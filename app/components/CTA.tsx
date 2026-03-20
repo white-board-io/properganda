@@ -201,7 +201,7 @@ export default function CTA() {
                 <Button
                   type="submit"
                   variant="accent"
-                  className="group mt-4 h-[62px] w-[342px] rounded-[20px] font-inter text-[16px] font-semibold leading-none tracking-[0.02em] opacity-100"
+                  className="group mt-4 h-[62px] w-full sm:w-[342px] rounded-[20px] font-inter text-[16px] font-semibold leading-none tracking-[0.02em] opacity-100"
                 >
                   Request For Free Consultation
                   <svg

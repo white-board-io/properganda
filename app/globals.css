@@ -11,6 +11,10 @@
   }
 }
 
+@keyframes cursor-blink {
+  50% { opacity: 0; }
+}
+
 @theme {
   /* Provisional marketing palette from current design implementation */
   --color-black: #000000;
@@ -86,6 +90,7 @@
   --shadow-brand-glow-hover: 0 0 50px rgb(0 224 74 / 0.5);
   --text-shadow-brand-glow: 0 0 20px rgb(22 157 82 / 0.4);
   --animate-spin-slow: spin-slow 8s linear infinite;
+  --animate-cursor-blink: cursor-blink 1s step-start infinite;
 }
 
 @theme inline {
