@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
@@ -19,19 +19,7 @@ const NAV_ITEMS = [
   { name: "Contact", href: "#contact" },
 ];
 
-const SOCIAL_LINKS = [
-  {
-    name: "Instagram",
-    href: "https://instagram.com",
-    icon: "/images/svg/insta.svg",
-  },
-  { name: "X", href: "https://x.com", icon: "/images/svg/x.svg" },
-  {
-    name: "LinkedIn",
-    href: "https://linkedin.com",
-    icon: "/images/svg/linkedin.svg",
-  },
-];
+
 
 export default function Header({
   variant = "default",
@@ -39,17 +27,7 @@ export default function Header({
   variant?: "default" | "commandments";
 }) {
   const containerRef = useRef<HTMLElement>(null);
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useGSAP(
     () => {
@@ -63,54 +41,29 @@ export default function Header({
     { scope: containerRef },
   );
 
-
-  const isFloatingPill = isScrolled;
-
   return (
     <div
       className={cn(
-        "fixed inset-x-0 top-0 z-50 flex flex-col items-center bg-black transition-all duration-300",
+        "fixed inset-x-0 top-0 z-50 flex flex-col items-center transition-all duration-300",
         "pt-8",
       )}
+      style={{
+        background: "linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 1) 100%)",
+      }}
     >
-      <SiteContainer className="mb-4 flex justify-end gap-5">
-        {SOCIAL_LINKS.map((link) => (
-          <a
-            key={link.name}
-            href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ui-icon-link"
-          >
-            <Image src={link.icon} alt={link.name} width={28} height={28} />
-          </a>
-        ))}
-      </SiteContainer>
-
       <header
         ref={containerRef}
         className={cn(
-          "pointer-events-auto transition-all duration-300 mx-auto",
-          isFloatingPill
-            ? cn(
-                "ui-card--floating border border-black/5 bg-white w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-[calc(100%-6rem)] xl:w-[calc(100%-8rem)] max-w-7xl",
-                isMobileMenuOpen ? "rounded-3xl" : "rounded-full",
-              )
-            : cn(
-                "w-full border border-transparent rounded-none",
-                isMobileMenuOpen
-                  ? "bg-brand-black/95 backdrop-blur-md"
-                  : "bg-transparent",
-              ),
+          "pointer-events-auto transition-all duration-300 mx-auto w-full max-w-[calc(100%-1rem)] md:max-w-4xl lg:max-w-7xl",
+          "border border-transparent rounded-none",
+          isMobileMenuOpen
+            ? "bg-brand-black/95 backdrop-blur-md"
+            : "bg-transparent",
         )}
         role="banner"
       >
         <SiteContainer
-          className={cn(
-            "flex items-center justify-between gap-4 transition-all duration-300 w-full",
-            isFloatingPill && "px-10",
-            isFloatingPill ? "py-4" : "py-5",
-          )}
+          className="flex items-center justify-between gap-4 transition-all duration-300 w-full py-5 px-6 md:px-6"
         >
           <Link
             href="/"
@@ -118,7 +71,7 @@ export default function Header({
             aria-label="Properganda - Home"
           >
             <Image
-              src={isFloatingPill ? "/images/svg/logo-black.svg" : "/images/svg/logo.svg"}
+              src="/images/svg/logo.svg"
               alt="Properganda"
               width={32}
               height={22}
@@ -126,10 +79,7 @@ export default function Header({
               className="h-8 w-auto transition-all duration-300"
             />
             <span
-              className={cn(
-                "ui-type-body-lg font-medium uppercase tracking-[0.2em] transition-colors duration-300",
-                isFloatingPill ? "text-brand-black" : "text-white",
-              )}
+              className="ui-type-body-lg font-medium uppercase tracking-[0.2em] transition-colors duration-300 text-white"
             >
               Properganda
             </span>
@@ -143,10 +93,7 @@ export default function Header({
               <Link
                 key={item.name}
                 href={item.href}
-                className={cn(
-                  "ui-nav-link transition-colors duration-300",
-                  isFloatingPill ? "text-brand-black" : "text-white",
-                )}
+                className="ui-nav-link transition-colors duration-300 text-white"
               >
                 {item.name}
               </Link>
@@ -156,27 +103,17 @@ export default function Header({
               href="#canopy"
               className={cn(
                 buttonVariants({
-                  variant: isFloatingPill ? "canopySolid" : "canopyOutline",
+                  variant: "canopyOutline",
                   size: "sm",
                 }),
                 "gap-2.5 px-5 py-2 items-center transition-all duration-300",
               )}
             >
               <div className="flex flex-col text-left leading-[1.1] justify-center pt-[2px]">
-                <span
-                  className={cn(
-                    "text-[10px] uppercase font-black tracking-widest transition-colors duration-300",
-                    isFloatingPill ? "text-brand-black" : "text-yellow-400",
-                  )}
-                >
+                <span className="text-[10px] uppercase font-black tracking-widest transition-colors duration-300 text-yellow-400">
                   Our
                 </span>
-                <span
-                  className={cn(
-                    "text-[10px] font-black tracking-widest transition-colors duration-300",
-                    isFloatingPill ? "text-brand-black" : "text-yellow-400",
-                  )}
-                >
+                <span className="text-[10px] font-black tracking-widest transition-colors duration-300 text-yellow-400">
                   Studio
                 </span>
               </div>
@@ -185,10 +122,7 @@ export default function Header({
                 alt="CANOPY"
                 width={100}
                 height={14}
-                className={cn(
-                  "h-[14px] w-auto transition-all duration-300",
-                  isFloatingPill && "brightness-0 invert",
-                )}
+                className="h-[14px] w-[100px] transition-all duration-300"
               />
             </Link>
           </nav>
@@ -201,27 +135,21 @@ export default function Header({
           >
             <span
               className={cn(
-                "block h-0.5 w-6 transition-all duration-300",
+                "block h-0.5 w-6 transition-all duration-300 bg-white",
                 isMobileMenuOpen && "translate-y-2 rotate-45",
-                isFloatingPill ? "bg-brand-black" : "bg-white",
               )}
             />
             <span
               className={cn(
-                "block h-0.5 w-6 transition-all duration-300",
+                "block h-0.5 w-6 transition-all duration-300 bg-white",
                 isMobileMenuOpen && "opacity-0",
-                isFloatingPill ? "bg-brand-black" : "bg-white",
               )}
             />
             <span
               className={cn(
                 "block h-0.5 transition-all duration-300",
                 isMobileMenuOpen ? "w-6 -translate-y-2 -rotate-45" : "w-4",
-                isMobileMenuOpen
-                  ? isFloatingPill
-                    ? "bg-brand-black"
-                    : "bg-white"
-                  : "bg-brand-green",
+                isMobileMenuOpen ? "bg-white" : "bg-brand-green",
               )}
             />
           </button>
@@ -239,10 +167,7 @@ export default function Header({
               <Link
                 key={item.name}
                 href={item.href}
-                className={cn(
-                  "ui-nav-link text-lg transition-colors duration-300",
-                  isFloatingPill ? "text-brand-black" : "text-white",
-                )}
+                className="ui-nav-link text-lg transition-colors duration-300 text-white"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.name}
@@ -254,27 +179,17 @@ export default function Header({
               onClick={() => setIsMobileMenuOpen(false)}
               className={cn(
                 buttonVariants({
-                  variant: isFloatingPill ? "canopySolid" : "canopyOutline",
+                  variant: "canopyOutline",
                   size: "sm",
                 }),
                 "gap-2.5 px-5 py-2 mt-2 items-center transition-all duration-300",
               )}
             >
               <div className="flex flex-col text-left leading-[1.1] justify-center pt-[2px]">
-                <span
-                  className={cn(
-                    "text-[10px] uppercase font-black tracking-widest transition-colors duration-300",
-                    isFloatingPill ? "text-brand-black" : "text-yellow-400",
-                  )}
-                >
+                <span className="text-[10px] uppercase font-black tracking-widest transition-colors duration-300 text-yellow-400">
                   Our
                 </span>
-                <span
-                  className={cn(
-                    "text-[10px] uppercase font-black tracking-widest transition-colors duration-300",
-                    isFloatingPill ? "text-brand-black" : "text-yellow-400",
-                  )}
-                >
+                <span className="text-[10px] uppercase font-black tracking-widest transition-colors duration-300 text-yellow-400">
                   Studio
                 </span>
               </div>
@@ -283,10 +198,7 @@ export default function Header({
                 alt="CANOPY"
                 width={100}
                 height={14}
-                className={cn(
-                  "h-[14px] w-auto transition-all duration-300",
-                  isFloatingPill && "brightness-0",
-                )}
+                className="h-[14px] w-[100px] transition-all duration-300"
               />
             </Link>
           </nav>
@@ -295,3 +207,4 @@ export default function Header({
     </div>
   );
 }
+

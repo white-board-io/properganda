@@ -5,7 +5,7 @@ import { useEffect, useId, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
-import TorriStatementGraphic from "@/app/components/TorriStatementGraphic";
+
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
@@ -144,39 +144,34 @@ export default function AboutUs() {
       variant="dark"
       ref={sectionRef}
       spacing="default"
-      className="px-0"
+      className="px-0 relative z-10 !pb-0"
       aria-label="About - Creative Collective"
     >
       <SiteContainer>
         <SectionEyebrow className="cc-text-item">ABOUT US</SectionEyebrow>
 
-        <section className="ui-panel ui-panel--gradient relative overflow-hidden px-8 pb-32 pt-16 sm:px-16 md:px-20 md:pb-40 md:pt-24 lg:px-24 xl:px-32">
-          <section className="relative z-10">
-            <section className="flex flex-col lg:flex-row lg:items-start gap-12">
-              <section className="cc-text-item flex flex-col justify-start">
-                <h2 className="font-bebas-neue text-[clamp(4rem,6vw,5.5rem)] leading-[0.89] font-normal uppercase text-white">
-                  Creative
-                  <br />
-                  Collective
-                </h2>
-              </section>
-
-              <section className="cc-text-item flex flex-col justify-start">
-                <p className="max-w-sm text-[1.25rem] leading-normal font-light tracking-[0.02em] text-neutral-450 sm:text-[1.375rem] xl:text-[1.4375rem] xl:leading-[1.44]">
-                  Using ideas, information and messages with the sincere intent
-                  of{" "}
-                  <span className="font-bold text-white">
-                    positively influencing
-                  </span>{" "}
-                  the beliefs and actions of causes, communities and companies.
-                </p>
-              </section>
+        <section className="relative overflow-hidden px-6 pb-32 pt-16 sm:px-12 md:px-16 md:pb-40 md:pt-24 lg:px-20 xl:px-24 w-full">
+          <section className="relative z-10 flex flex-col gap-12 lg:gap-16 w-full">
+            <section className="cc-text-item flex flex-col justify-start w-full max-w-none">
+              <h2 className="font-sans text-[28px] md:text-[42px] font-light text-neutral-300 leading-[1.28] tracking-[0.02em]">
+                Properganda is a
+                <span className="font-sans text-[48px] md:text-[80px] font-bold text-[#159848] leading-[1.1] md:leading-[80px] tracking-normal block my-2 md:my-4">
+                  creative agency
+                </span>
+                <span className="font-sans text-[28px] md:text-[42px] font-light leading-[1.28] tracking-[0.02em] block mt-4 md:mt-8 text-neutral-300">
+                  <span className="xl:whitespace-nowrap">for ambitious brands and organisations looking to create</span> <br className="hidden xl:block" />
+                  relevance, resonance and real-world impact.
+                </span>
+              </h2>
             </section>
 
-            <section className="relative z-20 mt-4 xl:-mt-20">
-              <section className="cc-image w-full max-w-6xl">
-                <TorriStatementGraphic className="h-auto w-full" />
-              </section>
+            <section className="cc-text-item flex flex-col justify-start mt-6 md:mt-12">
+              <h3 className="font-sans text-[56px] md:text-[100px] font-medium leading-[1.2] md:leading-[1.28] tracking-[0.02em] text-white">
+                Made with heart.
+              </h3>
+            </section>
+
+            <section className="relative z-20 mt-4">
               <a
                 href="#contact"
                 className="cc-text-item inline-block text-sm font-medium text-white underline decoration-white/30 underline-offset-8 transition-colors hover:decoration-white"
@@ -187,7 +182,12 @@ export default function AboutUs() {
           </section>
         </section>
 
-        <div className="relative z-20 -mt-8 flex justify-center">
+        <div className="relative z-20 flex justify-center translate-y-1/2">
+          {/* Green glow background spread */}
+          <div 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] h-[120px] blur-[50px] rounded-full pointer-events-none -z-10"
+            style={{ backgroundColor: "rgba(22, 157, 82, 0.25)" }} 
+          />
           <Link href="/commandments" className="ui-commandments-link cc-button">
             <span
               aria-hidden="true"
@@ -274,7 +274,7 @@ export default function AboutUs() {
               </svg>
             </span>
             <span className="ui-commandments-link__label">
-              Read Our 10 Commandments
+              Proper Ways of Working
             </span>
           </Link>
         </div>
