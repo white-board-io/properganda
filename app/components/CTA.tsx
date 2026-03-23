@@ -52,7 +52,9 @@ export default function CTA() {
         >
           <div className="flex h-full flex-col gap-12 lg:flex-row lg:justify-between">
             <div className="cta-content flex w-full flex-col lg:max-w-[385px]">
-              <SectionEyebrow className="mb-8">Contact</SectionEyebrow>
+              <SectionEyebrow scramble className="mb-8">
+                Contact
+              </SectionEyebrow>
 
               <h2 className="ui-type-heading-xl mb-10 max-w-[300px] text-brand-black">
                 Let&apos;s

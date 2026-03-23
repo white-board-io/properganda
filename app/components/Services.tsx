@@ -199,7 +199,7 @@ export default function Services() {
       aria-label="Our services"
     >
       <SiteContainer>
-        <SectionEyebrow>What We Do</SectionEyebrow>
+        <SectionEyebrow scramble>What We Do</SectionEyebrow>
 
         <div className="flex flex-col gap-4" onMouseLeave={handleListMouseLeave}>
           {SERVICES.map((service, index) => (

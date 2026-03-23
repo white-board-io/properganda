@@ -148,7 +148,9 @@ export default function AboutUs() {
       aria-label="About - Creative Collective"
     >
       <SiteContainer>
-        <SectionEyebrow className="cc-text-item">ABOUT US</SectionEyebrow>
+        <SectionEyebrow scramble className="cc-text-item">
+          ABOUT US
+        </SectionEyebrow>
 
         <section className="relative overflow-hidden px-6 pb-32 pt-16 sm:px-12 md:px-16 md:pb-40 md:pt-24 lg:px-20 xl:px-24 w-full">
           <section className="relative z-10 flex flex-col gap-12 lg:gap-16 w-full">
