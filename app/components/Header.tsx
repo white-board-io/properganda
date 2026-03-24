@@ -1,16 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 
 import { buttonVariants } from "@/components/ui/button";
 import { SiteContainer } from "@/components/ui/site-container";
 import { cn } from "@/lib/utils";
-
-gsap.registerPlugin(useGSAP);
 
 const NAV_ITEMS = [
   { name: "About Us", href: "#about" },
@@ -19,42 +15,26 @@ const NAV_ITEMS = [
   { name: "Contact", href: "#contact" },
 ];
 
-
-
 export default function Header({
   variant = "default",
 }: {
   variant?: "default" | "commandments";
 }) {
-  const containerRef = useRef<HTMLElement>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useGSAP(
-    () => {
-      gsap.from(containerRef.current, {
-        y: -100,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-      });
-    },
-    { scope: containerRef },
-  );
 
   return (
     <div
+      data-variant={variant}
       className={cn(
-        "fixed inset-x-0 top-0 z-50 flex flex-col items-center transition-all duration-300",
-        "pt-8",
+        "fixed inset-x-0 top-0 z-50 flex flex-col items-center pt-4 md:pt-5",
       )}
       style={{
         background: "linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 1) 100%)",
       }}
     >
       <header
-        ref={containerRef}
         className={cn(
-          "pointer-events-auto transition-all duration-300 mx-auto w-full max-w-[calc(100%-1rem)] md:max-w-4xl lg:max-w-7xl",
+          "pointer-events-auto mx-auto w-full max-w-[calc(100%-1rem)] md:max-w-4xl lg:max-w-7xl",
           "border border-transparent rounded-none",
           isMobileMenuOpen
             ? "bg-brand-black/95 backdrop-blur-md"
@@ -63,11 +43,11 @@ export default function Header({
         role="banner"
       >
         <SiteContainer
-          className="flex items-center justify-between gap-4 transition-all duration-300 w-full py-5 px-6 md:px-6"
+          className="flex min-h-[64px] w-full items-center justify-between gap-4 px-5 md:min-h-[70px] md:px-6"
         >
           <Link
             href="/"
-            className="flex items-center gap-2 shrink-0"
+            className="flex shrink-0 items-center gap-2 self-center"
             aria-label="Properganda - Home"
           >
             <Image
@@ -76,10 +56,10 @@ export default function Header({
               width={32}
               height={22}
               priority
-              className="h-8 w-auto transition-all duration-300"
+              className="h-7 w-auto md:h-[30px]"
             />
             <span
-              className="ui-type-body-lg font-medium uppercase tracking-[0.2em] transition-colors duration-300 text-white"
+              className="ui-type-body-lg self-center font-medium uppercase tracking-[0.2em] text-white"
             >
               Properganda
             </span>
@@ -87,13 +67,13 @@ export default function Header({
 
           <nav
             aria-label="Main navigation"
-            className="hidden items-center gap-10 lg:gap-14 md:flex whitespace-nowrap"
+            className="hidden items-center self-center whitespace-nowrap md:flex md:gap-9 lg:gap-12"
           >
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="ui-nav-link transition-colors duration-300 text-white"
+                className="ui-nav-link text-white"
               >
                 {item.name}
               </Link>
@@ -106,7 +86,7 @@ export default function Header({
                   variant: "canopyOutline",
                   size: "sm",
                 }),
-                "gap-2.5 px-5 py-2 items-center transition-all duration-300",
+                "items-center gap-2.5 self-center px-5 py-2",
               )}
             >
               <div className="flex flex-col text-left leading-[1.1] justify-center pt-[2px]">
@@ -128,7 +108,7 @@ export default function Header({
           </nav>
 
           <button
-            className="flex flex-col gap-1.5 md:hidden"
+            className="flex flex-col gap-1.5 self-center md:hidden"
             aria-label="Toggle mobile menu"
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -207,4 +187,3 @@ export default function Header({
     </div>
   );
 }
-

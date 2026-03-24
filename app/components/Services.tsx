@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import {
   ChevronDown,
@@ -26,11 +25,12 @@ import {
   Leaf
 } from "lucide-react";
 
+import { createScrollReveal } from "@/lib/gsap-reveal";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+gsap.registerPlugin(useGSAP);
 
 const SERVICES = [
   {
@@ -155,16 +155,13 @@ export default function Services() {
         }
       });
 
-      gsap.from(".service-item", {
-        y: 60,
-        stagger: 0.18,
+      createScrollReveal(".service-item", {
+        trigger: sectionRef.current,
+        start: "top 70%",
+        stagger: 0.16,
         duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 65%",
-          toggleActions: "play none none none",
-        },
+        scale: 0.99,
+        blur: 10,
       });
     },
     { scope: sectionRef },
@@ -199,7 +196,7 @@ export default function Services() {
       aria-label="Our services"
     >
       <SiteContainer>
-        <SectionEyebrow scramble>What We Do</SectionEyebrow>
+        <SectionEyebrow>What We Do</SectionEyebrow>
 
         <div className="flex flex-col gap-4" onMouseLeave={handleListMouseLeave}>
           {SERVICES.map((service, index) => (

@@ -68,17 +68,82 @@ export default function Hero({
     () => {
       if (variant !== "default") return;
 
-      const textTargets = [headingRef.current, subtextRef.current].filter(
-        Boolean,
+      const headingLines = Array.from(
+        headingRef.current?.querySelectorAll<HTMLElement>("[data-hero-line]") ?? [],
       );
-      const conscience = conscienceRef.current;
+      const subtext = subtextRef.current;
+      const revealTargets = subtext ? [...headingLines, subtext] : headingLines;
 
-      // Initial state
-      gsap.set(textTargets, { opacity: 0 });
+      if (!revealTargets.length) {
+        return;
+      }
 
-      const tl = gsap.timeline({ delay: 0.1 });
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        gsap.set(revealTargets, {
+          autoAlpha: 1,
+          scale: 1,
+          filter: "blur(0px)",
+          clipPath: "inset(0% 0% 0% 0%)",
+        });
+        return;
+      }
 
-      tl.to(textTargets, { opacity: 1, duration: 1, ease: "circ.out" });
+      gsap.set(revealTargets, {
+        transformOrigin: "50% 50%",
+        willChange: "opacity, transform, filter, clip-path",
+      });
+
+      const tl = gsap.timeline({
+        delay: 0.12,
+        defaults: { ease: "power3.out" },
+      });
+
+      tl.fromTo(
+        headingLines,
+        {
+          autoAlpha: 0,
+          scale: 0.985,
+          filter: "blur(14px)",
+          clipPath: "inset(0% 0% 100% 0%)",
+        },
+        {
+          autoAlpha: 1,
+          scale: 1,
+          filter: "blur(0px)",
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 1.2,
+          stagger: 0.14,
+        },
+      );
+
+      if (subtext) {
+        tl.fromTo(
+          subtext,
+          {
+            autoAlpha: 0,
+            scale: 0.99,
+            filter: "blur(10px)",
+            clipPath: "inset(0% 0% 100% 0%)",
+          },
+          {
+            autoAlpha: 1,
+            scale: 1,
+            filter: "blur(0px)",
+            clipPath: "inset(0% 0% 0% 0%)",
+            duration: 0.95,
+          },
+          "-=0.55",
+        );
+      }
+
+      tl.eventCallback("onComplete", () => {
+        gsap.set(revealTargets, { clearProps: "willChange" });
+      });
+
+      return () => {
+        tl.kill();
+        gsap.set(revealTargets, { clearProps: "willChange" });
+      };
     },
     { scope: sectionRef, dependencies: [variant] },
   );
@@ -167,11 +232,17 @@ export default function Hero({
               ref={headingRef}
               className="font-bebas-neue uppercase font-normal xl:text-[240px] xl:leading-[208px] tracking-normal text-white lg:text-[180px] lg:leading-[170px] md:text-[140px] md:leading-[130px] sm:text-[100px] sm:leading-[90px] text-[60px] leading-[50px]"
             >
-              <span className="block whitespace-nowrap">Creativity With</span>
-              <span className="block whitespace-nowrap">
-                {"A "}
-                <span ref={conscienceRef} className="text-white inline-block">
-                  Conscience
+              <span className="block overflow-hidden">
+                <span data-hero-line className="block whitespace-nowrap">
+                  Creativity With
+                </span>
+              </span>
+              <span className="block overflow-hidden">
+                <span data-hero-line className="block whitespace-nowrap">
+                  {"A "}
+                  <span ref={conscienceRef} className="text-white inline-block">
+                    Conscience
+                  </span>
                 </span>
               </span>
             </h1>

@@ -5,7 +5,7 @@ import { useEffect, useId, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
-
+import { createScrollReveal } from "@/lib/gsap-reveal";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
@@ -30,41 +30,18 @@ export default function AboutUs() {
 
   useGSAP(
     () => {
-      gsap.from(".cc-text-item", {
-        opacity: 0,
-        y: 60,
-        stagger: 0.15,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 60%",
-          toggleActions: "play none none none",
-        },
+      createScrollReveal(".cc-text-item", {
+        trigger: sectionRef.current,
+        start: "top 72%",
+        stagger: 0.16,
       });
 
-      gsap.from(".cc-image", {
-        opacity: 0,
-        scale: 1.1,
-        duration: 1.2,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 60%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      gsap.from(".cc-button", {
-        opacity: 0,
-        y: 30,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: ".cc-button",
-          start: "top 90%",
-          toggleActions: "play none none none",
-        },
+      createScrollReveal(".cc-button", {
+        trigger: ".cc-button",
+        start: "top 88%",
+        duration: 0.9,
+        scale: 0.99,
+        blur: 8,
       });
     },
     { scope: sectionRef },
@@ -148,7 +125,7 @@ export default function AboutUs() {
       aria-label="About - Creative Collective"
     >
       <SiteContainer>
-        <SectionEyebrow scramble className="cc-text-item">
+        <SectionEyebrow className="cc-text-item">
           ABOUT US
         </SectionEyebrow>
 

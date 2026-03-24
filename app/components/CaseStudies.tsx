@@ -2,29 +2,25 @@
 
 import { useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
+import { createScrollReveal } from "@/lib/gsap-reveal";
 import { SectionShell } from "@/components/ui/section-shell";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+gsap.registerPlugin(useGSAP);
 
 export default function CaseStudies() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
-      gsap.from(".case-video-container", {
-        opacity: 0,
-        y: 50,
-        scale: 0.96,
-        duration: 0.7,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 65%",
-          toggleActions: "play none none none",
-        },
+      createScrollReveal(".case-video-container", {
+        trigger: sectionRef.current,
+        start: "top 72%",
+        duration: 1,
+        scale: 0.975,
+        blur: 0,
+        clipPath: "inset(8% 0% 8% 0% round 1.5rem)",
       });
     },
     { scope: sectionRef },

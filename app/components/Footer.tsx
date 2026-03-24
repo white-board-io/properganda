@@ -4,12 +4,12 @@ import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
+import { createScrollReveal } from "@/lib/gsap-reveal";
 import { SiteContainer } from "@/components/ui/site-container";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+gsap.registerPlugin(useGSAP);
 
 const NAV_LINKS = [
   { href: "#about", label: "About Us" },
@@ -35,17 +35,13 @@ export default function Footer() {
 
   useGSAP(
     () => {
-      gsap.from(".footer-content > *", {
-        opacity: 0,
-        y: 30,
-        stagger: 0.1,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          toggleActions: "play none none none",
-        },
+      createScrollReveal(".footer-content > *", {
+        trigger: sectionRef.current,
+        start: "top 86%",
+        stagger: 0.14,
+        duration: 1,
+        scale: 0.99,
+        blur: 10,
       });
     },
     { scope: sectionRef },
