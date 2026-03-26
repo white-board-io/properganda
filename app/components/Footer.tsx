@@ -19,9 +19,9 @@ const NAV_LINKS = [
 ];
 
 const SOCIAL_LINKS = [
-  { href: "#", label: "Instagram", icon: "/images/svg/insta.svg" },
-  { href: "#", label: "X (formerly Twitter)", icon: "/images/svg/x.svg" },
-  { href: "#", label: "LinkedIn", icon: "/images/svg/linkedin.svg" },
+  { href: "https://www.instagram.com/properganda.in/", label: "Instagram", icon: "/images/svg/insta.svg" },
+  { href: "https://x.com/properganda_in", label: "X (formerly Twitter)", icon: "/images/svg/x.svg" },
+  { href: "https://www.linkedin.com/company/propergandacreative/", label: "LinkedIn", icon: "/images/svg/linkedin.svg" },
 ];
 
 const OTHER_LINKS = [

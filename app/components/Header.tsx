@@ -117,7 +117,7 @@ export default function Header({
             ))}
 
             <Link
-              href="#canopy"
+              href="https://www.canopymedia.in/"
               className={cn(
                 buttonVariants({
                   variant: "canopyOutline",

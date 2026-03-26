@@ -48,11 +48,18 @@ const MANIFESTO_DATA = [
     icon: "/images/svg/torii.svg",
   },
   {
-    id: "michael-chen",
-    text: "We believe that the most powerful brands are those built on authentic values, told through compelling stories, and designed to make a genuine impact. We don't just make things look good; we make things that do good.",
-    author: "Michael Chen",
-    role: "Lead Designer",
+    id: "anjali-bawa",
+    text: "Working with the Properganda team has been a seamless experience. They are extremely prompt and truly function as an extension of our internal team. The level of support and responsiveness they bring makes collaboration effortless. The quality of work delivered is consistently excellent. Once the brief or notes are shared, the team quickly translates them into well-executed outputs with minimal back and forth. Their proactive approach, politeness, and hands-on involvement make them a dependable partner to work with. We genuinely appreciate their professionalism and the ease with which they integrate into ongoing workflows.",
+    author: "Anjali Bawa",
+    role: "Lead - Corporate Communications, BluPine Energy",
     icon: "/images/svg/bpe.svg",
+  },
+  {
+    id: "dipankar-bose",
+    text: "Working with Properganda has been an absolute delight… they are still toddlers but boy are they feisty… I was blown over by their very first pitch deck… it stood out because they dared to be different and that in many ways pretty much defines them … the willingness and the guts to walk the path less explored. That is so refreshing in times when agencies mostly play safe and mimic each other. One other aspect that stood out was their proactive approach – even before we could furnish well-structured briefs, they were bubbling with ideas , some exceptional , others crazy, but atleast with them you wouldn’t have to nudge. I must also call out their exceptional client service , Shibani and team were literally 24x7 available on phone or chat, to make sure urgent deadlines were met and any feedback was duly noted. For me and my team , more often than not, Shibani was a panic button ,,, a quick call usually resulted in immediate soothing of nerves and an assurance that stuff would get delivered per schedule. I am sure the years ahead will only see Properganda get bigger, better and crazier… here’s wishing many more triumphs and lotsa action…",
+    author: "DIPANKAR BOSE",
+    role: "(AVP & HEAD – Branding & Corporate Communications)",
+    icon: "",
   },
 ];
 
@@ -109,7 +116,7 @@ export default function Manifesto() {
         <div className="relative mx-auto max-w-4xl mt-12 md:mt-16">
           <button
             onClick={scrollPrev}
-            className="absolute left-[-80px] top-[35%] z-10 hidden -translate-y-1/2 scale-150 text-brand-black/40 transition-all duration-300 hover:text-brand-black lg:block"
+            className="absolute left-[-80px] top-[35%] z-10 hidden -translate-y-1/2 scale-150 text-brand-black/40 transition-all duration-300 hover:text-brand-black cursor-pointer lg:block"
             aria-label="Previous slide"
           >
             <svg
@@ -131,7 +138,7 @@ export default function Manifesto() {
 
           <button
             onClick={scrollNext}
-            className="absolute right-[-80px] top-[35%] z-10 hidden -translate-y-1/2 scale-150 text-brand-black/40 transition-all duration-300 hover:text-brand-black lg:block"
+            className="absolute right-[-80px] top-[35%] z-10 hidden -translate-y-1/2 scale-150 text-brand-black/40 transition-all duration-300 hover:text-brand-black cursor-pointer lg:block"
             aria-label="Next slide"
           >
             <svg
@@ -152,7 +159,7 @@ export default function Manifesto() {
           </button>
 
           <div
-            className="cursor-grab overflow-hidden active:cursor-grabbing bg-neutral-cool-50 h-full"
+            className="overflow-hidden active:cursor-grabbing bg-neutral-cool-50 h-full"
             ref={emblaRef}
           >
             <div className="flex h-full items-stretch">
@@ -162,7 +169,7 @@ export default function Manifesto() {
                   key={slide.id}
                 >
                   <Card className="relative mb-14 p-10 md:p-16 rounded-xl flex-1 flex flex-col justify-center">
-                    <div className="ui-copy">
+                    <div className="ui-copy max-h-[200px] mx-auto overflow-y-auto pr-4 custom-scrollbar">
                       {getWordTokens(slide.text).map((token) => (
                         <span
                           key={`${slide.id}-${token.id}`}
@@ -201,13 +208,15 @@ export default function Manifesto() {
                       </div>
                     </div>
                     <div className="hidden md:flex items-center justify-end">
-                      <Image
-                        src={slide.icon}
-                        alt="Decorative Icon"
-                        width={100}
-                        height={100}
-                        className="h-10 w-auto"
-                      />
+                      {slide.icon && (
+                        <Image
+                          src={slide.icon}
+                          alt="Decorative Icon"
+                          width={100}
+                          height={100}
+                          className="h-10 w-auto"
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

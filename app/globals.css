@@ -658,7 +658,24 @@ body {
   background: var(--color-brand-black);
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--color-brand-green);
-  border-radius: 4px;
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-green-500);
+  border-radius: 20px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-green-600);
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-green-500) transparent;
 }
