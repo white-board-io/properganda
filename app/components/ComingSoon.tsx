@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -132,13 +131,6 @@ export default function ComingSoon() {
                   Start a conversation
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
                 </a>
-
-                <Link
-                  href="/commandments"
-                  className={buttonVariants({ variant: "neutral", size: "lg" })}
-                >
-                  Read the commandments
-                </Link>
               </div>
 
               <p className="mt-6 text-sm text-white/45">
@@ -201,24 +193,13 @@ export default function ComingSoon() {
                   ))}
                 </div>
 
-                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                <div className="mt-5 grid gap-4">
                   <div className="rounded-[1.5rem] border border-brand-green/20 bg-brand-green/10 p-5">
                     <p className="ui-caption text-white/60">Response Time</p>
                     <p className="mt-3 text-3xl font-semibold text-white">Within 24 hours</p>
                     <p className="mt-2 text-sm leading-7 text-white/65">
                       If you want to talk brand, campaigns, or launch planning, we&apos;re
                       still taking conversations.
-                    </p>
-                  </div>
-
-                  <div className="rounded-[1.5rem] border border-white/10 bg-black/30 p-5">
-                    <p className="ui-caption text-white/60">While You Wait</p>
-                    <p className="mt-3 text-3xl font-semibold text-white">
-                      Explore the ethos
-                    </p>
-                    <p className="mt-2 text-sm leading-7 text-white/65">
-                      The commandment page is still up if you want a feel for the voice
-                      behind the rebuild.
                     </p>
                   </div>
                 </div>
