@@ -5,7 +5,6 @@ import { useEffect, useId, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
-
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
@@ -79,7 +78,9 @@ export default function AboutUs() {
       return;
     }
 
-    const motionMediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const motionMediaQuery = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
 
     if (motionMediaQuery.matches) {
       return;
@@ -103,7 +104,10 @@ export default function AboutUs() {
         wrapPathDistance(headDistance + tangentSample, totalLength),
       );
       const tangentAngle =
-        (Math.atan2(nextPoint.y - previousPoint.y, nextPoint.x - previousPoint.x) *
+        (Math.atan2(
+          nextPoint.y - previousPoint.y,
+          nextPoint.x - previousPoint.x,
+        ) *
           180) /
         Math.PI;
 
@@ -134,7 +138,10 @@ export default function AboutUs() {
 
     return () => {
       window.cancelAnimationFrame(animationFrameId);
-      motionMediaQuery.removeEventListener("change", handleMotionPreferenceChange);
+      motionMediaQuery.removeEventListener(
+        "change",
+        handleMotionPreferenceChange,
+      );
     };
   }, []);
 
@@ -144,7 +151,7 @@ export default function AboutUs() {
       variant="dark"
       ref={sectionRef}
       spacing="default"
-      className="px-0 relative z-10 !pb-0"
+      className="px-0 relative !pb-0"
       aria-label="About - Creative Collective"
     >
       <SiteContainer>
@@ -152,31 +159,29 @@ export default function AboutUs() {
           ABOUT US
         </SectionEyebrow>
 
-        <section className="relative overflow-hidden px-6 pb-32 pt-16 sm:px-12 md:px-16 md:pb-40 md:pt-24 lg:px-20 xl:px-24 w-full">
-          <section className="relative z-10 flex flex-col gap-12 lg:gap-16 w-full">
-            <section className="cc-text-item flex flex-col justify-start w-full max-w-none">
-              <h2 className="font-sans text-[28px] md:text-[42px] font-light text-neutral-300 leading-[1.28] tracking-[0.02em]">
-                Properganda is a
-                <span className="font-sans text-[48px] md:text-[80px] font-bold text-[#159848] leading-[1.1] md:leading-[80px] tracking-normal block my-2 md:my-4">
+        <section className="relative overflow-hidden pb-32 pt-12 md:pb-40 md:pt-16 w-full">
+          <section className="relative z-10 flex flex-col gap-10 md:gap-12 w-full max-w-[900px]">
+            <section className="cc-text-item flex flex-col justify-start w-full">
+              <h2 className="font-sans text-[26px] md:text-[40px] font-light text-neutral-300 leading-[1.3] tracking-wide">
+                Properganda is a{" "}
+                <strong className="font-bold text-white">
                   creative agency
-                </span>
-                <span className="font-sans text-[28px] md:text-[42px] font-light leading-[1.28] tracking-[0.02em] block mt-4 md:mt-8 text-neutral-300">
-                  <span className="xl:whitespace-nowrap">for ambitious brands and organisations looking to create</span> <br className="hidden xl:block" />
-                  relevance, resonance and real-world impact.
-                </span>
+                </strong>{" "}
+                for ambitious brands and organisations looking to create
+                relevance, resonance and real-world impact.
               </h2>
             </section>
 
-            <section className="cc-text-item flex flex-col justify-start mt-6 md:mt-12">
-              <h3 className="font-sans text-[56px] md:text-[100px] font-medium leading-[1.2] md:leading-[1.28] tracking-[0.02em] text-white">
-                Made with heart.
+            <section className="cc-text-item flex flex-col justify-start mt-2">
+              <h3 className="font-sans text-[40px] md:text-[64px] font-bold leading-tight tracking-tight text-[#159848] uppercase">
+                MADE WITH HEART.
               </h3>
             </section>
 
-            <section className="relative z-20 mt-4">
+            <section className="relative z-20 mt-2">
               <a
                 href="#contact"
-                className="cc-text-item inline-block text-sm font-medium text-white underline decoration-white/30 underline-offset-8 transition-colors hover:decoration-white"
+                className="cc-text-item inline-block text-sm md:text-base font-medium text-white underline decoration-white/30 underline-offset-8 transition-colors hover:decoration-white"
               >
                 Be a part of Us
               </a>
@@ -186,22 +191,25 @@ export default function AboutUs() {
 
         <div className="relative z-20 flex justify-center translate-y-1/2">
           {/* Green glow background spread */}
-          <div 
+          <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] h-[120px] blur-[50px] rounded-full pointer-events-none -z-10"
-            style={{ backgroundColor: "rgba(22, 157, 82, 0.25)" }} 
+            style={{ backgroundColor: "rgba(22, 157, 82, 0.25)" }}
           />
           <Link href="/commandments" className="ui-commandments-link cc-button">
-            <span
-              aria-hidden="true"
-              className="ui-commandments-link__orbit"
-            >
+            <span aria-hidden="true" className="ui-commandments-link__orbit">
               <svg
                 viewBox="0 0 1000 120"
                 preserveAspectRatio="none"
                 className="ui-commandments-link__orbit-svg"
               >
                 <defs>
-                  <linearGradient id={cometFlameId} x1="-7" y1="0" x2="13" y2="0">
+                  <linearGradient
+                    id={cometFlameId}
+                    x1="-7"
+                    y1="0"
+                    x2="13"
+                    y2="0"
+                  >
                     <stop offset="0%" stopColor="#0c8d3d" />
                     <stop offset="34%" stopColor="#58ef87" />
                     <stop offset="82%" stopColor="#dfffe8" />
@@ -241,7 +249,13 @@ export default function AboutUs() {
                 />
                 <g aria-hidden="true">
                   <g ref={cometHeadRef} filter={`url(#${cometHeadGlowId})`}>
-                    <ellipse cx="1.2" cy="0" rx="9.6" ry="7.8" fill={`url(#${cometAuraId})`} />
+                    <ellipse
+                      cx="1.2"
+                      cy="0"
+                      rx="9.6"
+                      ry="7.8"
+                      fill={`url(#${cometAuraId})`}
+                    />
                     <g ref={cometHeadDirectionRef}>
                       <path
                         d="M -6.4 0 C -4.2 -3.7 0.4 -5.7 11.9 0 C 0.4 5.7 -4.2 3.7 -6.4 0 Z"
@@ -268,8 +282,20 @@ export default function AboutUs() {
                         fill="#f6fff8"
                         fillOpacity="0.72"
                       />
-                      <ellipse cx="5.4" cy="0" rx="3.3" ry="2.5" fill={`url(#${cometCoreId})`} />
-                      <circle cx="7.05" cy="0" r="1.22" fill="#ffffff" fillOpacity="0.98" />
+                      <ellipse
+                        cx="5.4"
+                        cy="0"
+                        rx="3.3"
+                        ry="2.5"
+                        fill={`url(#${cometCoreId})`}
+                      />
+                      <circle
+                        cx="7.05"
+                        cy="0"
+                        r="1.22"
+                        fill="#ffffff"
+                        fillOpacity="0.98"
+                      />
                     </g>
                   </g>
                 </g>

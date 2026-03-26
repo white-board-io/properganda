@@ -409,12 +409,12 @@
 }
 
 .ui-button--canopy-outline {
-  border-color: var(--color-yellow-400);
-  color: var(--color-yellow-400);
+  border-color: var(--color-brand-white);
+  color: var(--color-brand-white);
 }
 
 .ui-button--canopy-outline:hover {
-  background: color-mix(in srgb, var(--color-yellow-400) 10%, transparent);
+  background: color-mix(in srgb, var(--color-brand-black) 10%, transparent);
 }
 
 .ui-button--neutral {

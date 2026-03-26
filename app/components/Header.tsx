@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
@@ -28,6 +28,15 @@ export default function Header({
 }) {
   const containerRef = useRef<HTMLElement>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setPastHero(window.scrollY >= window.innerHeight - 250);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useGSAP(
     () => {
@@ -43,14 +52,27 @@ export default function Header({
 
   return (
     <div
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 flex flex-col items-center transition-all duration-300",
-        "pt-8",
-      )}
+      className="pointer-events-none fixed inset-x-0 top-0 z-50 flex flex-col items-center"
       style={{
-        background: "linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 1) 100%)",
+        paddingTop: pastHero ? "0.5rem" : "2rem",
+        transition: "padding-top 500ms ease",
       }}
     >
+      {/* Layer 1: gradient — visible inside Hero, fades out after */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 transition-opacity duration-200"
+        style={{
+          height: "calc(100% + 6rem)",
+          background: "linear-gradient(to bottom, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.8) 30%, rgba(0, 0, 0, 0.6) 55%, rgba(0, 0, 0, 0.3) 75%, rgba(0, 0, 0, 0) 100%)",
+          opacity: pastHero ? 0 : 1,
+        }}
+      />
+      {/* Layer 2: solid bg — fades in after Hero */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-brand-black/95 shadow-md transition-opacity duration-200"
+        style={{ opacity: pastHero ? 1 : 0 }}
+      />
+
       <header
         ref={containerRef}
         className={cn(
@@ -63,7 +85,7 @@ export default function Header({
         role="banner"
       >
         <SiteContainer
-          className="flex items-center justify-between gap-4 transition-all duration-300 w-full py-5 px-6 md:px-6"
+          className="flex items-center justify-between gap-4 transition-all duration-300 w-full py-5 !px-0"
         >
           <Link
             href="/"
@@ -71,18 +93,13 @@ export default function Header({
             aria-label="Properganda - Home"
           >
             <Image
-              src="/images/svg/logo.svg"
+              src="/images/svg/logo-text.svg"
               alt="Properganda"
               width={32}
               height={22}
               priority
               className="h-8 w-auto transition-all duration-300"
             />
-            <span
-              className="ui-type-body-lg font-medium uppercase tracking-[0.2em] transition-colors duration-300 text-white"
-            >
-              Properganda
-            </span>
           </Link>
 
           <nav
@@ -110,10 +127,10 @@ export default function Header({
               )}
             >
               <div className="flex flex-col text-left leading-[1.1] justify-center pt-[2px]">
-                <span className="text-[10px] uppercase font-black tracking-widest transition-colors duration-300 text-yellow-400">
+                <span className="text-[6px] font-black tracking-widest transition-colors duration-300 text-white">
                   Our
                 </span>
-                <span className="text-[10px] font-black tracking-widest transition-colors duration-300 text-yellow-400">
+                <span className="text-[6px] font-black tracking-widest transition-colors duration-300 text-white">
                   Studio
                 </span>
               </div>
@@ -186,10 +203,10 @@ export default function Header({
               )}
             >
               <div className="flex flex-col text-left leading-[1.1] justify-center pt-[2px]">
-                <span className="text-[10px] uppercase font-black tracking-widest transition-colors duration-300 text-yellow-400">
+                <span className="text-[10px] font-black tracking-widest transition-colors duration-300 text-white">
                   Our
                 </span>
-                <span className="text-[10px] uppercase font-black tracking-widest transition-colors duration-300 text-yellow-400">
+                <span className="text-[10px] font-black tracking-widest transition-colors duration-300 text-white">
                   Studio
                 </span>
               </div>

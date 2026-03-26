@@ -33,7 +33,7 @@ export default function Home() {
         <LogoBar />
         <AboutUs />
         <Services />
-        <CaseStudies />
+        {/* <CaseStudies /> */}
         <Manifesto />
         <CTA />
       </main>
