@@ -34,17 +34,17 @@ function getWordTokens(text: string) {
 
 const MANIFESTO_DATA = [
   {
-    id: "tomomi-shimizu",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean faucibus, diam a sodales hendrerit, libero tortor scelerisque arcu, vitae consequat sem diam ut ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean faucibus, diam a sodales hendrerit, libero tortor scelerisque arcu, vitae consequat sem diam ut ex.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean faucibus, diam a sodales hendrerit, libero tortor scelerisque arcu, vitae consequat sem diam ut ex.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    author: "Tomomi Shimizu",
-    role: "Founder",
+    id: "kundan-kumar",
+    text: "Thank you for the excellent support in developing our safety visual identity and campaign materials. Your team has done a great job in creating impactful designs and communication that effectively promote safety awareness among our employees. We truly appreciate your creativity, professionalism, and commitment to the project.",
+    author: "Kundan Kumar",
+    role: "HSE, Hero Future Energies ",
     icon: "/images/svg/hfe.svg",
   },
   {
-    id: "sarah-jenkins",
-    text: "Our collective approach brings together diverse perspectives to craft campaigns that resonate, brands that endure, and conversations that matter. Every project we undertake is guided by our commitment to purposeful creativity — work that not only captures attention but also drives meaningful change.",
-    author: "Sarah Jenkins",
-    role: "Creative Director",
+    id: "tomomi-shimizu",
+    text: "Creative, professional, exploratory, patient and warm. These are the words coming to my mind, when I look back our last 1 year journey with Properganda team. In particular, I love your art and design work, which is underpinned by your deep understanding about who we are. Thank you for feeling and understanding us.",
+    author: "Tomomi Shimizu",
+    role: "Co-founder & Chief Executive Officer (CEO)",
     icon: "/images/svg/torii.svg",
   },
   {
