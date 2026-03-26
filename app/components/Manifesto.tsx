@@ -3,8 +3,11 @@
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
+import Fade from "embla-carousel-fade";
+import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 
 import { Card } from "@/components/ui/card";
+import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
 
@@ -31,30 +34,33 @@ function getWordTokens(text: string) {
 
 const MANIFESTO_DATA = [
   {
-    id: "tomomi-shimizu",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean faucibus, diam a sodales hendrerit, libero tortor scelerisque arcu, vitae consequat sem diam ut ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean faucibus, diam a sodales hendrerit, libero tortor scelerisque arcu, vitae consequat sem diam ut ex.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean faucibus, diam a sodales hendrerit, libero tortor scelerisque arcu, vitae consequat sem diam ut ex.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    author: "Tomomi Shimizu",
-    role: "Founder",
-    avatar: "/manifesto_avatar_1.png",
+    id: "kundan-kumar",
+    text: "Thank you for the excellent support in developing our safety visual identity and campaign materials. Your team has done a great job in creating impactful designs and communication that effectively promote safety awareness among our employees. We truly appreciate your creativity, professionalism, and commitment to the project.",
+    author: "Kundan Kumar",
+    role: "HSE, Hero Future Energies ",
+    icon: "/images/svg/hfe.svg",
   },
   {
-    id: "sarah-jenkins",
-    text: "Our collective approach brings together diverse perspectives to craft campaigns that resonate, brands that endure, and conversations that matter. Every project we undertake is guided by our commitment to purposeful creativity — work that not only captures attention but also drives meaningful change.",
-    author: "Sarah Jenkins",
-    role: "Creative Director",
-    avatar: "/manifesto_avatar_2.png",
+    id: "tomomi-shimizu",
+    text: "Creative, professional, exploratory, patient and warm. These are the words coming to my mind, when I look back our last 1 year journey with Properganda team. In particular, I love your art and design work, which is underpinned by your deep understanding about who we are. Thank you for feeling and understanding us.",
+    author: "Tomomi Shimizu",
+    role: "Co-founder & Chief Executive Officer (CEO)",
+    icon: "/images/svg/torii.svg",
   },
   {
     id: "michael-chen",
     text: "We believe that the most powerful brands are those built on authentic values, told through compelling stories, and designed to make a genuine impact. We don't just make things look good; we make things that do good.",
     author: "Michael Chen",
     role: "Lead Designer",
-    avatar: "/manifesto_avatar_3.png",
+    icon: "/images/svg/bpe.svg",
   },
 ];
 
 export default function Manifesto() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
+    Fade(),
+    WheelGesturesPlugin(),
+  ]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const scrollSnaps = emblaApi?.scrollSnapList() ?? [];
 
@@ -98,7 +104,9 @@ export default function Manifesto() {
       aria-label="Brand manifesto carousel"
     >
       <SiteContainer>
-        <div className="relative mx-auto max-w-4xl">
+        <SectionEyebrow scramble>FROM OUR CLIENTS</SectionEyebrow>
+
+        <div className="relative mx-auto max-w-4xl mt-12 md:mt-16">
           <button
             onClick={scrollPrev}
             className="absolute left-[-80px] top-[35%] z-10 hidden -translate-y-1/2 scale-150 text-brand-black/40 transition-all duration-300 hover:text-brand-black lg:block"
@@ -144,16 +152,16 @@ export default function Manifesto() {
           </button>
 
           <div
-            className="cursor-grab overflow-hidden active:cursor-grabbing bg-neutral-cool-50"
+            className="cursor-grab overflow-hidden active:cursor-grabbing bg-neutral-cool-50 h-full"
             ref={emblaRef}
           >
-            <div className="flex">
-              {MANIFESTO_DATA.map((slide) => (
+            <div className="flex h-full items-stretch">
+              {MANIFESTO_DATA.map((slide, index) => (
                 <div
-                  className="min-w-0 flex-[0_0_100%]"
+                  className="min-w-0 flex-[0_0_100%] flex flex-col"
                   key={slide.id}
                 >
-                  <Card className="relative mb-14 p-10 md:p-16 rounded-xl">
+                  <Card className="relative mb-14 p-10 md:p-16 rounded-xl flex-1 flex flex-col justify-center">
                     <div className="ui-copy">
                       {getWordTokens(slide.text).map((token) => (
                         <span
@@ -181,17 +189,8 @@ export default function Manifesto() {
                     </svg>
                   </Card>
 
-                  <div className="flex flex-col items-end justify-between gap-8 px-10 md:flex-row">
+                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 px-10">
                     <div className="flex items-center gap-5">
-                      <div className="relative h-16 w-16 overflow-hidden rounded-full grayscale ring-1 ring-black/5">
-                        <Image
-                          src={slide.avatar}
-                          alt={slide.author}
-                          fill
-                          sizes="64px"
-                          className="object-cover"
-                        />
-                      </div>
                       <div>
                         <h3 className="text-lg font-bold leading-tight tracking-tight text-brand-black">
                           {slide.author}
@@ -201,21 +200,18 @@ export default function Manifesto() {
                         </p>
                       </div>
                     </div>
+                    <div className="hidden md:flex items-center justify-end">
+                      <Image
+                        src={slide.icon}
+                        alt="Decorative Icon"
+                        width={100}
+                        height={100}
+                        className="h-10 w-auto"
+                      />
+                    </div>
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-
-          <div className="pointer-events-none absolute bottom-[115px] right-[40px] z-10 hidden md:block">
-            <div className="flex items-center gap-2">
-              <Image
-                src="/images/svg/torii.svg"
-                alt="Torii"
-                width={80}
-                height={80}
-                className="h-10 w-auto"
-              />
             </div>
           </div>
 

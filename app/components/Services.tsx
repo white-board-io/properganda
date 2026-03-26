@@ -215,10 +215,11 @@ export default function Services() {
                     className="text-black break-words w-[calc(100%-3rem)] md:w-full"
                     style={{
                       fontFamily: "Inter, sans-serif",
-                      fontWeight: 700,
+                      fontWeight: activeIndex === index ? 700 : 400,
                       fontSize: "clamp(2.5rem, 7vw, 100px)",
                       lineHeight: "1.2",
                       letterSpacing: "0%",
+                      transition: "font-weight 0.3s ease",
                     }}
                   >
                     {service.text}
@@ -239,12 +240,12 @@ export default function Services() {
                 }}
                 style={{ height: 0, opacity: 0, overflow: "hidden" }}
               >
-                <ul className="flex flex-col gap-3 md:gap-4 pt-6 pb-4 pl-2 md:pl-6 text-black">
+                <ul className="flex flex-col gap-3 md:gap-4 pt-6 pb-4 pl-4 md:pl-25 text-black">
                   {service.subItems.map((item, itemIndex) => {
                     const Icon = item.icon;
                     return (
                       <li key={itemIndex} className="flex items-center gap-3 md:gap-4 text-[#333] text-base md:text-xl md:font-medium">
-                        <Icon className="text-brand-green w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
+                        <Icon className="text-[#169D52] w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
                         <span className="cursor-pointer transition-opacity hover:opacity-70">{item.text}</span>
                       </li>
                     );

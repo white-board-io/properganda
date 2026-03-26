@@ -66,17 +66,16 @@ export default function Footer() {
               />
             </Link>
 
-            <div className="flex flex-col gap-8">
-              <h2 className="text-3xl font-bold leading-tight text-[#169D52] sm:text-4xl lg:h-[102px] lg:w-[332px] lg:text-[40px] lg:leading-[51px]">
-                We&apos;re not big.
-                <br />
-                But we&apos;re Proper.
+            <div className="flex flex-col gap-20">
+              <h2 className="text-[32px] font-bold text-white sm:text-[40px] leading-tight sm:leading-[40px]">
+                <span className="block whitespace-nowrap">No drills. No frills.</span>
+                <span className="block whitespace-nowrap">Just great work.</span>
               </h2>
 
               <div className="flex gap-4">
                 {SOCIAL_LINKS.map((link) => (
-                  <a key={link.label} href={link.href} className="ui-icon-link" aria-label={link.label}>
-                    <Image src={link.icon} alt={link.label} width={48} height={48} />
+                  <a key={link.label} href={link.href} className="ui-icon-link flex h-11 w-11 items-center justify-center rounded-full border bg-white" aria-label={link.label}>
+                    <Image src={link.icon} alt={link.label} width={23} height={23} />
                   </a>
                 ))}
               </div>
@@ -96,21 +95,7 @@ export default function Footer() {
               <div className="space-y-6">
                 <h3 className="ui-footer-heading">Locations</h3>
                 <div className="space-y-2 text-lg text-brand-gray">
-                  <p>Sao Tome and Principe</p>
-                  <p>(208) 555-0112</p>
-                </div>
-              </div>
-
-              <div className="space-y-6 lg:min-w-[300px]">
-                <h3 className="ui-footer-heading">Other</h3>
-                <div className="space-y-2 text-lg text-brand-gray">
-                  {OTHER_LINKS.map((link) => (
-                    <p key={link.label}>
-                      <Link href={link.href} className="underline transition-colors hover:text-brand-green">
-                        {link.label}
-                      </Link>
-                    </p>
-                  ))}
+                  <p>Lower Parel, Mumbai</p>
                 </div>
               </div>
             </div>

@@ -41,43 +41,101 @@ export default function Commandments({
   const panelRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
+  const isAnimatingRef = useRef(false);
+  const currentIdxRef = useRef(0);
+  const stRef = useRef<ScrollTrigger | null>(null);
+  const wheelCooldownRef = useRef(false);
 
   useGSAP(
     () => {
       if (!panelRef.current || !trackRef.current) return;
 
-      const items = gsap.utils.toArray(".commandment-item");
-      const totalItems = items.length;
+      const totalItems = commandments.length;
 
-      const yMove = -100 * (totalItems - 1);
-
-      const ctx = gsap.context(() => {
-        ScrollTrigger.create({
-          trigger: panelRef.current,
-          start: "center center",
-          end: `+=${totalItems * 100}%`,
-          pin: true,
-          animation: gsap.to(trackRef.current, {
-            yPercent: yMove,
-            ease: "none",
-          }),
-          scrub: 1,
-          onUpdate: (self) => {
-            const progress = self.progress;
-            const newIdx = Math.min(
-              Math.max(Math.round(progress * (totalItems - 1)), 0),
-              totalItems - 1,
-            );
-
-            // Only update via scroll if on desktop
-            if (newIdx !== activeIdx && window.innerWidth >= 768) {
-              setActiveIdx(newIdx);
-            }
-          },
-        });
+      const st = ScrollTrigger.create({
+        trigger: panelRef.current,
+        start: "top top",
+        end: `+=${totalItems * 100}%`,
+        pin: true,
+        onEnter: () => {
+          currentIdxRef.current = 0;
+          setActiveIdx(0);
+          gsap.set(trackRef.current, { yPercent: 0 });
+        },
+        onEnterBack: () => {
+          currentIdxRef.current = totalItems - 1;
+          setActiveIdx(totalItems - 1);
+          gsap.set(trackRef.current, { yPercent: -100 * (totalItems - 1) });
+        },
       });
 
-      return () => ctx.revert();
+      stRef.current = st;
+
+      const animateToIdx = (targetIdx: number) => {
+        if (isAnimatingRef.current) return;
+        isAnimatingRef.current = true;
+        currentIdxRef.current = targetIdx;
+        setActiveIdx(targetIdx);
+
+        gsap.to(trackRef.current, {
+          yPercent: -100 * targetIdx,
+          duration: 0.8,
+          ease: "power2.out",
+          onComplete: () => {
+            isAnimatingRef.current = false;
+          },
+        });
+      };
+
+      const exitSection = (direction: "up" | "down") => {
+        isAnimatingRef.current = true;
+        const targetScroll = direction === "down" ? st.end + 1 : st.start - 1;
+        const scrollObj = { y: window.scrollY };
+        gsap.to(scrollObj, {
+          y: targetScroll,
+          duration: 0.8,
+          ease: "power2.out",
+          onUpdate: () => window.scrollTo(0, scrollObj.y),
+          onComplete: () => {
+            isAnimatingRef.current = false;
+          },
+        });
+      };
+
+      const handleWheel = (e: WheelEvent) => {
+        if (window.innerWidth < 768) return;
+        if (!st.isActive) return;
+
+        e.preventDefault();
+        if (isAnimatingRef.current || wheelCooldownRef.current) return;
+
+        wheelCooldownRef.current = true;
+        setTimeout(() => {
+          wheelCooldownRef.current = false;
+        }, 1000);
+
+        const idx = currentIdxRef.current;
+
+        if (e.deltaY > 0) {
+          if (idx < totalItems - 1) {
+            animateToIdx(idx + 1);
+          } else {
+            exitSection("down");
+          }
+        } else if (e.deltaY < 0) {
+          if (idx > 0) {
+            animateToIdx(idx - 1);
+          } else {
+            exitSection("up");
+          }
+        }
+      };
+
+      window.addEventListener("wheel", handleWheel, { passive: false });
+
+      return () => {
+        window.removeEventListener("wheel", handleWheel);
+      };
     },
     { scope: scrollContainerRef, dependencies: [commandments] },
   );
@@ -94,23 +152,20 @@ export default function Commandments({
       return;
     }
 
-    if (!panelRef.current) return;
+    if (!trackRef.current) return;
+    if (isAnimatingRef.current) return;
+    isAnimatingRef.current = true;
+    currentIdxRef.current = index;
+    setActiveIdx(index);
 
-    const st = ScrollTrigger.getAll().find(
-      (trigger) => trigger.trigger === panelRef.current,
-    );
-
-    if (st) {
-      const start = st.start;
-      const end = st.end;
-      const progress = index / (commandments.length - 1);
-      const targetScroll = start + (end - start) * progress;
-
-      window.scrollTo({
-        top: targetScroll,
-        behavior: "smooth",
-      });
-    }
+    gsap.to(trackRef.current, {
+      yPercent: -100 * index,
+      duration: 0.5,
+      ease: "power3.out",
+      onComplete: () => {
+        isAnimatingRef.current = false;
+      },
+    });
   };
 
   const handleMobileScroll = (e: React.UIEvent<HTMLDivElement>) => {
