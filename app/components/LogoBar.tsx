@@ -22,7 +22,7 @@ const LOGO_ROWS = [
     { name: "HCC", src: "/images/svg/hcc.svg", width: 244, height: 67 },
   ],
   [
-    { name: "Yamaha", src: "/images/svg/yamaha.svg", width: 261, height: 55 },
+    { name: "Yamaha", src: "/images/svg/yamaha_logo.svg", width: 261, height: 55 },
     { name: "Amazon", src: "/images/svg/amazon.svg", width: 211, height: 64 },
     { name: "Learning Links", src: "/images/svg/learnings.svg", width: 100, height: 85 },
     { name: "Hero Future Energies", src: "/images/svg/hfe.svg", width: 177, height: 92 },
