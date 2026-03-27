@@ -39,7 +39,7 @@ function BlurTextReveal<C extends React.ElementType = "div">({
   y = 10,
   ...props
 }: BlurTextRevealProps<C>) {
-  const rootRef = React.useRef<HTMLElement>(null);
+  const rootRef = React.useRef<HTMLSpanElement>(null);
   const Component = as ?? "div";
   const resolvedSegments = React.useMemo<readonly BlurTextSegment[]>(
     () => segments ?? [{ text: text ?? "" }],
@@ -115,50 +115,52 @@ function BlurTextReveal<C extends React.ElementType = "div">({
   );
 
   return (
-    <Component ref={rootRef} className={className} {...props}>
-      {resolvedSegments.map((segment, segmentIndex) => {
-        const SegmentTag = segment.as ?? "span";
-        const tokens = segment.text.split(/(\s+)/);
+    <Component className={className} {...props}>
+      <span ref={rootRef} className="block">
+        {resolvedSegments.map((segment, segmentIndex) => {
+          const SegmentTag = segment.as ?? "span";
+          const tokens = segment.text.split(/(\s+)/);
 
-        return (
-          <SegmentTag
-            key={`${segmentIndex}-${segment.text}`}
-            className={segment.className}
-          >
-            {tokens.map((token, tokenIndex) => {
-              if (!token) {
-                return null;
-              }
+          return (
+            <SegmentTag
+              key={`${segmentIndex}-${segment.text}`}
+              className={segment.className}
+            >
+              {tokens.map((token, tokenIndex) => {
+                if (!token) {
+                  return null;
+                }
 
-              if (/^\s+$/.test(token)) {
+                if (/^\s+$/.test(token)) {
+                  return (
+                    <React.Fragment key={`${segmentIndex}-${tokenIndex}`}>
+                      {token}
+                    </React.Fragment>
+                  );
+                }
+
                 return (
-                  <React.Fragment key={`${segmentIndex}-${tokenIndex}`}>
-                    {token}
-                  </React.Fragment>
+                  <span
+                    key={`${segmentIndex}-${tokenIndex}-${token}`}
+                    className="inline-block whitespace-nowrap"
+                  >
+                    {Array.from(token).map((character, characterIndex) => (
+                      <span
+                        key={`${segmentIndex}-${tokenIndex}-${characterIndex}-${character}`}
+                        className={cn(
+                          "ui-blur-text-reveal__char inline-block will-change-[transform,filter,opacity]",
+                        )}
+                      >
+                        {character}
+                      </span>
+                    ))}
+                  </span>
                 );
-              }
-
-              return (
-                <span
-                  key={`${segmentIndex}-${tokenIndex}-${token}`}
-                  className="inline-block whitespace-nowrap"
-                >
-                  {Array.from(token).map((character, characterIndex) => (
-                    <span
-                      key={`${segmentIndex}-${tokenIndex}-${characterIndex}-${character}`}
-                      className={cn(
-                        "ui-blur-text-reveal__char inline-block will-change-[transform,filter,opacity]",
-                      )}
-                    >
-                      {character}
-                    </span>
-                  ))}
-                </span>
-              );
-            })}
-          </SegmentTag>
-        );
-      })}
+              })}
+            </SegmentTag>
+          );
+        })}
+      </span>
     </Component>
   );
 }
