@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -11,6 +11,8 @@ import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
 
 gsap.registerPlugin(useGSAP);
+
+const ABOUT_WORDS = ["MADE WITH HEART.", "BACKED BY BRAINS."] as const;
 
 const ABOUT_PULSE_BEAMS = [
   {
@@ -179,6 +181,35 @@ export default function AboutUs() {
     { scope: sectionRef },
   );
 
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [currentText, setCurrentText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const word = ABOUT_WORDS[currentWordIndex];
+    let timeoutId: NodeJS.Timeout;
+
+    if (!isDeleting && currentText === word) {
+      timeoutId = setTimeout(() => setIsDeleting(true), 1500);
+    } else if (isDeleting && currentText === "") {
+      timeoutId = setTimeout(() => {
+        setIsDeleting(false);
+        setCurrentWordIndex((prev) => (prev + 1) % ABOUT_WORDS.length);
+      }, 1000);
+    } else {
+      const timeout = 250;
+      timeoutId = setTimeout(() => {
+        setCurrentText((prev) =>
+          isDeleting
+            ? word.slice(0, prev.length - 1)
+            : word.slice(0, prev.length + 1),
+        );
+      }, timeout);
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [currentText, isDeleting, currentWordIndex]);
+
   useEffect(() => {
     const orbitGuide = orbitGuideRef.current;
     const cometHead = cometHeadRef.current;
@@ -322,8 +353,9 @@ export default function AboutUs() {
             </section>
 
             <section className="flex flex-col justify-start mt-2">
-              <h3 className="font-sans text-[40px] md:text-[64px] font-bold leading-tight tracking-tight text-[#159848] uppercase">
-                MADE WITH HEART.
+              <h3 className="font-sans text-[40px] md:text-[64px] font-bold leading-tight tracking-tight text-[#159848] uppercase min-h-[1.2em]">
+                {currentText}
+                <span className="animate-cursor-blink ml-1">_</span>
               </h3>
             </section>
 
