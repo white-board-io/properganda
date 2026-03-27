@@ -5,9 +5,9 @@ import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
+import { BlurTextReveal } from "@/components/ui/blur-text-reveal";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
-import { TextReveal } from "@/components/ui/text-reveal-animation";
 
 gsap.registerPlugin(useGSAP);
 
@@ -160,10 +160,17 @@ export default function Hero({
 
         <SiteContainer className="z-10 w-full mt-24 lg:mt-40">
           <section className="flex flex-col items-start justify-center gap-12">
-            <TextReveal
+            <BlurTextReveal
               as="h1"
-              lines={HERO_LINES}
               className="font-bebas-neue uppercase font-normal xl:text-[208px] xl:leading-[180px] tracking-normal text-white lg:text-[180px] lg:leading-[170px] md:text-[140px] md:leading-[130px] sm:text-[100px] sm:leading-[90px] text-[60px] leading-[50px]"
+              segments={HERO_LINES.map((line) => ({
+                text: line,
+                className: "block whitespace-nowrap",
+              }))}
+              stagger={0.018}
+              duration={0.32}
+              blur={8}
+              y={10}
             />
 
             <section className="relative flex items-center justify-between">

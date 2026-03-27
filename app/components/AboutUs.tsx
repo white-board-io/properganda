@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
+import { BlurTextReveal } from "@/components/ui/blur-text-reveal";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
 
@@ -298,14 +299,26 @@ export default function AboutUs() {
         <section className="relative overflow-hidden pb-32 pt-12 md:pb-40 md:pt-16 w-full">
           <section className="relative z-10 flex flex-col gap-10 md:gap-12 w-full max-w-[900px]">
             <section className="flex flex-col justify-start w-full">
-              <h2 className="font-sans text-[26px] md:text-[40px] font-light text-neutral-300 leading-[1.3] tracking-wide">
-                Properganda is a{" "}
-                <strong className="font-bold text-white">
-                  creative agency
-                </strong>{" "}
-                for ambitious brands and organisations looking to create
-                relevance, resonance and real-world impact.
-              </h2>
+              <BlurTextReveal
+                as="h2"
+                className="font-sans text-[26px] md:text-[40px] font-light text-neutral-300 leading-[1.3] tracking-wide"
+                segments={[
+                  { text: "Properganda is a " },
+                  {
+                    text: "creative agency",
+                    as: "strong",
+                    className: "font-bold text-white",
+                  },
+                  {
+                    text:
+                      " for ambitious brands and organisations looking to create relevance, resonance and real-world impact.",
+                  },
+                ]}
+                stagger={0.014}
+                duration={0.3}
+                blur={8}
+                y={10}
+              />
             </section>
 
             <section className="flex flex-col justify-start mt-2">
