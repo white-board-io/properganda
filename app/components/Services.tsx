@@ -25,7 +25,6 @@ import {
   Leaf
 } from "lucide-react";
 
-import { createScrollReveal } from "@/lib/gsap-reveal";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
@@ -154,15 +153,6 @@ export default function Services() {
           gsap.set(el, { height: 0, opacity: 0, overflow: "hidden" });
         }
       });
-
-      createScrollReveal(".service-item", {
-        trigger: sectionRef.current,
-        start: "top 70%",
-        stagger: 0.16,
-        duration: 1,
-        scale: 0.99,
-        blur: 10,
-      });
     },
     { scope: sectionRef },
   );
@@ -196,7 +186,7 @@ export default function Services() {
       aria-label="Our services"
     >
       <SiteContainer>
-        <SectionEyebrow>What We Do</SectionEyebrow>
+        <SectionEyebrow scramble>What We Do</SectionEyebrow>
 
         <div className="flex flex-col gap-4" onMouseLeave={handleListMouseLeave}>
           {SERVICES.map((service, index) => (

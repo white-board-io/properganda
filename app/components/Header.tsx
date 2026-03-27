@@ -1,16 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 
 import { buttonVariants } from "@/components/ui/button";
 import { SiteContainer } from "@/components/ui/site-container";
 import { cn } from "@/lib/utils";
-
-gsap.registerPlugin(useGSAP);
 
 const NAV_ITEMS = [
   { name: "About Us", href: "#about" },
@@ -22,11 +18,11 @@ const NAV_ITEMS = [
 
 
 export default function Header({
-  variant = "default",
+  variant: _variant = "default",
 }: {
   variant?: "default" | "commandments";
 }) {
-  const containerRef = useRef<HTMLElement>(null);
+  void _variant;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [pastHero, setPastHero] = useState(false);
 
@@ -34,21 +30,11 @@ export default function Header({
     const onScroll = () => {
       setPastHero(window.scrollY >= window.innerHeight - 250);
     };
+
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useGSAP(
-    () => {
-      gsap.from(containerRef.current, {
-        y: -100,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-      });
-    },
-    { scope: containerRef },
-  );
 
   return (
     <div
@@ -74,7 +60,6 @@ export default function Header({
       />
 
       <header
-        ref={containerRef}
         className={cn(
           "pointer-events-auto transition-all duration-300 mx-auto w-full max-w-[calc(100%-1rem)] md:max-w-4xl lg:max-w-7xl",
           "border border-transparent rounded-none",
@@ -98,19 +83,20 @@ export default function Header({
               width={32}
               height={22}
               priority
-              className="h-8 w-auto transition-all duration-300"
+              className="h-8 w-auto transition-all duration-300 drop-shadow-[0_2px_14px_rgba(0,0,0,0.75)]"
             />
           </Link>
 
           <nav
             aria-label="Main navigation"
-            className="hidden items-center gap-10 lg:gap-14 md:flex whitespace-nowrap"
+            className="hidden items-center gap-10 lg:gap-14 md:flex whitespace-nowrap z-10"
           >
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="ui-nav-link transition-colors duration-300 text-white"
+                className="ui-nav-link transition-colors duration-300"
+                style={{ color: "#FFFFFF" }}
               >
                 {item.name}
               </Link>
@@ -125,12 +111,19 @@ export default function Header({
                 }),
                 "gap-2.5 px-5 py-2 items-center transition-all duration-300",
               )}
+              style={{ color: "#FFFFFF", borderColor: "#FFFFFF" }}
             >
               <div className="flex flex-col text-left leading-[1.1] justify-center pt-[2px]">
-                <span className="text-[6px] font-black tracking-widest transition-colors duration-300 text-white">
+                <span
+                  className="text-[6px] font-black tracking-widest transition-colors duration-300"
+                  style={{ color: "#FFFFFF" }}
+                >
                   Our
                 </span>
-                <span className="text-[6px] font-black tracking-widest transition-colors duration-300 text-white">
+                <span
+                  className="text-[6px] font-black tracking-widest transition-colors duration-300"
+                  style={{ color: "#FFFFFF" }}
+                >
                   Studio
                 </span>
               </div>
@@ -139,7 +132,7 @@ export default function Header({
                 alt="CANOPY"
                 width={100}
                 height={14}
-                className="h-[14px] w-[100px] transition-all duration-300"
+                className="h-[14px] w-[100px] transition-all duration-300 drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"
               />
             </Link>
           </nav>
@@ -184,7 +177,8 @@ export default function Header({
               <Link
                 key={item.name}
                 href={item.href}
-                className="ui-nav-link text-lg transition-colors duration-300 text-white"
+                className="ui-nav-link text-lg transition-colors duration-300"
+                style={{ color: "#FFFFFF" }}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.name}
@@ -201,12 +195,19 @@ export default function Header({
                 }),
                 "gap-2.5 px-5 py-2 mt-2 items-center transition-all duration-300",
               )}
+              style={{ color: "#FFFFFF", borderColor: "#FFFFFF" }}
             >
               <div className="flex flex-col text-left leading-[1.1] justify-center pt-[2px]">
-                <span className="text-[10px] font-black tracking-widest transition-colors duration-300 text-white">
+                <span
+                  className="text-[10px] font-black tracking-widest transition-colors duration-300"
+                  style={{ color: "#FFFFFF" }}
+                >
                   Our
                 </span>
-                <span className="text-[10px] font-black tracking-widest transition-colors duration-300 text-white">
+                <span
+                  className="text-[10px] font-black tracking-widest transition-colors duration-300"
+                  style={{ color: "#FFFFFF" }}
+                >
                   Studio
                 </span>
               </div>
@@ -215,7 +216,7 @@ export default function Header({
                 alt="CANOPY"
                 width={100}
                 height={14}
-                className="h-[14px] w-[100px] transition-all duration-300"
+                className="h-[14px] w-[100px] transition-all duration-300 drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"
               />
             </Link>
           </nav>
@@ -224,4 +225,3 @@ export default function Header({
     </div>
   );
 }
-

@@ -1,15 +1,8 @@
 "use client";
 
-import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-
-import { createScrollReveal } from "@/lib/gsap-reveal";
 import { SiteContainer } from "@/components/ui/site-container";
-
-gsap.registerPlugin(useGSAP);
 
 const NAV_LINKS = [
   { href: "#about", label: "About Us" },
@@ -24,35 +17,11 @@ const SOCIAL_LINKS = [
   { href: "https://www.linkedin.com/company/propergandacreative/", label: "LinkedIn", icon: "/images/svg/linkedin.svg" },
 ];
 
-const OTHER_LINKS = [
-  { href: "/brand-book", label: "Brand Book" },
-  { href: "/employee-hand-book", label: "Employee Hand Book" },
-];
-
 export default function Footer() {
-  const sectionRef = useRef<HTMLElement>(null);
   const currentYear = new Date().getFullYear();
 
-  useGSAP(
-    () => {
-      createScrollReveal(".footer-content > *", {
-        trigger: sectionRef.current,
-        start: "top 86%",
-        stagger: 0.14,
-        duration: 1,
-        scale: 0.99,
-        blur: 10,
-      });
-    },
-    { scope: sectionRef },
-  );
-
   return (
-    <footer
-      ref={sectionRef}
-      className="bg-brand-black pb-12 pt-20 text-white font-inter"
-      role="contentinfo"
-    >
+    <footer className="bg-brand-black pb-12 pt-20 text-white font-inter" role="contentinfo">
       <SiteContainer>
         <div className="footer-content grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-36">
           <div className="grid items-start gap-8 sm:grid-cols-[auto_1fr] lg:gap-12">

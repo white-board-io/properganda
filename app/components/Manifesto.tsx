@@ -163,7 +163,7 @@ export default function Manifesto() {
             ref={emblaRef}
           >
             <div className="flex h-full items-stretch">
-              {MANIFESTO_DATA.map((slide, index) => (
+              {MANIFESTO_DATA.map((slide) => (
                 <div
                   className="min-w-0 flex-[0_0_100%] flex flex-col"
                   key={slide.id}

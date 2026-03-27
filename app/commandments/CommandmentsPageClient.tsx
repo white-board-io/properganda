@@ -6,13 +6,9 @@ import Commandments from "../components/Commandments";
 import CTA from "../components/CTA";
 import Footer from "../components/Footer";
 import { COMMANDMENTS } from "./data";
-import { useRef, useEffect } from "react";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
+import { useEffect } from "react";
 
 export default function CommandmentsPageClient() {
-  const containerRef = useRef<HTMLElement>(null);
-
   useEffect(() => {
     let cooldown = false;
 
@@ -67,24 +63,11 @@ export default function CommandmentsPageClient() {
     };
   }, []);
 
-  useGSAP(
-    () => {
-      gsap.from(".commandment-item", {
-        opacity: 0,
-        y: 40,
-        stagger: 0.1,
-        duration: 0.8,
-        ease: "power3.out",
-      });
-    },
-    { scope: containerRef },
-  );
-
   return (
     <div className="bg-brand-black min-h-screen">
       <Header variant="commandments" />
 
-      <main ref={containerRef}>
+      <main>
         <Hero variant="commandments" />
         <div id="commandments-section">
           <Commandments commandments={COMMANDMENTS} />

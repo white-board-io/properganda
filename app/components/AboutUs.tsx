@@ -2,21 +2,16 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
-
-gsap.registerPlugin(useGSAP);
 
 function wrapPathDistance(distance: number, totalLength: number) {
   return ((distance % totalLength) + totalLength) % totalLength;
 }
 
 export default function AboutUs() {
-  const sectionRef = useRef<HTMLElement>(null);
   const orbitGuideRef = useRef<SVGPathElement>(null);
   const cometHeadRef = useRef<SVGGElement>(null);
   const cometHeadDirectionRef = useRef<SVGGElement>(null);
@@ -26,48 +21,6 @@ export default function AboutUs() {
   const cometCoreId = useId().replace(/:/g, "");
   const cometOrbitPath =
     "M 60 1.5 H 940 A 58.5 58.5 0 0 1 940 118.5 H 60 A 58.5 58.5 0 0 1 60 1.5 Z";
-
-  useGSAP(
-    () => {
-      gsap.from(".cc-text-item", {
-        opacity: 0,
-        y: 60,
-        stagger: 0.15,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 60%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      gsap.from(".cc-image", {
-        opacity: 0,
-        scale: 1.1,
-        duration: 1.2,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 60%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      gsap.from(".cc-button", {
-        opacity: 0,
-        y: 30,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: ".cc-button",
-          start: "top 90%",
-          toggleActions: "play none none none",
-        },
-      });
-    },
-    { scope: sectionRef },
-  );
 
   useEffect(() => {
     const orbitGuide = orbitGuideRef.current;
@@ -149,19 +102,18 @@ export default function AboutUs() {
     <SectionShell
       id="about"
       variant="dark"
-      ref={sectionRef}
       spacing="default"
       className="px-0 relative !pb-0"
       aria-label="About - Creative Collective"
     >
       <SiteContainer>
-        <SectionEyebrow scramble className="cc-text-item">
+        <SectionEyebrow scramble>
           ABOUT US
         </SectionEyebrow>
 
         <section className="relative overflow-hidden pb-32 pt-12 md:pb-40 md:pt-16 w-full">
           <section className="relative z-10 flex flex-col gap-10 md:gap-12 w-full max-w-[900px]">
-            <section className="cc-text-item flex flex-col justify-start w-full">
+            <section className="flex flex-col justify-start w-full">
               <h2 className="font-sans text-[26px] md:text-[40px] font-light text-neutral-300 leading-[1.3] tracking-wide">
                 Properganda is a{" "}
                 <strong className="font-bold text-white">
@@ -172,7 +124,7 @@ export default function AboutUs() {
               </h2>
             </section>
 
-            <section className="cc-text-item flex flex-col justify-start mt-2">
+            <section className="flex flex-col justify-start mt-2">
               <h3 className="font-sans text-[40px] md:text-[64px] font-bold leading-tight tracking-tight text-[#159848] uppercase">
                 MADE WITH HEART.
               </h3>
@@ -181,7 +133,7 @@ export default function AboutUs() {
             <section className="relative z-20 mt-2">
               <a
                 href="#contact"
-                className="cc-text-item inline-block text-sm md:text-base font-medium text-white underline decoration-white/30 underline-offset-8 transition-colors hover:decoration-white"
+                className="inline-block text-sm md:text-base font-medium text-white underline decoration-white/30 underline-offset-8 transition-colors hover:decoration-white"
               >
                 Be a part of Us
               </a>
@@ -195,7 +147,7 @@ export default function AboutUs() {
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] h-[120px] blur-[50px] rounded-full pointer-events-none -z-10"
             style={{ backgroundColor: "rgba(22, 157, 82, 0.25)" }}
           />
-          <Link href="/commandments" className="ui-commandments-link cc-button">
+          <Link href="/commandments" className="ui-commandments-link">
             <span aria-hidden="true" className="ui-commandments-link__orbit">
               <svg
                 viewBox="0 0 1000 120"

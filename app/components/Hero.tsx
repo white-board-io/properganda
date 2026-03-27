@@ -26,11 +26,6 @@ export default function Hero({
   variant?: HeroVariant;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const badgeRef = useRef<HTMLDivElement>(null);
-  const subtextRef = useRef<HTMLDivElement>(null);
-  const conscienceRef = useRef<HTMLSpanElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const standRef = useRef<HTMLParagraphElement>(null);
   const orbitContainerRef = useRef<HTMLDivElement>(null);
 
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -82,90 +77,6 @@ export default function Hero({
 
     return () => clearTimeout(timeoutId);
   }, [currentText, isDeleting, currentWordIndex, variant]);
-
-  useGSAP(
-    () => {
-      if (variant !== "default") return;
-
-      const headingLines = Array.from(
-        headingRef.current?.querySelectorAll<HTMLElement>("[data-hero-line]") ?? [],
-      );
-      const subtext = subtextRef.current;
-      const revealTargets = subtext ? [...headingLines, subtext] : headingLines;
-
-      if (!revealTargets.length) {
-        return;
-      }
-
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        gsap.set(revealTargets, {
-          autoAlpha: 1,
-          scale: 1,
-          filter: "blur(0px)",
-          clipPath: "inset(0% 0% 0% 0%)",
-        });
-        return;
-      }
-
-      gsap.set(revealTargets, {
-        transformOrigin: "50% 50%",
-        willChange: "opacity, transform, filter, clip-path",
-      });
-
-      const tl = gsap.timeline({
-        delay: 0.12,
-        defaults: { ease: "power3.out" },
-      });
-
-      tl.fromTo(
-        headingLines,
-        {
-          autoAlpha: 0,
-          scale: 0.985,
-          filter: "blur(14px)",
-          clipPath: "inset(0% 0% 100% 0%)",
-        },
-        {
-          autoAlpha: 1,
-          scale: 1,
-          filter: "blur(0px)",
-          clipPath: "inset(0% 0% 0% 0%)",
-          duration: 1.2,
-          stagger: 0.14,
-        },
-      );
-
-      if (subtext) {
-        tl.fromTo(
-          subtext,
-          {
-            autoAlpha: 0,
-            scale: 0.99,
-            filter: "blur(10px)",
-            clipPath: "inset(0% 0% 100% 0%)",
-          },
-          {
-            autoAlpha: 1,
-            scale: 1,
-            filter: "blur(0px)",
-            clipPath: "inset(0% 0% 0% 0%)",
-            duration: 0.95,
-          },
-          "-=0.55",
-        );
-      }
-
-      tl.eventCallback("onComplete", () => {
-        gsap.set(revealTargets, { clearProps: "willChange" });
-      });
-
-      return () => {
-        tl.kill();
-        gsap.set(revealTargets, { clearProps: "willChange" });
-      };
-    },
-    { scope: sectionRef, dependencies: [variant] },
-  );
 
   useGSAP(
     () => {
@@ -248,7 +159,6 @@ export default function Hero({
         <SiteContainer className="z-10 w-full mt-24 lg:mt-40">
           <section className="flex flex-col items-start justify-center gap-12">
             <h1
-              ref={headingRef}
               className="font-bebas-neue uppercase font-normal xl:text-[208px] xl:leading-[180px] tracking-normal text-white lg:text-[180px] lg:leading-[170px] md:text-[140px] md:leading-[130px] sm:text-[100px] sm:leading-[90px] text-[60px] leading-[50px]"
             >
               <span className="block overflow-hidden">
@@ -259,7 +169,7 @@ export default function Hero({
               <span className="block overflow-hidden">
                 <span data-hero-line className="block whitespace-nowrap">
                   {"A "}
-                  <span ref={conscienceRef} className="text-white inline-block">
+                  <span className="text-white inline-block">
                     Conscience
                   </span>
                 </span>
@@ -267,7 +177,7 @@ export default function Hero({
             </h1>
 
             <section className="relative flex items-center justify-between">
-              <div ref={subtextRef} className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1">
                 <p
                   className="text-white opacity-50"
                   style={{
@@ -305,7 +215,6 @@ export default function Hero({
                     STAND
                   </span>
                   <div
-                    ref={standRef}
                     className="relative flex-1 text-white uppercase whitespace-nowrap"
                     style={{
                       height: "1.42em",
@@ -328,7 +237,6 @@ export default function Hero({
           </section>
 
           <aside
-            ref={badgeRef}
             aria-label="Let's Talk Button"
             onClick={() => setIsModalOpen(true)}
             className="ui-hero-badge fixed bottom-8 right-4 z-50 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full transition-shadow md:bottom-20 md:right-8 md:h-24 md:w-24 lg:bottom-[4rem] lg:right-[4rem]"
@@ -509,7 +417,6 @@ export default function Hero({
         </div>
 
         <div
-          ref={badgeRef}
           className="ui-hero-badge fixed bottom-8 right-4 z-50 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full transition-shadow md:bottom-[5rem] md:right-[2rem] md:h-24 md:w-24 lg:bottom-[4rem] lg:right-[4rem]"
           aria-label="Let's Talk"
           onClick={() => setIsModalOpen(true)}
