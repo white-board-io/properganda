@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { toast } from "sonner";
 
 import { BlurTextReveal } from "@/components/ui/blur-text-reveal";
 import { SectionShell } from "@/components/ui/section-shell";
@@ -46,11 +47,26 @@ export default function Hero({
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: wire up submission
-    setIsModalOpen(false);
-    setFormData({ name: "", email: "", mobile: "", message: "" });
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("Failed to send");
+      toast.success("You should hear back from us soon");
+      setIsModalOpen(false);
+      setFormData({ name: "", email: "", mobile: "", message: "" });
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -542,7 +558,7 @@ export default function Hero({
                   type="submit"
                   className="mt-1 w-full rounded-full bg-[#169D52] py-4 text-sm font-semibold text-white transition-colors hover:bg-green-700 active:scale-[0.98]"
                 >
-                  Request for a call back
+                  {isSubmitting ? "Sending..." : "Request for a call back"}
                 </button>
               </form>
             </div>

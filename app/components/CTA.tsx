@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { type FormEvent, useState } from "react";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -27,6 +28,7 @@ const SERVICES = [
 
 export default function CTA() {
   const [selectedService, setSelectedService] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const selectedServiceLabel = SERVICES.find(
     (service) => service.value === selectedService,
@@ -97,7 +99,35 @@ export default function CTA() {
               </div>
             </div>
 
-            <form className="flex h-full w-full flex-1 flex-col gap-8 lg:max-w-[797px]">
+            <form
+              onSubmit={async (e: FormEvent<HTMLFormElement>) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                const fd = new FormData(e.currentTarget);
+                try {
+                  const res = await fetch("/api/contact", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      name: fd.get("name"),
+                      email: fd.get("email"),
+                      mobile: fd.get("mobile"),
+                      service: fd.get("service"),
+                      message: fd.get("message"),
+                    }),
+                  });
+                  if (!res.ok) throw new Error("Failed to send");
+                  toast.success("You should hear back from us soon");
+                  e.currentTarget.reset();
+                  setSelectedService("");
+                } catch {
+                  toast.error("Something went wrong. Please try again.");
+                } finally {
+                  setIsSubmitting(false);
+                }
+              }}
+              className="flex h-full w-full flex-1 flex-col gap-8 lg:max-w-[797px]"
+            >
               <div className="grid grid-cols-1 gap-x-14 gap-y-6 md:grid-cols-2">
                 <div className="cta-form-item flex flex-col gap-2">
                   <label htmlFor="name" className="ui-form-label">
@@ -105,6 +135,7 @@ export default function CTA() {
                   </label>
                   <Input
                     id="name"
+                    name="name"
                     placeholder="Enter your Name"
                     className="w-full"
                     required
@@ -118,6 +149,7 @@ export default function CTA() {
                   <Input
                     type="email"
                     id="email"
+                    name="email"
                     placeholder="Enter your email ID"
                     className="w-full"
                     required
@@ -131,6 +163,7 @@ export default function CTA() {
                   <Input
                     type="tel"
                     id="mobile"
+                    name="mobile"
                     placeholder="Enter your Mobile number"
                     className="w-full"
                   />
@@ -184,16 +217,17 @@ export default function CTA() {
                 <label htmlFor="message" className="ui-form-label">
                   How can we help?<span className="text-red-500">*</span>
                 </label>
-                <Textarea id="message" className="w-full resize-none" required />
+                <Textarea id="message" name="message" className="w-full resize-none" required />
               </div>
 
               <div className="cta-form-item">
                 <Button
                   type="submit"
                   variant="accent"
+                  disabled={isSubmitting}
                   className="group mt-4 h-[62px] w-full sm:w-auto sm:px-8 rounded-[20px] font-inter text-[16px] font-semibold leading-none tracking-[0.02em] opacity-100"
                 >
-                  Request for a call back
+                  {isSubmitting ? "Sending..." : "Request for a call back"}
                   <svg
                     className="h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
                     viewBox="0 0 24 24"
