@@ -7,10 +7,12 @@ import { useGSAP } from "@gsap/react";
 
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
+import { TextReveal } from "@/components/ui/text-reveal-animation";
 
 gsap.registerPlugin(useGSAP);
 
 const SLOT_WORDS = ["up", "out", "for something"] as const;
+const HERO_LINES = ["Creativity With", "A Conscience"] as const;
 
 const ORBIT_COPY = "COMMANDMENTS  ";
 const orbitCharacters = Array.from(ORBIT_COPY).map((char, index) => ({
@@ -158,23 +160,11 @@ export default function Hero({
 
         <SiteContainer className="z-10 w-full mt-24 lg:mt-40">
           <section className="flex flex-col items-start justify-center gap-12">
-            <h1
+            <TextReveal
+              as="h1"
+              lines={HERO_LINES}
               className="font-bebas-neue uppercase font-normal xl:text-[208px] xl:leading-[180px] tracking-normal text-white lg:text-[180px] lg:leading-[170px] md:text-[140px] md:leading-[130px] sm:text-[100px] sm:leading-[90px] text-[60px] leading-[50px]"
-            >
-              <span className="block overflow-hidden">
-                <span data-hero-line className="block whitespace-nowrap">
-                  Creativity With
-                </span>
-              </span>
-              <span className="block overflow-hidden">
-                <span data-hero-line className="block whitespace-nowrap">
-                  {"A "}
-                  <span className="text-white inline-block">
-                    Conscience
-                  </span>
-                </span>
-              </span>
-            </h1>
+            />
 
             <section className="relative flex items-center justify-between">
               <div className="flex flex-col gap-1">
