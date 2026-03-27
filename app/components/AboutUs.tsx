@@ -2,25 +2,181 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
+
+gsap.registerPlugin(useGSAP);
+
+const ABOUT_PULSE_BEAMS = [
+  {
+    top: "18%",
+    left: "4%",
+    width: "clamp(16rem, 24vw, 22rem)",
+    rotation: 0,
+    duration: 2.55,
+    delay: 0.2,
+    gap: 3.1,
+  },
+  {
+    top: "26%",
+    left: "84%",
+    width: "clamp(10rem, 14vw, 13rem)",
+    rotation: 90,
+    duration: 2.4,
+    delay: 0.75,
+    gap: 3,
+  },
+  {
+    top: "34%",
+    left: "58%",
+    width: "clamp(14rem, 20vw, 18rem)",
+    rotation: 0,
+    duration: 2.2,
+    delay: 1.1,
+    gap: 2.7,
+  },
+  {
+    top: "52%",
+    left: "14%",
+    width: "clamp(16rem, 24vw, 22rem)",
+    rotation: 0,
+    duration: 2.8,
+    delay: 1.65,
+    gap: 3,
+  },
+  {
+    top: "58%",
+    left: "8%",
+    width: "clamp(9rem, 12vw, 12rem)",
+    rotation: 90,
+    duration: 2.15,
+    delay: 2.2,
+    gap: 3.2,
+  },
+  {
+    top: "72%",
+    left: "56%",
+    width: "clamp(16rem, 24vw, 22rem)",
+    rotation: 0,
+    duration: 2.7,
+    delay: 2.8,
+    gap: 2.8,
+  },
+  {
+    top: "86%",
+    left: "24%",
+    width: "clamp(14rem, 20vw, 18rem)",
+    rotation: 0,
+    duration: 2.35,
+    delay: 3.45,
+    gap: 3.05,
+  },
+] as const;
 
 function wrapPathDistance(distance: number, totalLength: number) {
   return ((distance % totalLength) + totalLength) % totalLength;
 }
 
 export default function AboutUs() {
+  const sectionRef = useRef<HTMLElement>(null);
   const orbitGuideRef = useRef<SVGPathElement>(null);
   const cometHeadRef = useRef<SVGGElement>(null);
   const cometHeadDirectionRef = useRef<SVGGElement>(null);
+  const beamRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const beamPulseRefs = useRef<Array<HTMLDivElement | null>>([]);
   const cometHeadGlowId = useId().replace(/:/g, "");
   const cometFlameId = useId().replace(/:/g, "");
   const cometAuraId = useId().replace(/:/g, "");
   const cometCoreId = useId().replace(/:/g, "");
   const cometOrbitPath =
     "M 60 1.5 H 940 A 58.5 58.5 0 0 1 940 118.5 H 60 A 58.5 58.5 0 0 1 60 1.5 Z";
+
+  useGSAP(
+    () => {
+      const beams = beamRefs.current.filter(
+        (beam): beam is HTMLDivElement => beam !== null,
+      );
+      const pulses = beamPulseRefs.current.filter(
+        (pulse): pulse is HTMLDivElement => pulse !== null,
+      );
+
+      if (!beams.length) {
+        return;
+      }
+
+      const mediaMatch = gsap.matchMedia();
+
+      mediaMatch.add("(prefers-reduced-motion: no-preference)", () => {
+        const timelines = beams.map((beam, index) => {
+          const pulse = pulses[index];
+          const beamConfig = ABOUT_PULSE_BEAMS[index];
+
+          if (!pulse) {
+            return null;
+          }
+
+          const beamWidth = beam.offsetWidth;
+          const pulseWidth = pulse.offsetWidth;
+
+          gsap.set(beam, { rotate: beamConfig.rotation });
+          gsap.set(pulse, {
+            x: -pulseWidth * 1.15,
+            autoAlpha: 0,
+          });
+
+          const timeline = gsap.timeline({
+            repeat: -1,
+            repeatDelay: beamConfig.gap,
+            delay: beamConfig.delay,
+          });
+
+          timeline
+            .to(
+              pulse,
+              {
+                autoAlpha: 1,
+                duration: 0.28,
+                ease: "power1.out",
+              },
+              0,
+            )
+            .to(
+              pulse,
+              {
+                x: beamWidth + pulseWidth * 0.08,
+                duration: beamConfig.duration,
+                ease: "none",
+              },
+              0,
+            )
+            .to(
+              pulse,
+              {
+                autoAlpha: 0,
+                duration: 0.34,
+                ease: "power1.in",
+              },
+              beamConfig.duration - 0.34,
+            );
+
+          return timeline;
+        });
+
+        return () => {
+          timelines.forEach((timeline) => timeline?.kill());
+        };
+      });
+
+      return () => {
+        mediaMatch.revert();
+      };
+    },
+    { scope: sectionRef },
+  );
 
   useEffect(() => {
     const orbitGuide = orbitGuideRef.current;
@@ -100,13 +256,41 @@ export default function AboutUs() {
 
   return (
     <SectionShell
+      ref={sectionRef}
       id="about"
       variant="dark"
       spacing="default"
-      className="px-0 relative !pb-0"
+      className="px-0 relative isolate !pb-0"
       aria-label="About - Creative Collective"
     >
-      <SiteContainer>
+      <div aria-hidden="true" className="ui-about-pulse-field">
+        {ABOUT_PULSE_BEAMS.map((beam, index) => (
+          <div
+            key={`${beam.top}-${beam.left}-${index}`}
+            ref={(node) => {
+              beamRefs.current[index] = node;
+            }}
+            className="ui-about-pulse-beam"
+            style={{
+              top: beam.top,
+              left: beam.left,
+              width: beam.width,
+            }}
+          >
+            <div className="ui-about-pulse-beam__line" />
+            <div
+              ref={(node) => {
+                beamPulseRefs.current[index] = node;
+              }}
+              className="ui-about-pulse-beam__pulse"
+            >
+              <div className="ui-about-pulse-beam__spark" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <SiteContainer className="relative z-10">
         <SectionEyebrow scramble>
           ABOUT US
         </SectionEyebrow>
