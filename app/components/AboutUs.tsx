@@ -197,7 +197,7 @@ export default function AboutUs() {
         setCurrentWordIndex((prev) => (prev + 1) % ABOUT_WORDS.length);
       }, 1000);
     } else {
-      const timeout = 250;
+      const timeout = isDeleting ? 100 : 250;
       timeoutId = setTimeout(() => {
         setCurrentText((prev) =>
           isDeleting
