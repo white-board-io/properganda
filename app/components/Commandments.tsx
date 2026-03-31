@@ -564,7 +564,7 @@ export default function Commandments({
               className="w-full shrink-0 snap-center flex flex-col items-center justify-center px-6 relative"
             >
               {/* Top Number indicator with lines */}
-              <div className="flex w-full items-center justify-center mb-12">
+              <div className="mb-8 flex w-full items-center justify-center">
                 <div className="flex-1 flex items-center h-full">
                   <div className="flex-1 h-[2px] bg-white"></div>
                   <div className="w-[8px] h-[8px] rounded-full bg-white shrink-0 ml-[-2px]"></div>
@@ -579,12 +579,12 @@ export default function Commandments({
               </div>
 
               {/* Title & Description */}
-              <div className="flex flex-col items-center transform -translate-y-4">
-                <h3 className="font-bebas-neue mb-6 w-full max-w-[90%] text-center text-[32px] leading-[34px] font-normal tracking-normal text-white">
+              <div className="flex flex-col items-center">
+                <h3 className="mb-5 w-full max-w-[84%] text-center font-bebas-neue text-[24px] leading-[26px] font-normal tracking-[0.02em] text-white sm:max-w-[88%] sm:text-[28px] sm:leading-[30px]">
                   {renderTitle(commandment.title)}
                 </h3>
 
-                <p className="text-center text-[20px] leading-[144%] text-white/80 font-inter font-light tracking-[0.02em] px-4">
+                <p className="px-4 text-center font-inter text-[17px] leading-[1.4] font-light tracking-[0.02em] text-white/80 sm:text-[18px] sm:leading-[1.42]">
                   {commandment.description}
                 </p>
               </div>

@@ -102,7 +102,7 @@ export default function Header({
           </nav>
 
           <button
-            className="flex flex-col gap-1.5 md:hidden"
+            className="flex flex-col gap-1.5 md:hidden mr-4 md:mr-0 opacity-100 drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]"
             aria-label="Toggle mobile menu"
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -122,8 +122,8 @@ export default function Header({
             <span
               className={cn(
                 "block h-0.5 transition-all duration-300",
-                isMobileMenuOpen ? "w-6 -translate-y-2 -rotate-45" : "w-4",
-                isMobileMenuOpen ? "bg-white" : "bg-brand-green",
+                isMobileMenuOpen ? "w-6 -translate-y-2 -rotate-45" : "w-6",
+                "bg-white",
               )}
             />
           </button>
