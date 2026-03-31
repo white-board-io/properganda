@@ -12,7 +12,7 @@ import { SiteContainer } from "@/components/ui/site-container";
 
 gsap.registerPlugin(useGSAP);
 
-const ABOUT_TAGLINES = ["Made with heart.", "BACKED BY BRAINS"] as const;
+const ABOUT_TAGLINES = ["Made with heart.", "Backed by brains."] as const;
 
 const ABOUT_PULSE_BEAMS = [
   {
