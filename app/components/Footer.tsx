@@ -18,6 +18,7 @@ const SOCIAL_LINKS = [
   { href: "https://www.instagram.com/properganda.in/", label: "Instagram", icon: "/images/svg/insta.svg" },
   { href: "https://x.com/properganda_in", label: "X (formerly Twitter)", icon: "/images/svg/x.svg" },
   { href: "https://www.linkedin.com/company/propergandacreative/", label: "LinkedIn", icon: "/images/svg/linkedin.svg" },
+  { href: "https://www.youtube.com/@PropergandaCreative/", label: "Youtube", icon: "/images/svg/youtube.svg" },
 ];
 
 export default function Footer() {
@@ -65,7 +66,7 @@ export default function Footer() {
 
             <div className="flex flex-col gap-10 sm:flex-row sm:items-center sm:justify-between sm:gap-12">
               <div className="space-y-6">
-                <h3 className="ui-footer-heading">Location</h3>
+                <h3 className="ui-footer-link">Location</h3>
                 <div className="space-y-2 text-lg text-brand-gray">
                   <p>Lower Parel, Mumbai</p>
                 </div>
@@ -73,6 +74,8 @@ export default function Footer() {
 
               <Link
                 href="https://www.canopymedia.in/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={cn(
                   buttonVariants({
                     variant: "canopyOutline",

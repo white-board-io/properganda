@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -12,7 +12,7 @@ import { SiteContainer } from "@/components/ui/site-container";
 
 gsap.registerPlugin(useGSAP);
 
-const ABOUT_WORDS = ["MADE WITH HEART.", "BACKED BY BRAINS."] as const;
+const ABOUT_TAGLINES = ["Made with heart.", "BACKED BY BRAINS"] as const;
 
 const ABOUT_PULSE_BEAMS = [
   {
@@ -89,6 +89,7 @@ export default function AboutUs() {
   const orbitGuideRef = useRef<SVGPathElement>(null);
   const cometHeadRef = useRef<SVGGElement>(null);
   const cometHeadDirectionRef = useRef<SVGGElement>(null);
+  const taglineCharRefs = useRef<Array<Array<HTMLSpanElement | null>>>([]);
   const beamRefs = useRef<Array<HTMLDivElement | null>>([]);
   const beamPulseRefs = useRef<Array<HTMLDivElement | null>>([]);
   const cometHeadGlowId = useId().replace(/:/g, "");
@@ -181,34 +182,66 @@ export default function AboutUs() {
     { scope: sectionRef },
   );
 
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [currentText, setCurrentText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
+  useGSAP(
+    () => {
+      const taglineCharacters = ABOUT_TAGLINES.map((_, index) =>
+        (taglineCharRefs.current[index] ?? []).filter(
+          (character): character is HTMLSpanElement => character !== null,
+        ),
+      ).filter((characters) => characters.length > 0);
 
-  useEffect(() => {
-    const word = ABOUT_WORDS[currentWordIndex];
-    let timeoutId: NodeJS.Timeout;
+      if (!taglineCharacters.length) {
+        return;
+      }
 
-    if (!isDeleting && currentText === word) {
-      timeoutId = setTimeout(() => setIsDeleting(true), 1500);
-    } else if (isDeleting && currentText === "") {
-      timeoutId = setTimeout(() => {
-        setIsDeleting(false);
-        setCurrentWordIndex((prev) => (prev + 1) % ABOUT_WORDS.length);
-      }, 1000);
-    } else {
-      const timeout = isDeleting ? 50 : 150;
-      timeoutId = setTimeout(() => {
-        setCurrentText((prev) =>
-          isDeleting
-            ? word.slice(0, prev.length - 1)
-            : word.slice(0, prev.length + 1),
-        );
-      }, timeout);
-    }
+      const mediaMatch = gsap.matchMedia();
 
-    return () => clearTimeout(timeoutId);
-  }, [currentText, isDeleting, currentWordIndex]);
+      mediaMatch.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.set(taglineCharacters.flat(), {
+          autoAlpha: 0,
+          y: 10,
+          filter: "blur(8px)",
+        });
+
+        const timeline = gsap.timeline({ repeat: -1 });
+
+        taglineCharacters.forEach((characters) => {
+          timeline
+            .set(characters, {
+              autoAlpha: 0,
+              y: 10,
+              filter: "blur(8px)",
+            })
+            .to(characters, {
+              autoAlpha: 1,
+              y: 0,
+              filter: "blur(0px)",
+              duration: 0.45,
+              ease: "power2.out",
+              stagger: 0.024,
+              clearProps: "filter",
+            })
+            .to({}, { duration: 1.8 })
+            .to(characters, {
+              autoAlpha: 0,
+              filter: "blur(6px)",
+              duration: 0.3,
+              ease: "power1.inOut",
+              stagger: 0.016,
+            });
+        });
+
+        return () => {
+          timeline.kill();
+        };
+      });
+
+      return () => {
+        mediaMatch.revert();
+      };
+    },
+    { scope: sectionRef },
+  );
 
   useEffect(() => {
     const orbitGuide = orbitGuideRef.current;
@@ -353,9 +386,34 @@ export default function AboutUs() {
             </section>
 
             <section className="flex flex-col justify-start mt-2">
-              <h3 className="font-sans text-[40px] md:text-[64px] font-bold leading-tight tracking-tight text-[#159848] uppercase min-h-[1.2em]">
-                {currentText}
-                <span className="animate-cursor-blink ml-1">_</span>
+              <h3 className="font-sans text-[40px] md:text-[64px] font-bold leading-tight tracking-tight text-[#159848]">
+                <span className="sr-only">
+                  Made with heart. Backed by brains.
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="grid min-h-[1.2em] justify-items-start motion-reduce:flex motion-reduce:min-h-0 motion-reduce:flex-col motion-reduce:gap-1"
+                >
+                  {ABOUT_TAGLINES.map((tagline, index) => (
+                    <span
+                      key={tagline}
+                      className="col-start-1 row-start-1 block whitespace-nowrap"
+                    >
+                      {Array.from(tagline).map((character, characterIndex) => (
+                        <span
+                          key={`${tagline}-${characterIndex}-${character}`}
+                          className="inline-block whitespace-pre will-change-[transform,filter,opacity]"
+                          ref={(node) => {
+                            taglineCharRefs.current[index] ??= [];
+                            taglineCharRefs.current[index][characterIndex] = node;
+                          }}
+                        >
+                          {character === " " ? "\u00A0" : character}
+                        </span>
+                      ))}
+                    </span>
+                  ))}
+                </span>
               </h3>
             </section>
 

@@ -1,28 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { toast } from "sonner";
 
 import { BlurTextReveal } from "@/components/ui/blur-text-reveal";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
 
-const SLOT_WORDS = ["up", "out", "for something"] as const;
+const SLOT_WORDS = ["MOVE", "MATTER", "MAKE AN IMPACT"] as const;
 const HERO_LINES = ["Creativity With", "A Conscience"] as const;
 const COMMANDMENTS_HERO_TITLE = "Proper";
 const COMMANDMENTS_HERO_SUBTITLE = "Ways of Working";
 
 type HeroVariant = "default" | "commandments";
 
+gsap.registerPlugin(useGSAP);
+
 export default function Hero({
   variant = "default",
 }: {
   variant?: HeroVariant;
 }) {
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [currentText, setCurrentText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
+  const slotCharRefs = useRef<Array<Array<HTMLSpanElement | null>>>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -58,32 +60,70 @@ export default function Hero({
     }
   };
 
-  useEffect(() => {
-    if (variant !== "default") return;
+  useGSAP(
+    () => {
+      if (variant !== "default") {
+        return;
+      }
 
-    const word = SLOT_WORDS[currentWordIndex];
-    let timeoutId: NodeJS.Timeout;
+      const slotCharacters = SLOT_WORDS.map((_, index) =>
+        (slotCharRefs.current[index] ?? []).filter(
+          (character): character is HTMLSpanElement => character !== null,
+        ),
+      ).filter((characters) => characters.length > 0);
 
-    if (!isDeleting && currentText === word) {
-      timeoutId = setTimeout(() => setIsDeleting(true), 1500);
-    } else if (isDeleting && currentText === "") {
-      timeoutId = setTimeout(() => {
-        setIsDeleting(false);
-        setCurrentWordIndex((prev) => (prev + 1) % SLOT_WORDS.length);
-      }, 1000);
-    } else {
-      const timeout = 250;
-      timeoutId = setTimeout(() => {
-        setCurrentText((prev) =>
-          isDeleting
-            ? word.slice(0, prev.length - 1)
-            : word.slice(0, prev.length + 1),
-        );
-      }, timeout);
-    }
+      if (!slotCharacters.length) {
+        return;
+      }
 
-    return () => clearTimeout(timeoutId);
-  }, [currentText, isDeleting, currentWordIndex, variant]);
+      const mediaMatch = gsap.matchMedia();
+
+      mediaMatch.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.set(slotCharacters.flat(), {
+          autoAlpha: 0,
+          y: 10,
+          filter: "blur(8px)",
+        });
+
+        const timeline = gsap.timeline({ repeat: -1 });
+
+        slotCharacters.forEach((characters) => {
+          timeline
+            .set(characters, {
+              autoAlpha: 0,
+              y: 10,
+              filter: "blur(8px)",
+            })
+            .to(characters, {
+              autoAlpha: 1,
+              y: 0,
+              filter: "blur(0px)",
+              duration: 0.45,
+              ease: "power2.out",
+              stagger: 0.024,
+              clearProps: "filter",
+            })
+            .to({}, { duration: 1.8 })
+            .to(characters, {
+              autoAlpha: 0,
+              filter: "blur(6px)",
+              duration: 0.3,
+              ease: "power1.inOut",
+              stagger: 0.016,
+            });
+        });
+
+        return () => {
+          timeline.kill();
+        };
+      });
+
+      return () => {
+        mediaMatch.revert();
+      };
+    },
+    { dependencies: [variant] },
+  );
 
   if (variant === "default") {
     return (
@@ -137,21 +177,8 @@ export default function Hero({
                   For Brands & Businesses that want to
                 </p>
                 <div className="flex items-center gap-[0.3em]">
-                  <span
-                    className="text-white uppercase inline-block"
-                    style={{
-                      fontFamily: "var(--font-inter-google), Inter, sans-serif",
-                      fontWeight: 900,
-                      fontSize: "50px",
-                      lineHeight: "1.42",
-                      letterSpacing: "0.02em",
-                      verticalAlign: "middle",
-                    }}
-                  >
-                    STAND
-                  </span>
                   <div
-                    className="relative flex-1 text-white uppercase whitespace-nowrap"
+                    className="relative text-white uppercase whitespace-nowrap"
                     style={{
                       height: "1.42em",
                       fontFamily: "var(--font-inter-google), Inter, sans-serif",
@@ -162,9 +189,33 @@ export default function Hero({
                       verticalAlign: "middle",
                     }}
                   >
-                    <span className="opacity-50">{currentText}</span>
-                    <span className="animate-cursor-blink opacity-50 ml-1">
-                      _
+                    <span className="sr-only">move, matter, make an impact</span>
+                    <span
+                      aria-hidden="true"
+                      className="grid h-full justify-items-start motion-reduce:hidden"
+                    >
+                      {SLOT_WORDS.map((word, index) => (
+                        <span
+                          key={word}
+                          className="col-start-1 row-start-1 block whitespace-nowrap"
+                        >
+                          {Array.from(word).map((character, characterIndex) => (
+                            <span
+                              key={`${word}-${characterIndex}-${character}`}
+                              className="inline-block whitespace-pre opacity-0 will-change-[transform,filter,opacity]"
+                              ref={(node) => {
+                                slotCharRefs.current[index] ??= [];
+                                slotCharRefs.current[index][characterIndex] = node;
+                              }}
+                            >
+                              {character === " " ? "\u00A0" : character}
+                            </span>
+                          ))}
+                        </span>
+                      ))}
+                    </span>
+                    <span aria-hidden="true" className="hidden motion-reduce:inline">
+                      {SLOT_WORDS[0]}
                     </span>
                   </div>
                 </div>
@@ -194,12 +245,26 @@ export default function Hero({
                 fontFamily="sans-serif"
               >
                 <textPath
-                  startOffset="50%"
+                  startOffset="28%"
                   textAnchor="middle"
                   href="#badge-circle-bottom"
                 >
-                  <tspan>LET&apos;S</tspan>
-                  <tspan dx="10">TALK</tspan>
+                  LET&apos;S
+                </textPath>
+              </text>
+              <text
+                fontSize="16"
+                fill="#FFFFFF"
+                letterSpacing="1"
+                fontWeight="bold"
+                fontFamily="sans-serif"
+              >
+                <textPath
+                  startOffset="82%"
+                  textAnchor="middle"
+                  href="#badge-circle-bottom"
+                >
+                  TALK
                 </textPath>
               </text>
             </svg>
@@ -365,10 +430,24 @@ export default function Hero({
               <textPath
                 href="#badge-circle-bottom"
                 textAnchor="middle"
-                startOffset="50%"
+                startOffset="28%"
               >
-                <tspan>LET&apos;S</tspan>
-                <tspan dx="10">TALK</tspan>
+                LET&apos;S
+              </textPath>
+            </text>
+            <text
+              fontSize="16"
+              fill="#FFFFFF"
+              fontWeight="bold"
+              letterSpacing="1"
+              fontFamily="sans-serif"
+            >
+              <textPath
+                href="#badge-circle-bottom"
+                textAnchor="middle"
+                startOffset="82%"
+              >
+                TALK
               </textPath>
             </text>
           </svg>
