@@ -63,27 +63,23 @@ export default function Commandments({
 
   const resetDesktopCardStyles = useCallback((card: HTMLDivElement) => {
     card.style.opacity = "1";
-    card.style.transform = "translateY(0%) rotateX(0deg) scale(1)";
+    card.style.transform = "translateY(0) rotateX(0deg)";
   }, []);
 
-  // Wristwatch roller: items rotate on a vertical drum/cylinder
+  // Wristwatch date-wheel roller:
+  // Direction 1 (advance): current rolls UP & tilts back, next rolls UP from below
+  // Direction -1 (reverse): current rolls DOWN & tilts forward, next rolls DOWN from above
+  // Keep rotateX moderate (20deg) to avoid perspective distortion
   const getExitKeyframes = useCallback((direction: 1 | -1) => [
     {
       opacity: 1,
-      transform: "translateY(0%) rotateX(0deg) scale(1)",
-    },
-    {
-      opacity: 0.6,
-      transform: direction === 1
-        ? "translateY(-30%) rotateX(35deg) scale(0.92)"
-        : "translateY(30%) rotateX(-35deg) scale(0.92)",
-      offset: 0.5,
+      transform: "translateY(0) rotateX(0deg)",
     },
     {
       opacity: 0,
       transform: direction === 1
-        ? "translateY(-70%) rotateX(55deg) scale(0.85)"
-        : "translateY(70%) rotateX(-55deg) scale(0.85)",
+        ? "translateY(-65%) rotateX(20deg)"
+        : "translateY(65%) rotateX(-20deg)",
     },
   ], []);
 
@@ -91,19 +87,12 @@ export default function Commandments({
     {
       opacity: 0,
       transform: direction === 1
-        ? "translateY(70%) rotateX(-55deg) scale(0.85)"
-        : "translateY(-70%) rotateX(55deg) scale(0.85)",
-    },
-    {
-      opacity: 0.6,
-      transform: direction === 1
-        ? "translateY(20%) rotateX(-20deg) scale(0.95)"
-        : "translateY(-20%) rotateX(20deg) scale(0.95)",
-      offset: 0.5,
+        ? "translateY(65%) rotateX(-20deg)"
+        : "translateY(-65%) rotateX(20deg)",
     },
     {
       opacity: 1,
-      transform: "translateY(0%) rotateX(0deg) scale(1)",
+      transform: "translateY(0) rotateX(0deg)",
     },
   ], []);
 
@@ -145,25 +134,31 @@ export default function Commandments({
     const exitAnimation = card.animate(getExitKeyframes(direction), {
       duration: DESKTOP_CARD_EXIT_DURATION_MS,
       easing: "cubic-bezier(0.4, 0, 0.7, 0.2)",
-      fill: "forwards",
+      fill: "both",
     });
 
     exitAnimation.onfinish = () => {
+      // Update content while card is invisible (exit fill keeps opacity: 0)
       displayIdxRef.current = index;
       setDisplayIdx(index);
 
+      // Use rAF to let React commit the content update, then animate in.
+      // The same DOM element is reused (stable key), so exit fill keeps it
+      // hidden until we start the enter animation.
       window.requestAnimationFrame(() => {
-        const nextCard = desktopCardRef.current;
-        if (!nextCard) {
+        const sameCard = desktopCardRef.current;
+        if (!sameCard) {
           isCardAnimatingRef.current = false;
           return;
         }
 
-        nextCard.getAnimations().forEach((animation) => animation.cancel());
-        const enterAnimation = nextCard.animate(getEnterKeyframes(direction), {
+        // Cancel exit animation and immediately start enter — these are
+        // synchronous, so no frame gap where the card would flash visible.
+        sameCard.getAnimations().forEach((animation) => animation.cancel());
+        const enterAnimation = sameCard.animate(getEnterKeyframes(direction), {
           duration: DESKTOP_CARD_ENTER_DURATION_MS,
-          easing: "cubic-bezier(0.2, 0.8, 0.3, 1)",
-          fill: "forwards",
+          easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+          fill: "both",
         });
 
         const finalizeTransition = () => {
@@ -456,12 +451,10 @@ export default function Commandments({
 
   const renderDesktopCommandmentCard = (
     commandment: Commandment,
-    index: number,
   ) => (
     <div
       ref={desktopCardRef}
-      key={`${commandment.number}-${index}`}
-      aria-hidden={activeIdx !== index}
+      key="desktop-commandment-card"
       className="ui-commandment-card absolute inset-0 flex h-full w-full flex-col items-center justify-center px-4 text-center"
     >
       <span className="font-bebas-neue mb-6 text-[100px] leading-none font-bold text-[#169D52]">
@@ -523,7 +516,6 @@ export default function Commandments({
                     {commandments[displayIdx]
                       ? renderDesktopCommandmentCard(
                           commandments[displayIdx],
-                          displayIdx,
                         )
                       : null}
                   </div>
