@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { buttonVariants } from "@/components/ui/button";
 import { SiteContainer } from "@/components/ui/site-container";
 import { cn } from "@/lib/utils";
 
@@ -74,7 +73,7 @@ export default function Header({
         >
           <Link
             href="/"
-            className="flex items-center gap-2 shrink-0"
+            className="flex items-center gap-2 shrink-0 ml-4 md:ml-0"
             aria-label="Properganda - Home"
           >
             <Image
@@ -95,46 +94,11 @@ export default function Header({
               <Link
                 key={item.name}
                 href={item.href}
-                className="ui-nav-link transition-colors duration-300"
-                style={{ color: "#FFFFFF" }}
+                className="ui-nav-link text-white transition-colors duration-300"
               >
                 {item.name}
               </Link>
             ))}
-
-            <Link
-              href="https://www.canopymedia.in/"
-              className={cn(
-                buttonVariants({
-                  variant: "canopyOutline",
-                  size: "sm",
-                }),
-                "gap-2.5 px-5 py-2 items-center transition-all duration-300",
-              )}
-              style={{ color: "#FFFFFF", borderColor: "#FFFFFF" }}
-            >
-              <div className="flex flex-col text-left leading-[1.1] justify-center pt-[2px]">
-                <span
-                  className="text-[6px] font-black tracking-widest transition-colors duration-300"
-                  style={{ color: "#FFFFFF" }}
-                >
-                  Our
-                </span>
-                <span
-                  className="text-[6px] font-black tracking-widest transition-colors duration-300"
-                  style={{ color: "#FFFFFF" }}
-                >
-                  Studio
-                </span>
-              </div>
-              <Image
-                src="/images/svg/canopy.svg"
-                alt="CANOPY"
-                width={100}
-                height={14}
-                className="h-[14px] w-[100px] transition-all duration-300 drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"
-              />
-            </Link>
           </nav>
 
           <button
@@ -177,48 +141,12 @@ export default function Header({
               <Link
                 key={item.name}
                 href={item.href}
-                className="ui-nav-link text-lg transition-colors duration-300"
-                style={{ color: "#FFFFFF" }}
+                className="ui-nav-link text-lg text-white transition-colors duration-300"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.name}
               </Link>
             ))}
-
-            <Link
-              href="#canopy"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={cn(
-                buttonVariants({
-                  variant: "canopyOutline",
-                  size: "sm",
-                }),
-                "gap-2.5 px-5 py-2 mt-2 items-center transition-all duration-300",
-              )}
-              style={{ color: "#FFFFFF", borderColor: "#FFFFFF" }}
-            >
-              <div className="flex flex-col text-left leading-[1.1] justify-center pt-[2px]">
-                <span
-                  className="text-[10px] font-black tracking-widest transition-colors duration-300"
-                  style={{ color: "#FFFFFF" }}
-                >
-                  Our
-                </span>
-                <span
-                  className="text-[10px] font-black tracking-widest transition-colors duration-300"
-                  style={{ color: "#FFFFFF" }}
-                >
-                  Studio
-                </span>
-              </div>
-              <Image
-                src="/images/svg/canopy.svg"
-                alt="CANOPY"
-                width={100}
-                height={14}
-                className="h-[14px] w-[100px] transition-all duration-300 drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"
-              />
-            </Link>
           </nav>
         </div>
       </header>

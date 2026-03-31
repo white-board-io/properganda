@@ -1,65 +1,86 @@
 "use client";
 
+import { useEffect } from "react";
+
 import Header from "../components/Header";
 import Hero from "../components/Hero";
 import Commandments from "../components/Commandments";
 import CTA from "../components/CTA";
 import Footer from "../components/Footer";
 import { COMMANDMENTS } from "./data";
-import { useEffect } from "react";
 
 export default function CommandmentsPageClient() {
   useEffect(() => {
-    let cooldown = false;
+    const previousScrollRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    let snapCooldown = false;
+    let touchStartY = 0;
 
-    const handleWheel = (e: WheelEvent) => {
+    const getHeaderOffset = () => (window.innerWidth >= 768 ? 120 : 104);
+    const getCommandmentsSnapTarget = () => {
       const commandmentsEl = document.getElementById("commandments-section");
-      if (!commandmentsEl) return;
+      if (!commandmentsEl) return null;
 
-      const sectionTop = commandmentsEl.offsetTop;
-      if (window.scrollY >= sectionTop) return;
-
-      if (e.deltaY > 0) {
-        e.preventDefault();
-        if (!cooldown) {
-          cooldown = true;
-          window.scrollTo(0, sectionTop);
-          setTimeout(() => { cooldown = false; }, 500);
-        }
-      }
+      return Math.max(0, commandmentsEl.offsetTop - getHeaderOffset());
     };
 
-    let touchStartY = 0;
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    };
+
+    const snapToCommandments = () => {
+      const target = getCommandmentsSnapTarget();
+      if (target === null || snapCooldown) return;
+
+      snapCooldown = true;
+      window.scrollTo({ top: target, left: 0, behavior: "smooth" });
+      window.setTimeout(() => {
+        snapCooldown = false;
+      }, 900);
+    };
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY <= 0) return;
+
+      const target = getCommandmentsSnapTarget();
+      if (target === null) return;
+      if (window.scrollY >= target - 2) return;
+
+      e.preventDefault();
+      snapToCommandments();
+    };
+
     const handleTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
+      touchStartY = e.touches[0]?.clientY ?? 0;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      const commandmentsEl = document.getElementById("commandments-section");
-      if (!commandmentsEl) return;
+      const deltaY = touchStartY - (e.touches[0]?.clientY ?? touchStartY);
+      if (deltaY <= 12) return;
 
-      const sectionTop = commandmentsEl.offsetTop;
-      if (window.scrollY >= sectionTop) return;
+      const target = getCommandmentsSnapTarget();
+      if (target === null) return;
+      if (window.scrollY >= target - 2) return;
 
-      const deltaY = touchStartY - e.touches[0].clientY;
-      if (deltaY > 10) {
-        e.preventDefault();
-        if (!cooldown) {
-          cooldown = true;
-          window.scrollTo(0, sectionTop);
-          setTimeout(() => { cooldown = false; }, 500);
-        }
-      }
+      e.preventDefault();
+      snapToCommandments();
     };
 
+    scrollToTop();
+
+    const rafId = window.requestAnimationFrame(scrollToTop);
+    const timeoutId = window.setTimeout(scrollToTop, 0);
     window.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("touchstart", handleTouchStart, { passive: true });
     window.addEventListener("touchmove", handleTouchMove, { passive: false });
 
     return () => {
+      window.cancelAnimationFrame(rafId);
+      window.clearTimeout(timeoutId);
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchmove", handleTouchMove);
+      window.history.scrollRestoration = previousScrollRestoration;
     };
   }, []);
 

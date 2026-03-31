@@ -197,7 +197,7 @@ export default function AboutUs() {
         setCurrentWordIndex((prev) => (prev + 1) % ABOUT_WORDS.length);
       }, 1000);
     } else {
-      const timeout = isDeleting ? 100 : 200;
+      const timeout = isDeleting ? 50 : 150;
       timeoutId = setTimeout(() => {
         setCurrentText((prev) =>
           isDeleting
@@ -376,7 +376,7 @@ export default function AboutUs() {
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] h-[120px] blur-[50px] rounded-full pointer-events-none -z-10"
             style={{ backgroundColor: "rgba(22, 157, 82, 0.25)" }}
           />
-          <Link href="/commandments" className="ui-commandments-link">
+          <Link href="/commandments" scroll className="ui-commandments-link">
             <span aria-hidden="true" className="ui-commandments-link__orbit">
               <svg
                 viewBox="0 0 1000 120"

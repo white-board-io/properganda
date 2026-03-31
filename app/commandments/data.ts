@@ -1,52 +1,52 @@
 export const COMMANDMENTS = [
   {
     number: "01",
-    title: "THOU SHALL NOT WASTE THE AUDIENCE'S TIME.",
-    description: "Respect attention. Every second must earn its keep."
-  },
-  {
-    number: "02",
-    title: "CLARITY SHALL BE THINE NORTH STAR.",
-    description: "Confusion is the enemy of action. Speak plainly, act boldly."
-  },
-  {
-    number: "03",
-    title: "THOU SHALL NOT COPY-PASTE FROM CHATGPT WITHOUT USING THINE BRAIN.",
+    title: "Thou shalt not copy-paste everything from ChatGPT. Or Claude. Or Jasper.",
     description: "We love AI. We trust IQ."
   },
   {
+    number: "02",
+    title: "Thou shalt not block meetings that could've been a well-written email.",
+    description: "Or worse, a voice note."
+  },
+  {
+    number: "03",
+    title: "Thou shalt dress from collar to confidence for client calls",
+    description: "Pajamas are fine. Just don't stand up."
+  },
+  {
     number: "04",
-    title: "THINE WORK SHALL CARRY A CONSCIENCE.",
-    description: "Purpose over plumage. Impact over vanity."
+    title: "Thou shalt honour your deadlines like you'd want others to honour yours.",
+    description: "Golden Rule, Golden Hour."
   },
   {
     number: "05",
-    title: "THOU SHALL EMBRACE RADICAL HONESTY.",
-    description: "Authenticity is the only currency that never devalues."
+    title: "Thou shalt not ghost messages, teammates, or timelines.",
+    description: "Vanishing acts belong in magic shows."
   },
   {
     number: "06",
-    title: "THOU SHALL INNOVATE OR THOU SHALL EXPIRE.",
-    description: "The status quo is a slow death. Keep moving."
+    title: "Thou shalt not take kickbacks, side deals, or anything shady.",
+    description: "Unless it's coffee. Then take two."
   },
   {
     number: "07",
-    title: "DATA SHALL INFORM, BUT INTUITION SHALL LEAD.",
-    description: "Logic gets us to the door; magic opens it."
+    title: "Thou shalt ask questions, freely and often.",
+    description: "No question is stupid. Silence is."
   },
   {
     number: "08",
-    title: "THOU SHALL RISE BY LIFTING OTHERS.",
-    description: "Success is a collective sport. Leave no one behind."
+    title: "Thou shalt always have your team’s back.",
+    description: "Throw ideas around. Not people under buses."
   },
   {
     number: "09",
-    title: "SIMPLICITY SHALL BE THINE ULTIMATE SOPHISTICATION.",
-    description: "Remove the noise until only the music remains."
+    title: "Thou shalt always remember: breaks are sacred, burnout is not a badge.",
+    description: "Take time off. Everything and everyone will survive."
   },
   {
     number: "10",
-    title: "THOU SHALL PLAY WITH DEADLY SERIOUS PURPOSE.",
-    description: "Joy is the engine of creativity. Never lose the spark."
+    title: "Thou shalt lead with empathy, even when it’s inconvenient.",
+    description: "People over process. Always."
   }
 ];

@@ -57,7 +57,7 @@ const MANIFESTO_DATA = [
   {
     id: "dipankar-bose",
     text: "Working with Properganda has been an absolute delight… they are still toddlers but boy are they feisty… I was blown over by their very first pitch deck… it stood out because they dared to be different and that in many ways pretty much defines them … the willingness and the guts to walk the path less explored. That is so refreshing in times when agencies mostly play safe and mimic each other. One other aspect that stood out was their proactive approach – even before we could furnish well-structured briefs, they were bubbling with ideas , some exceptional , others crazy, but atleast with them you wouldn’t have to nudge. I must also call out their exceptional client service , Shibani and team were literally 24x7 available on phone or chat, to make sure urgent deadlines were met and any feedback was duly noted. For me and my team , more often than not, Shibani was a panic button ,,, a quick call usually resulted in immediate soothing of nerves and an assurance that stuff would get delivered per schedule. I am sure the years ahead will only see Properganda get bigger, better and crazier… here’s wishing many more triumphs and lotsa action…",
-    author: "DIPANKAR BOSE",
+    author: "Dipankar Bose",
     role: "(AVP & HEAD – Branding & Corporate Communications)",
     icon: "",
   },
@@ -165,11 +165,27 @@ export default function Manifesto() {
             <div className="flex h-full items-stretch">
               {MANIFESTO_DATA.map((slide) => (
                 <div
-                  className="min-w-0 flex-[0_0_100%] flex flex-col"
+                  className="relative min-w-0 flex-[0_0_100%] flex flex-col pt-6 md:pt-6"
                   key={slide.id}
                 >
+                  <svg
+                    className="ui-text-accent absolute left-8 top-0 z-10 h-10 w-12 md:left-12 md:h-12 md:w-14"
+                    viewBox="0 0 56 48"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 48V30.622C0 14.386 8.731 4.187 20.207 0L24.414 9.402C17.359 12.608 13.448 18.108 12.897 24.572H24.414V48H0Z"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M31.586 48V30.622C31.586 14.386 40.317 4.187 51.793 0L56 9.402C48.945 12.608 45.034 18.108 44.483 24.572H56V48H31.586Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+
                   <Card className="relative mb-14 p-10 md:p-16 rounded-xl flex-1 flex flex-col justify-center">
-                    <div className="ui-copy max-h-[200px] mx-auto overflow-y-auto pr-4 custom-scrollbar">
+                    <div className="ui-copy mt-4 max-h-[200px] mx-auto overflow-y-auto pr-4 custom-scrollbar md:mt-6">
                       {getWordTokens(slide.text).map((token) => (
                         <span
                           key={`${slide.id}-${token.id}`}

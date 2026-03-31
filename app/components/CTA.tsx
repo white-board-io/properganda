@@ -21,9 +21,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
 const SERVICES = [
-  { value: "branding", label: "Branding" },
-  { value: "marketing", label: "Marketing" },
-  { value: "design", label: "Design" },
+  { value: "Branding", label: "Branding" },
+  { value: "Logo Design", label: "Logo Design" },
+  { value: "Social Media Marketing", label: "Social Media Marketing" },
+  { value: "Internal Communication", label: "Internal Communication" },
+  { value: "ESG Storytelling", label: "ESG Storytelling" },
+  { value: "Film & Video", label: "Film & Video" },
+  { value: "Other", label: "Other" },
 ];
 
 export default function CTA() {
@@ -217,7 +221,13 @@ export default function CTA() {
                 <label htmlFor="message" className="ui-form-label">
                   How can we help?<span className="text-red-500">*</span>
                 </label>
-                <Textarea id="message" name="message" className="w-full resize-none" required />
+                <Textarea
+                  id="message"
+                  name="message"
+                  placeholder="Write three wishes we can grant for you"
+                  className="w-full resize-none"
+                  required
+                />
               </div>
 
               <div className="cta-form-item">

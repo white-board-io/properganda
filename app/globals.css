@@ -236,7 +236,7 @@
 }
 
 .ui-nav-link:hover {
-  color: var(--color-brand-green);
+  color: #169D52;
 }
 
 .ui-caption {
@@ -278,7 +278,7 @@
 }
 
 .ui-footer-link:hover {
-  color: var(--color-brand-green);
+  color: #169D52;
 }
 
 .ui-footer-heading {
@@ -551,6 +551,9 @@
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
 }
@@ -796,23 +799,28 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
+  width: 8px; /* Slightly wider for better visibility */
+  display: block;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--color-green-500);
+  background: rgba(22, 157, 82, 0.05); /* Very light green track */
   border-radius: 20px;
 }
 
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--color-green-500);
+  border: 2px solid transparent; /* Creates a gap around the thumb */
+  border-radius: 20px;
+  background-clip: padding-box;
+}
+
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--color-green-600);
+  background-color: var(--color-green-600);
 }
 
 .custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-green-500) transparent;
+  scrollbar-width: auto; /* Use standard width */
+  scrollbar-color: var(--color-green-500) rgba(22, 157, 82, 0.05);
+  scrollbar-gutter: stable;
 }

@@ -2,7 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
+
+import { buttonVariants } from "@/components/ui/button";
 import { SiteContainer } from "@/components/ui/site-container";
+import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
   { href: "#about", label: "About Us" },
@@ -60,13 +63,41 @@ export default function Footer() {
               ))}
             </nav>
 
-            <div className="flex flex-wrap justify-between gap-12">
+            <div className="flex flex-col gap-10 sm:flex-row sm:items-center sm:justify-between sm:gap-12">
               <div className="space-y-6">
-                <h3 className="ui-footer-heading">Locations</h3>
+                <h3 className="ui-footer-heading">Location</h3>
                 <div className="space-y-2 text-lg text-brand-gray">
                   <p>Lower Parel, Mumbai</p>
                 </div>
               </div>
+
+              <Link
+                href="https://www.canopymedia.in/"
+                className={cn(
+                  buttonVariants({
+                    variant: "canopyOutline",
+                    size: "sm",
+                  }),
+                  "inline-flex w-fit gap-2.5 self-start px-5 py-2 items-center",
+                )}
+                style={{ color: "#FFFFFF", borderColor: "#FFFFFF" }}
+              >
+                <div className="flex flex-col justify-center pt-[2px] text-left leading-[1.1]">
+                  <span className="text-[6px] font-black tracking-widest" style={{ color: "#FFFFFF" }}>
+                    Our
+                  </span>
+                  <span className="text-[6px] font-black tracking-widest" style={{ color: "#FFFFFF" }}>
+                    Studio
+                  </span>
+                </div>
+                <Image
+                  src="/images/svg/canopy.svg"
+                  alt="CANOPY"
+                  width={100}
+                  height={14}
+                  className="h-[14px] w-[100px]"
+                />
+              </Link>
             </div>
           </div>
         </div>

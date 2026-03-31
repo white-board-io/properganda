@@ -11,14 +11,16 @@ import { SiteContainer } from "@/components/ui/site-container";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
+const LOGO_SCALE = 0.8;
+
 const LOGO_ROWS = [
   [
+    { name: "Emblem of India", src: "/images/svg/eoi.svg", width: 125, height: 127 },
     { name: "NDAP", src: "/images/svg/ndap.svg", width: 125, height: 127 },
     { name: "UNDP", src: "/images/svg/undp.svg", width: 63, height: 128 },
     { name: "Tripura", src: "/images/svg/tripura.svg", width: 141, height: 127 },
     { name: "Emblem", src: "/images/svg/emblem-1.svg", width: 145, height: 130 },
     { name: "NITI Aayog", src: "/images/svg/niti.svg", width: 137, height: 130 },
-    { name: "GSTPAM", src: "/images/svg/gstpam.svg", width: 84, height: 131 },
     { name: "HCC", src: "/images/svg/hcc.svg", width: 244, height: 67 },
   ],
   [
@@ -26,13 +28,13 @@ const LOGO_ROWS = [
     { name: "Amazon", src: "/images/svg/amazon.svg", width: 211, height: 64 },
     { name: "Learning Links", src: "/images/svg/learnings.svg", width: 100, height: 85 },
     { name: "Hero Future Energies", src: "/images/svg/hfe.svg", width: 177, height: 92 },
-    { name: "UK India Business Council", src: "/images/svg/uki.svg", width: 287, height: 73 },
+    { name: "Sterlite", src: "/images/svg/sterlite.svg", width: 327, height: 56 },
   ],
   [
     { name: "Nasscom Foundation", src: "/images/svg/nf.svg", width: 230, height: 71 },
     { name: "Ciena", src: "/images/svg/ciena.svg", width: 215, height: 72 },
     { name: "Torii", src: "/images/svg/torii.svg", width: 190, height: 72 },
-    { name: "Sterlite", src: "/images/svg/sterlite.svg", width: 327, height: 56 },
+    { name: "UK India Business Council", src: "/images/svg/uki.svg", width: 287, height: 73 },
     { name: "BluPine Energy", src: "/images/svg/bpe.svg", width: 187, height: 116 },
   ],
   [
@@ -153,7 +155,7 @@ export default function LogoBar() {
                     src={logo.src}
                     alt={logo.name}
                     className="object-contain w-full h-auto"
-                    style={{ maxWidth: logo.width }}
+                    style={{ maxWidth: logo.width * LOGO_SCALE }}
                   />
                 </div>
               ))}

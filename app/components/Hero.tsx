@@ -1,25 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import { toast } from "sonner";
 
 import { BlurTextReveal } from "@/components/ui/blur-text-reveal";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
 
-gsap.registerPlugin(useGSAP);
-
 const SLOT_WORDS = ["up", "out", "for something"] as const;
 const HERO_LINES = ["Creativity With", "A Conscience"] as const;
-
-const ORBIT_COPY = "COMMANDMENTS  ";
-const orbitCharacters = Array.from(ORBIT_COPY).map((char, index) => ({
-  id: `${char === " " ? "space" : char}-${index}`,
-  char,
-}));
+const COMMANDMENTS_HERO_TITLE = "Proper";
+const COMMANDMENTS_HERO_SUBTITLE = "Ways of Working";
 
 type HeroVariant = "default" | "commandments";
 
@@ -28,9 +20,6 @@ export default function Hero({
 }: {
   variant?: HeroVariant;
 }) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const orbitContainerRef = useRef<HTMLDivElement>(null);
-
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -96,68 +85,11 @@ export default function Hero({
     return () => clearTimeout(timeoutId);
   }, [currentText, isDeleting, currentWordIndex, variant]);
 
-  useGSAP(
-    () => {
-      if (variant === "commandments" && orbitContainerRef.current) {
-        const chars = orbitContainerRef.current.querySelectorAll(".char-orbit");
-        const radiusX = 240;
-        const radiusY = 75;
-
-        gsap.to(
-          { progress: 0 },
-          {
-            progress: 1,
-            duration: 15,
-            repeat: -1,
-            ease: "none",
-            onUpdate: function () {
-              const progress = this.targets()[0].progress;
-              chars.forEach((char, i) => {
-                const charOffset = (-i / chars.length) * Math.PI * 2;
-                const angle = charOffset + progress * Math.PI * 2;
-                const x = Math.cos(angle) * radiusX;
-                const y = Math.sin(angle) * radiusY;
-
-                // When y is negative, the character is in the top/back half of the ellipse.
-                // We use Math.sin(angle) to smoothly interpolate opacity.
-                // At sin(angle) = 1 (front center), opacity is 1.
-                // At sin(angle) = 0 (edges), opacity is still decent (e.g., 0.8).
-                // At sin(angle) = -1 (back center), opacity should be 0.
-                const sinValue = Math.sin(angle);
-
-                // Opacity mapping:
-                // Front half (sinValue > 0): 0.6 to 1.0
-                // Back half (sinValue < 0): 0 at the very back (-1), but fades out quickly.
-                // Using a sharp fade out when going into the negative.
-                let targetOpacity = 0;
-                if (sinValue >= -0.2) {
-                  // Map [-0.2, 1] to [0, 1]
-                  targetOpacity = (sinValue + 0.2) / 1.2;
-                }
-
-                gsap.set(char, {
-                  x: x,
-                  y: y,
-                  scale: 0.8 + Math.max(0, sinValue) * 0.2, // slight scale effect for depth
-                  opacity: targetOpacity,
-                  zIndex: sinValue > 0 ? 100 : 10, // send to back properly
-                  rotation: 0,
-                });
-              });
-            },
-          },
-        );
-      }
-    },
-    { scope: sectionRef, dependencies: [variant] },
-  );
-
   if (variant === "default") {
     return (
       <SectionShell
         spacing="none"
         variant="dark"
-        ref={sectionRef}
         aria-label="Hero"
         className="relative flex min-h-screen flex-col justify-center overflow-hidden px-0"
       >
@@ -178,7 +110,7 @@ export default function Hero({
           <section className="flex flex-col items-start justify-center gap-12">
             <BlurTextReveal
               as="h1"
-              className="font-bebas-neue uppercase font-normal xl:text-[208px] xl:leading-[180px] tracking-normal text-white lg:text-[180px] lg:leading-[170px] md:text-[140px] md:leading-[130px] sm:text-[100px] sm:leading-[90px] text-[60px] leading-[50px]"
+              className="font-bebas-neue uppercase font-normal xl:text-[180px] xl:leading-[160px] tracking-normal text-white lg:text-[180px] lg:leading-[170px] md:text-[140px] md:leading-[130px] sm:text-[100px] sm:leading-[90px] text-[60px] leading-[50px]"
               segments={HERO_LINES.map((line) => ({
                 text: line,
                 className: "block whitespace-nowrap",
@@ -192,26 +124,17 @@ export default function Hero({
             <section className="relative flex items-center justify-between">
               <div className="flex flex-col gap-1">
                 <p
-                  className="text-white opacity-50"
+                  className="text-white"
                   style={{
                     fontFamily: "var(--font-inter-google), Inter, sans-serif",
-                    fontWeight: 200,
+                    fontWeight: 700,
                     fontSize: "25px",
                     lineHeight: "1.42",
                     letterSpacing: "0.02em",
                     fontStyle: "normal",
                   }}
                 >
-                  For Brands{" "}
-                  <span
-                    style={{
-                      fontWeight: 700,
-                      fontFamily: "var(--font-inter-google), Inter, sans-serif",
-                    }}
-                  >
-                    &
-                  </span>{" "}
-                  Businesses that want to
+                  For Brands & Businesses that want to
                 </p>
                 <div className="flex items-center gap-[0.3em]">
                   <span
@@ -275,7 +198,8 @@ export default function Hero({
                   textAnchor="middle"
                   href="#badge-circle-bottom"
                 >
-                  LET&apos;S TALK
+                  <tspan>LET&apos;S</tspan>
+                  <tspan dx="10">TALK</tspan>
                 </textPath>
               </text>
             </svg>
@@ -366,7 +290,7 @@ export default function Hero({
                       name="message"
                       required
                       rows={5}
-                      placeholder="Send your message..."
+                      placeholder="Write three wishes we can grant for you"
                       value={formData.message}
                       onChange={handleFormChange}
                       className="resize-none rounded-md border border-[#000000] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500"
@@ -392,7 +316,6 @@ export default function Hero({
 
   return (
     <SectionShell
-      ref={sectionRef}
       spacing="none"
       variant="dark"
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-0"
@@ -401,7 +324,7 @@ export default function Hero({
       <div className="absolute inset-0">
         <Image
           src="/images/hero-bg.png"
-          alt="10 Commandments Background"
+          alt="Proper ways of working background"
           fill
           priority
           className="object-cover object-center opacity-100"
@@ -409,24 +332,13 @@ export default function Hero({
       </div>
 
       <SiteContainer className="z-10 flex w-full flex-1 flex-col items-center justify-center mt-24 lg:mt-32">
-        <div className="relative flex items-center justify-center pt-20">
-          <div
-            ref={orbitContainerRef}
-            className="pointer-events-none absolute left-1/2 top-1/2 z-20 flex h-[800px] w-[2400px] -translate-x-1/2 -translate-y-1/2 items-center justify-center"
-          >
-            {orbitCharacters.map(({ id, char }) => (
-              <div
-                key={id}
-                className="ui-text-shadow-brand char-orbit absolute text-[clamp(1.5rem,4vw,3rem)] font-black uppercase tracking-widest text-green-500 opacity-90"
-              >
-                {char}
-              </div>
-            ))}
-          </div>
-
-          <h1 className="font-bebas-neue text-[25rem] leading-none font-black text-white mix-blend-overlay select-none md:text-[35rem]">
-            10
+        <div className="flex flex-col items-center justify-center px-4 pt-20 text-center">
+          <h1 className="font-bebas-neue select-none align-middle text-[88px] leading-[76px] font-normal tracking-[0] text-white sm:text-[140px] sm:leading-[118px] lg:text-[250px] lg:leading-[208px]">
+            {COMMANDMENTS_HERO_TITLE}
           </h1>
+          <p className="mt-2 font-inter align-middle text-[20px] leading-[28.8px] font-medium uppercase tracking-[0.2em] text-[#169D52] sm:text-[28px] sm:leading-[40.32px] sm:tracking-[0.24em] lg:text-[42px] lg:leading-[60.48px] lg:tracking-[0.31em]">
+            {COMMANDMENTS_HERO_SUBTITLE}
+          </p>
         </div>
 
         <div
@@ -455,7 +367,8 @@ export default function Hero({
                 textAnchor="middle"
                 startOffset="50%"
               >
-                LET&apos;S TALK
+                <tspan>LET&apos;S</tspan>
+                <tspan dx="10">TALK</tspan>
               </textPath>
             </text>
           </svg>
@@ -546,7 +459,7 @@ export default function Hero({
                     name="message"
                     required
                     rows={5}
-                    placeholder="Send your message..."
+                    placeholder="Write three wishes we can grant for you"
                     value={formData.message}
                     onChange={handleFormChange}
                     className="resize-none rounded-md border border-[#000000] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500"

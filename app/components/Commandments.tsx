@@ -17,14 +17,26 @@ type Commandment = {
   description: string;
 };
 
+const COMMANDMENTS_NOTE =
+  "*Properganda is always evolving. So is this list. #BeProper";
+
 const renderTitle = (title: string) => {
-  if (title.includes("COPY-PASTE")) {
-    const parts = title.split("COPY-PASTE");
+  const lowerTitle = title.toUpperCase();
+  if (lowerTitle.includes("COPY-PASTE")) {
+    const index = lowerTitle.indexOf("COPY-PASTE");
+    const before = title.slice(0, index);
+    const match = title.slice(index, index + 10);
+    const after = title.slice(index + 10);
     return (
       <>
-        {parts[0]}
-        <span className="text-[#169D52]">COPY-PASTE</span>
-        {parts[1]}
+        {before}
+        <span 
+          className="bg-clip-text text-transparent" 
+          style={{ backgroundImage: 'linear-gradient(90deg, #169D52 -33.2%, #FFFFFF 104.45%)' }}
+        >
+          {match}
+        </span>
+        {after}
       </>
     );
   }
@@ -45,18 +57,27 @@ export default function Commandments({
   const currentIdxRef = useRef(0);
   const stRef = useRef<ScrollTrigger | null>(null);
   const wheelCooldownRef = useRef(false);
+  const totalItems = commandments.length;
+  const getHeaderOffset = () => (window.innerWidth >= 768 ? 120 : 104);
+
+  const getDesktopScrollTarget = (index: number) => {
+    const st = stRef.current;
+    if (!st) return window.scrollY;
+
+    const stepSize = (st.end - st.start) / totalItems;
+    return st.start + stepSize * index;
+  };
 
   useGSAP(
     () => {
       if (!panelRef.current || !trackRef.current) return;
 
-      const totalItems = commandments.length;
-
       const st = ScrollTrigger.create({
         trigger: panelRef.current,
-        start: "top top",
+        start: () => `top top+=${getHeaderOffset()}`,
         end: `+=${totalItems * 100}%`,
         pin: true,
+        invalidateOnRefresh: true,
         onEnter: () => {
           currentIdxRef.current = 0;
           setActiveIdx(0);
@@ -67,6 +88,24 @@ export default function Commandments({
           setActiveIdx(totalItems - 1);
           gsap.set(trackRef.current, { yPercent: -100 * (totalItems - 1) });
         },
+        onUpdate: (self) => {
+          if (isAnimatingRef.current) return;
+
+          const stepSize = (self.end - self.start) / totalItems;
+          if (!stepSize) return;
+
+          const progressWithinSection = Math.max(0, window.scrollY - self.start);
+          const nextIdx = Math.min(
+            totalItems - 1,
+            Math.round(progressWithinSection / stepSize),
+          );
+
+          if (nextIdx === currentIdxRef.current) return;
+
+          currentIdxRef.current = nextIdx;
+          setActiveIdx(nextIdx);
+          gsap.set(trackRef.current, { yPercent: -100 * nextIdx });
+        },
       });
 
       stRef.current = st;
@@ -76,13 +115,22 @@ export default function Commandments({
         isAnimatingRef.current = true;
         currentIdxRef.current = targetIdx;
         setActiveIdx(targetIdx);
+        const scrollState = { y: window.scrollY };
+        const targetScroll = getDesktopScrollTarget(targetIdx);
 
-        gsap.to(trackRef.current, {
-          yPercent: -100 * targetIdx,
-          duration: 0.8,
-          ease: "power2.out",
+        gsap.timeline({
+          defaults: { duration: 0.82, ease: "power3.inOut" },
           onComplete: () => {
             isAnimatingRef.current = false;
+          },
+        })
+        .to(trackRef.current, {
+          yPercent: -100 * targetIdx,
+        }, 0)
+        .to(scrollState, {
+          y: targetScroll,
+          onUpdate: () => {
+            window.scrollTo(0, scrollState.y);
           },
         });
       };
@@ -93,8 +141,8 @@ export default function Commandments({
         const scrollObj = { y: window.scrollY };
         gsap.to(scrollObj, {
           y: targetScroll,
-          duration: 0.8,
-          ease: "power2.out",
+          duration: 0.9,
+          ease: "power3.inOut",
           onUpdate: () => window.scrollTo(0, scrollObj.y),
           onComplete: () => {
             isAnimatingRef.current = false;
@@ -105,6 +153,7 @@ export default function Commandments({
       const handleWheel = (e: WheelEvent) => {
         if (window.innerWidth < 768) return;
         if (!st.isActive) return;
+        if (Math.abs(e.deltaY) < 10) return;
 
         e.preventDefault();
         if (isAnimatingRef.current || wheelCooldownRef.current) return;
@@ -112,7 +161,7 @@ export default function Commandments({
         wheelCooldownRef.current = true;
         setTimeout(() => {
           wheelCooldownRef.current = false;
-        }, 1000);
+        }, 520);
 
         const idx = currentIdxRef.current;
 
@@ -135,6 +184,8 @@ export default function Commandments({
 
       return () => {
         window.removeEventListener("wheel", handleWheel);
+        st.kill();
+        stRef.current = null;
       };
     },
     { scope: scrollContainerRef, dependencies: [commandments] },
@@ -153,19 +204,28 @@ export default function Commandments({
     }
 
     if (!trackRef.current) return;
+    const targetScroll = getDesktopScrollTarget(index);
     if (isAnimatingRef.current) return;
     isAnimatingRef.current = true;
     currentIdxRef.current = index;
     setActiveIdx(index);
+    const scrollState = { y: window.scrollY };
 
-    gsap.to(trackRef.current, {
-      yPercent: -100 * index,
-      duration: 0.5,
-      ease: "power3.out",
+    gsap.timeline({
+      defaults: { duration: 0.5, ease: "power3.out" },
       onComplete: () => {
         isAnimatingRef.current = false;
       },
-    });
+    })
+    .to(trackRef.current, {
+      yPercent: -100 * index,
+    }, 0)
+    .to(scrollState, {
+      y: targetScroll,
+      onUpdate: () => {
+        window.scrollTo(0, scrollState.y);
+      },
+    }, 0);
   };
 
   const handleMobileScroll = (e: React.UIEvent<HTMLDivElement>) => {
@@ -187,8 +247,12 @@ export default function Commandments({
       <SiteContainer className="hidden md:block">
         <div
           ref={panelRef}
-          className="ui-panel ui-panel--solid-dark relative flex h-[90vh] items-center overflow-hidden px-12"
+          className="ui-panel ui-panel--solid-dark relative flex h-[calc(100vh-7.5rem)] min-h-[38rem] items-center overflow-hidden px-12"
         >
+          <p className="pointer-events-none absolute bottom-8 right-12 z-20 max-w-[22rem] text-right font-inter text-[12px] font-light leading-[1.44] tracking-[0.02em] text-white/65">
+            {COMMANDMENTS_NOTE}
+          </p>
+
           <div className="relative z-10 flex h-full w-full items-center">
             {/* Side Navigation */}
             <div className="absolute left-0 z-20 flex flex-col gap-4 text-sm font-medium">
@@ -253,7 +317,11 @@ export default function Commandments({
       </SiteContainer>
 
       {/* Mobile View */}
-      <div className="md:hidden flex flex-col h-[80svh] relative w-full pb-12 overflow-hidden bg-black">
+      <div className="md:hidden relative flex h-[calc(100svh-6.5rem)] min-h-[34rem] w-full flex-col overflow-hidden bg-black pb-12">
+        <p className="pointer-events-none absolute bottom-20 right-4 z-10 max-w-[18rem] text-right font-inter text-[12px] font-light leading-[1.44] tracking-[0.02em] text-white/65">
+          {COMMANDMENTS_NOTE}
+        </p>
+
         {/* Mobile Swipe Container */}
         <div
           ref={mobileContainerRef}
