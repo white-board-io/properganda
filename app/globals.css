@@ -747,6 +747,20 @@
   scrollbar-width: none;
 }
 
+.ui-commandment-stage {
+  perspective: 700px;
+  perspective-origin: center center;
+}
+
+.ui-commandment-card {
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  opacity: 1;
+  transform: translateY(0%) rotateX(0deg) scale(1);
+}
+
 @media (min-width: 640px) {
   .ui-site-container {
     padding-inline: var(--spacing-gutter-sm);
@@ -776,6 +790,15 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+@media (min-width: 768px) {
+  html:has([data-commandments-route]),
+  body:has([data-commandments-route]) {
+    scroll-behavior: auto !important;
+    scroll-snap-type: y mandatory;
+    scroll-padding-top: 7.5rem;
+  }
 }
 
 body {

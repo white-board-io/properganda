@@ -1,15 +1,10 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
 import { cn } from "@/lib/utils";
-
-gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 type Commandment = {
   number: string;
@@ -19,6 +14,9 @@ type Commandment = {
 
 const COMMANDMENTS_NOTE =
   "*Properganda is always evolving. So is this list. #BeProper";
+const DESKTOP_CARD_EXIT_DURATION_MS = 320;
+const DESKTOP_CARD_ENTER_DURATION_MS = 420;
+const DESKTOP_AUTO_SCROLL_LOCK_MS = 1200;
 
 const renderTitle = (title: string) => {
   const lowerTitle = title.toUpperCase();
@@ -48,148 +46,376 @@ export default function Commandments({
 }: {
   commandments: Commandment[];
 }) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const mobileContainerRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
+  const desktopSectionRef = useRef<HTMLDivElement>(null);
+  const desktopCardRef = useRef<HTMLDivElement>(null);
+  const desktopStepRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const activeIdxRef = useRef(0);
+  const displayIdxRef = useRef(0);
+  const isCardAnimatingRef = useRef(false);
+  const pendingDisplayIdxRef = useRef<number | null>(null);
+  const isAutoScrollingRef = useRef(false);
+  const autoScrollTimeoutRef = useRef<number | null>(null);
+  const touchStartYRef = useRef(0);
   const [activeIdx, setActiveIdx] = useState(0);
-  const isAnimatingRef = useRef(false);
-  const currentIdxRef = useRef(0);
-  const stRef = useRef<ScrollTrigger | null>(null);
-  const wheelCooldownRef = useRef(false);
+  const [displayIdx, setDisplayIdx] = useState(0);
   const totalItems = commandments.length;
-  const getHeaderOffset = () => (window.innerWidth >= 768 ? 120 : 104);
 
-  const getDesktopScrollTarget = (index: number) => {
-    const st = stRef.current;
-    if (!st) return window.scrollY;
+  const resetDesktopCardStyles = useCallback((card: HTMLDivElement) => {
+    card.style.opacity = "1";
+    card.style.transform = "translateY(0%) rotateX(0deg) scale(1)";
+  }, []);
 
-    const stepSize = (st.end - st.start) / totalItems;
-    return st.start + stepSize * index;
-  };
-
-  useGSAP(
-    () => {
-      if (!panelRef.current || !trackRef.current) return;
-
-      const st = ScrollTrigger.create({
-        trigger: panelRef.current,
-        start: () => `top top+=${getHeaderOffset()}`,
-        end: `+=${totalItems * 100}%`,
-        pin: true,
-        invalidateOnRefresh: true,
-        onEnter: () => {
-          currentIdxRef.current = 0;
-          setActiveIdx(0);
-          gsap.set(trackRef.current, { yPercent: 0 });
-        },
-        onEnterBack: () => {
-          currentIdxRef.current = totalItems - 1;
-          setActiveIdx(totalItems - 1);
-          gsap.set(trackRef.current, { yPercent: -100 * (totalItems - 1) });
-        },
-        onUpdate: (self) => {
-          if (isAnimatingRef.current) return;
-
-          const stepSize = (self.end - self.start) / totalItems;
-          if (!stepSize) return;
-
-          const progressWithinSection = Math.max(0, window.scrollY - self.start);
-          const nextIdx = Math.min(
-            totalItems - 1,
-            Math.round(progressWithinSection / stepSize),
-          );
-
-          if (nextIdx === currentIdxRef.current) return;
-
-          currentIdxRef.current = nextIdx;
-          setActiveIdx(nextIdx);
-          gsap.set(trackRef.current, { yPercent: -100 * nextIdx });
-        },
-      });
-
-      stRef.current = st;
-
-      const animateToIdx = (targetIdx: number) => {
-        if (isAnimatingRef.current) return;
-        isAnimatingRef.current = true;
-        currentIdxRef.current = targetIdx;
-        setActiveIdx(targetIdx);
-        const scrollState = { y: window.scrollY };
-        const targetScroll = getDesktopScrollTarget(targetIdx);
-
-        gsap.timeline({
-          defaults: { duration: 0.82, ease: "power3.inOut" },
-          onComplete: () => {
-            isAnimatingRef.current = false;
-          },
-        })
-        .to(trackRef.current, {
-          yPercent: -100 * targetIdx,
-        }, 0)
-        .to(scrollState, {
-          y: targetScroll,
-          onUpdate: () => {
-            window.scrollTo(0, scrollState.y);
-          },
-        });
-      };
-
-      const exitSection = (direction: "up" | "down") => {
-        isAnimatingRef.current = true;
-        const targetScroll = direction === "down" ? st.end + 1 : st.start - 1;
-        const scrollObj = { y: window.scrollY };
-        gsap.to(scrollObj, {
-          y: targetScroll,
-          duration: 0.9,
-          ease: "power3.inOut",
-          onUpdate: () => window.scrollTo(0, scrollObj.y),
-          onComplete: () => {
-            isAnimatingRef.current = false;
-          },
-        });
-      };
-
-      const handleWheel = (e: WheelEvent) => {
-        if (window.innerWidth < 768) return;
-        if (!st.isActive) return;
-        if (Math.abs(e.deltaY) < 10) return;
-
-        e.preventDefault();
-        if (isAnimatingRef.current || wheelCooldownRef.current) return;
-
-        wheelCooldownRef.current = true;
-        setTimeout(() => {
-          wheelCooldownRef.current = false;
-        }, 520);
-
-        const idx = currentIdxRef.current;
-
-        if (e.deltaY > 0) {
-          if (idx < totalItems - 1) {
-            animateToIdx(idx + 1);
-          } else {
-            exitSection("down");
-          }
-        } else if (e.deltaY < 0) {
-          if (idx > 0) {
-            animateToIdx(idx - 1);
-          } else {
-            exitSection("up");
-          }
-        }
-      };
-
-      window.addEventListener("wheel", handleWheel, { passive: false });
-
-      return () => {
-        window.removeEventListener("wheel", handleWheel);
-        st.kill();
-        stRef.current = null;
-      };
+  // Wristwatch roller: items rotate on a vertical drum/cylinder
+  const getExitKeyframes = useCallback((direction: 1 | -1) => [
+    {
+      opacity: 1,
+      transform: "translateY(0%) rotateX(0deg) scale(1)",
     },
-    { scope: scrollContainerRef, dependencies: [commandments] },
-  );
+    {
+      opacity: 0.6,
+      transform: direction === 1
+        ? "translateY(-30%) rotateX(35deg) scale(0.92)"
+        : "translateY(30%) rotateX(-35deg) scale(0.92)",
+      offset: 0.5,
+    },
+    {
+      opacity: 0,
+      transform: direction === 1
+        ? "translateY(-70%) rotateX(55deg) scale(0.85)"
+        : "translateY(70%) rotateX(-55deg) scale(0.85)",
+    },
+  ], []);
+
+  const getEnterKeyframes = useCallback((direction: 1 | -1) => [
+    {
+      opacity: 0,
+      transform: direction === 1
+        ? "translateY(70%) rotateX(-55deg) scale(0.85)"
+        : "translateY(-70%) rotateX(55deg) scale(0.85)",
+    },
+    {
+      opacity: 0.6,
+      transform: direction === 1
+        ? "translateY(20%) rotateX(-20deg) scale(0.95)"
+        : "translateY(-20%) rotateX(20deg) scale(0.95)",
+      offset: 0.5,
+    },
+    {
+      opacity: 1,
+      transform: "translateY(0%) rotateX(0deg) scale(1)",
+    },
+  ], []);
+
+  const animateDesktopCardToIdx = useCallback(function runDesktopCardTransition(index: number) {
+    if (typeof window === "undefined" || window.innerWidth < 768) {
+      pendingDisplayIdxRef.current = null;
+      displayIdxRef.current = index;
+      setDisplayIdx((previousIdx) => (
+        previousIdx === index ? previousIdx : index
+      ));
+      return;
+    }
+
+    const card = desktopCardRef.current;
+    if (!card) {
+      pendingDisplayIdxRef.current = null;
+      displayIdxRef.current = index;
+      setDisplayIdx((previousIdx) => (
+        previousIdx === index ? previousIdx : index
+      ));
+      return;
+    }
+
+    if (displayIdxRef.current === index && !isCardAnimatingRef.current) {
+      pendingDisplayIdxRef.current = null;
+      return;
+    }
+
+    if (isCardAnimatingRef.current) {
+      pendingDisplayIdxRef.current = index;
+      return;
+    }
+
+    const direction: 1 | -1 = index > displayIdxRef.current ? 1 : -1;
+    isCardAnimatingRef.current = true;
+    pendingDisplayIdxRef.current = null;
+    card.getAnimations().forEach((animation) => animation.cancel());
+
+    const exitAnimation = card.animate(getExitKeyframes(direction), {
+      duration: DESKTOP_CARD_EXIT_DURATION_MS,
+      easing: "cubic-bezier(0.4, 0, 0.7, 0.2)",
+      fill: "forwards",
+    });
+
+    exitAnimation.onfinish = () => {
+      displayIdxRef.current = index;
+      setDisplayIdx(index);
+
+      window.requestAnimationFrame(() => {
+        const nextCard = desktopCardRef.current;
+        if (!nextCard) {
+          isCardAnimatingRef.current = false;
+          return;
+        }
+
+        nextCard.getAnimations().forEach((animation) => animation.cancel());
+        const enterAnimation = nextCard.animate(getEnterKeyframes(direction), {
+          duration: DESKTOP_CARD_ENTER_DURATION_MS,
+          easing: "cubic-bezier(0.2, 0.8, 0.3, 1)",
+          fill: "forwards",
+        });
+
+        const finalizeTransition = () => {
+          const activeCard = desktopCardRef.current;
+          if (activeCard) {
+            activeCard.getAnimations().forEach((animation) => animation.cancel());
+            resetDesktopCardStyles(activeCard);
+          }
+
+          isCardAnimatingRef.current = false;
+          const pendingIdx = pendingDisplayIdxRef.current;
+          if (pendingIdx !== null && pendingIdx !== displayIdxRef.current) {
+            pendingDisplayIdxRef.current = null;
+            runDesktopCardTransition(pendingIdx);
+          }
+        };
+
+        enterAnimation.onfinish = finalizeTransition;
+        enterAnimation.oncancel = finalizeTransition;
+      });
+    };
+
+    exitAnimation.oncancel = () => {
+      isCardAnimatingRef.current = false;
+    };
+  }, [getEnterKeyframes, getExitKeyframes, resetDesktopCardStyles]);
+
+  const setCommandmentIdx = useCallback((index: number, animate = true) => {
+    activeIdxRef.current = index;
+    setActiveIdx((previousIdx) => (
+      previousIdx === index ? previousIdx : index
+    ));
+
+    if (typeof window === "undefined" || window.innerWidth < 768 || !animate) {
+      pendingDisplayIdxRef.current = null;
+      isCardAnimatingRef.current = false;
+      displayIdxRef.current = index;
+      setDisplayIdx((previousIdx) => (
+        previousIdx === index ? previousIdx : index
+      ));
+      const card = desktopCardRef.current;
+      if (card) {
+        card.getAnimations().forEach((animation) => animation.cancel());
+        resetDesktopCardStyles(card);
+      }
+      return;
+    }
+
+    if (displayIdxRef.current === index && !isCardAnimatingRef.current) {
+      return;
+    }
+
+    animateDesktopCardToIdx(index);
+  }, [animateDesktopCardToIdx, resetDesktopCardStyles]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const stepElements = desktopStepRefs.current.filter(
+      (step): step is HTMLDivElement => step !== null,
+    );
+    if (!stepElements.length) {
+      return;
+    }
+
+    const getHeaderOffset = () => 120;
+    let rafId = 0;
+
+    const updateActiveStep = () => {
+      rafId = 0;
+      if (window.innerWidth < 768) {
+        return;
+      }
+      if (isAutoScrollingRef.current) {
+        return;
+      }
+
+      const nextIdx = stepElements.reduce((closestIdx, step, index) => {
+        const closestStep = stepElements[closestIdx];
+        if (!closestStep) {
+          return index;
+        }
+
+        const currentDistance = Math.abs(
+          step.getBoundingClientRect().top - getHeaderOffset(),
+        );
+        const closestDistance = Math.abs(
+          closestStep.getBoundingClientRect().top - getHeaderOffset(),
+        );
+
+        return currentDistance < closestDistance ? index : closestIdx;
+      }, 0);
+
+      if (activeIdxRef.current === nextIdx) {
+        return;
+      }
+
+      setCommandmentIdx(nextIdx);
+    };
+
+    const requestActiveStepUpdate = () => {
+      if (rafId) {
+        return;
+      }
+
+      rafId = window.requestAnimationFrame(updateActiveStep);
+    };
+
+    if (window.innerWidth >= 768) {
+      requestActiveStepUpdate();
+    }
+    window.addEventListener("scroll", requestActiveStepUpdate, { passive: true });
+    window.addEventListener("resize", requestActiveStepUpdate, { passive: true });
+
+    return () => {
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
+      window.removeEventListener("scroll", requestActiveStepUpdate);
+      window.removeEventListener("resize", requestActiveStepUpdate);
+    };
+  }, [setCommandmentIdx, totalItems]);
+
+  useEffect(() => {
+    const card = desktopCardRef.current;
+    return () => {
+      card?.getAnimations().forEach((animation) => animation.cancel());
+      isCardAnimatingRef.current = false;
+      pendingDisplayIdxRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const releaseAutoScrollLock = () => {
+      if (autoScrollTimeoutRef.current !== null) {
+        window.clearTimeout(autoScrollTimeoutRef.current);
+      }
+
+      autoScrollTimeoutRef.current = window.setTimeout(() => {
+        isAutoScrollingRef.current = false;
+        autoScrollTimeoutRef.current = null;
+      }, DESKTOP_AUTO_SCROLL_LOCK_MS);
+    };
+
+    const isDesktopStepperActive = () => {
+      if (window.innerWidth < 768 || !desktopSectionRef.current) {
+        return false;
+      }
+
+      const rect = desktopSectionRef.current.getBoundingClientRect();
+      const headerOffset = 120;
+      const stickyHeight = window.innerHeight - headerOffset;
+
+      return rect.top <= headerOffset + 2 && rect.bottom >= headerOffset + stickyHeight / 2;
+    };
+
+    const scrollDesktopTargetIntoView = (target: Element | null) => {
+      if (!target) {
+        return;
+      }
+
+      isAutoScrollingRef.current = true;
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      releaseAutoScrollLock();
+    };
+
+    const handleDesktopStepNavigation = (deltaY: number) => {
+      if (!isDesktopStepperActive()) {
+        return false;
+      }
+
+      if (isAutoScrollingRef.current) {
+        return true;
+      }
+
+      if (deltaY > 0) {
+        if (activeIdxRef.current < totalItems - 1) {
+          const nextIdx = activeIdxRef.current + 1;
+          setCommandmentIdx(nextIdx);
+          scrollDesktopTargetIntoView(desktopStepRefs.current[nextIdx]);
+        } else {
+          scrollDesktopTargetIntoView(document.getElementById("contact"));
+        }
+        return true;
+      }
+
+      if (deltaY < 0) {
+        if (activeIdxRef.current > 0) {
+          const nextIdx = activeIdxRef.current - 1;
+          setCommandmentIdx(nextIdx);
+          scrollDesktopTargetIntoView(desktopStepRefs.current[nextIdx]);
+        } else {
+          scrollDesktopTargetIntoView(document.getElementById("commandments-hero-snap"));
+        }
+        return true;
+      }
+
+      return false;
+    };
+
+    const handleWheel = (event: WheelEvent) => {
+      if (Math.abs(event.deltaY) < 10) {
+        return;
+      }
+
+      if (!handleDesktopStepNavigation(event.deltaY)) {
+        return;
+      }
+
+      event.preventDefault();
+    };
+
+    const handleTouchStart = (event: TouchEvent) => {
+      touchStartYRef.current = event.touches[0]?.clientY ?? 0;
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      const currentY = event.touches[0]?.clientY ?? touchStartYRef.current;
+      const deltaY = touchStartYRef.current - currentY;
+      if (Math.abs(deltaY) < 16) {
+        return;
+      }
+
+      if (!handleDesktopStepNavigation(deltaY)) {
+        return;
+      }
+
+      event.preventDefault();
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+
+    return () => {
+      if (autoScrollTimeoutRef.current !== null) {
+        window.clearTimeout(autoScrollTimeoutRef.current);
+      }
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [setCommandmentIdx, totalItems]);
 
   const scrollToCommandment = (index: number) => {
     if (window.innerWidth < 768) {
@@ -198,34 +424,24 @@ export default function Commandments({
           left: mobileContainerRef.current.clientWidth * index,
           behavior: "smooth",
         });
-        setActiveIdx(index);
+        setCommandmentIdx(index, false);
       }
       return;
     }
 
-    if (!trackRef.current) return;
-    const targetScroll = getDesktopScrollTarget(index);
-    if (isAnimatingRef.current) return;
-    isAnimatingRef.current = true;
-    currentIdxRef.current = index;
-    setActiveIdx(index);
-    const scrollState = { y: window.scrollY };
-
-    gsap.timeline({
-      defaults: { duration: 0.5, ease: "power3.out" },
-      onComplete: () => {
-        isAnimatingRef.current = false;
-      },
-    })
-    .to(trackRef.current, {
-      yPercent: -100 * index,
-    }, 0)
-    .to(scrollState, {
-      y: targetScroll,
-      onUpdate: () => {
-        window.scrollTo(0, scrollState.y);
-      },
-    }, 0);
+    setCommandmentIdx(index);
+    isAutoScrollingRef.current = true;
+    if (autoScrollTimeoutRef.current !== null) {
+      window.clearTimeout(autoScrollTimeoutRef.current);
+    }
+    autoScrollTimeoutRef.current = window.setTimeout(() => {
+      isAutoScrollingRef.current = false;
+      autoScrollTimeoutRef.current = null;
+    }, DESKTOP_AUTO_SCROLL_LOCK_MS);
+    desktopStepRefs.current[index]?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
 
   const handleMobileScroll = (e: React.UIEvent<HTMLDivElement>) => {
@@ -233,8 +449,32 @@ export default function Commandments({
     const scrollLeft = container.scrollLeft;
     const width = container.clientWidth;
     const newIdx = Math.round(scrollLeft / width);
-    if (newIdx !== activeIdx) setActiveIdx(newIdx);
+    if (newIdx !== activeIdx) {
+      setCommandmentIdx(newIdx, false);
+    }
   };
+
+  const renderDesktopCommandmentCard = (
+    commandment: Commandment,
+    index: number,
+  ) => (
+    <div
+      ref={desktopCardRef}
+      key={`${commandment.number}-${index}`}
+      aria-hidden={activeIdx !== index}
+      className="ui-commandment-card absolute inset-0 flex h-full w-full flex-col items-center justify-center px-4 text-center"
+    >
+      <span className="font-bebas-neue mb-6 text-[100px] leading-none font-bold text-[#169D52]">
+        {commandment.number}
+      </span>
+      <h3 className="font-bebas-neue mb-4 w-full max-w-4xl text-[clamp(2.75rem,5vw,3.75rem)] leading-[1.08] font-normal uppercase text-white">
+        {renderTitle(commandment.title)}
+      </h3>
+      <p className="max-w-2xl text-2xl leading-[1.44] font-light tracking-[0.02em] text-white/70">
+        {commandment.description}
+      </p>
+    </div>
+  );
 
   return (
     <SectionShell
@@ -242,82 +482,80 @@ export default function Commandments({
       spacing="none"
       className="px-0 relative"
       aria-label="Commandments Content"
-      ref={scrollContainerRef}
     >
       <SiteContainer className="hidden md:block">
         <div
-          ref={panelRef}
-          className="ui-panel ui-panel--solid-dark relative flex h-[calc(100vh-7.5rem)] min-h-[38rem] items-center overflow-hidden px-12"
+          ref={desktopSectionRef}
+          className="relative"
         >
-          <p className="pointer-events-none absolute bottom-8 right-12 z-20 max-w-[22rem] text-right font-inter text-[12px] font-light leading-[1.44] tracking-[0.02em] text-white/65">
-            {COMMANDMENTS_NOTE}
-          </p>
+          <div className="sticky top-[7.5rem] z-10 h-[calc(100vh-7.5rem)] min-h-[38rem]">
+            <div className="ui-panel ui-panel--solid-dark relative flex h-full items-center overflow-hidden px-12">
+              <p className="pointer-events-none absolute bottom-8 right-12 z-20 max-w-[22rem] text-right font-inter text-[12px] font-light leading-[1.44] tracking-[0.02em] text-white/65">
+                {COMMANDMENTS_NOTE}
+              </p>
 
-          <div className="relative z-10 flex h-full w-full items-center">
-            {/* Side Navigation */}
-            <div className="absolute left-0 z-20 flex flex-col gap-4 text-sm font-medium">
-              {commandments.map((commandment, index) => (
-                <button
-                  key={commandment.number}
-                  type="button"
-                  onClick={() => scrollToCommandment(index)}
-                  className={cn(
-                    "font-inter block w-8 text-left transition-all duration-300",
-                    activeIdx === index
-                      ? "text-[#169D52] font-black text-base opacity-100"
-                      : "text-white opacity-40 hover:opacity-100 font-normal text-sm",
-                  )}
-                >
-                  {commandment.number}
-                </button>
-              ))}
-            </div>
-
-            <div className="mx-auto flex h-full w-full max-w-5xl flex-col items-center text-center">
-              {/* Top Line Map */}
-              <div className="flex w-full flex-1 flex-col items-center justify-start z-10">
-                <div className="w-px flex-1 bg-white" />
-                <div className="h-2 w-2 rounded-full bg-white" />
-              </div>
-
-              {/* Scrolling Track Container */}
-              <div className="relative h-[28rem] w-full overflow-hidden">
-                {/* The Track that moves up */}
-                <div
-                  ref={trackRef}
-                  className="absolute left-0 top-0 w-full h-full flex flex-col"
-                >
-                  {commandments.map((commandment) => (
-                    <div
-                      key={`${commandment.number}-${commandment.title}`}
-                      className="commandment-item shrink-0 flex h-full w-full flex-col items-center justify-center px-4"
+              <div className="relative z-10 flex h-full w-full items-center">
+                <div className="absolute left-0 z-20 flex flex-col gap-4 text-sm font-medium">
+                  {commandments.map((commandment, index) => (
+                    <button
+                      key={commandment.number}
+                      type="button"
+                      onClick={() => scrollToCommandment(index)}
+                      className={cn(
+                        "font-inter block w-8 text-left transition-all duration-300",
+                        activeIdx === index
+                          ? "text-[#169D52] font-black text-base opacity-100"
+                          : "text-white opacity-40 hover:opacity-100 font-normal text-sm",
+                      )}
                     >
-                      <span className="font-bebas-neue mb-6 text-[100px] leading-none font-bold text-[#169D52]">
-                        {commandment.number}
-                      </span>
-                      <h3 className="font-bebas-neue mb-4 w-full max-w-4xl text-[clamp(2.75rem,5vw,3.75rem)] leading-[1.08] font-normal uppercase text-white">
-                        {renderTitle(commandment.title)}
-                      </h3>
-                      <p className="max-w-2xl text-2xl leading-[1.44] font-light tracking-[0.02em] text-white/70">
-                        {commandment.description}
-                      </p>
-                    </div>
+                      {commandment.number}
+                    </button>
                   ))}
                 </div>
-              </div>
 
-              {/* Bottom Line Map */}
-              <div className="flex w-full flex-1 flex-col items-center justify-end z-10">
-                <div className="h-2 w-2 rounded-full bg-white" />
-                <div className="w-px flex-1 bg-white transition-opacity duration-300" />
+                <div className="mx-auto flex h-full w-full max-w-5xl flex-col items-center text-center">
+                  <div className="z-10 flex w-full flex-1 flex-col items-center justify-start">
+                    <div className="w-px flex-1 bg-white" />
+                    <div className="h-2 w-2 rounded-full bg-white" />
+                  </div>
+
+                  <div className="ui-commandment-stage relative h-[28rem] w-full overflow-hidden">
+                    {commandments[displayIdx]
+                      ? renderDesktopCommandmentCard(
+                          commandments[displayIdx],
+                          displayIdx,
+                        )
+                      : null}
+                  </div>
+
+                  <div className="z-10 flex w-full flex-1 flex-col items-center justify-end">
+                    <div className="h-2 w-2 rounded-full bg-white" />
+                    <div className="w-px flex-1 bg-white transition-opacity duration-300" />
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
+
+          <div aria-hidden="true" className="-mt-[calc(100vh-7.5rem)]">
+            {commandments.map((commandment, index) => (
+              <div
+                key={`${commandment.number}-desktop-step`}
+                ref={(node) => {
+                  desktopStepRefs.current[index] = node;
+                }}
+                data-commandment-step={commandment.number}
+                className="h-[calc(100vh-7.5rem)] snap-start snap-always"
+              />
+            ))}
           </div>
         </div>
       </SiteContainer>
 
       {/* Mobile View */}
-      <div className="md:hidden relative flex h-[calc(100svh-6.5rem)] min-h-[34rem] w-full flex-col overflow-hidden bg-black pb-12">
+      <div
+        className="md:hidden relative flex h-[calc(100svh-6.5rem)] min-h-[34rem] w-full flex-col overflow-hidden bg-black pb-12"
+      >
         <p className="pointer-events-none absolute bottom-20 right-4 z-10 max-w-[18rem] text-right font-inter text-[12px] font-light leading-[1.44] tracking-[0.02em] text-white/65">
           {COMMANDMENTS_NOTE}
         </p>
