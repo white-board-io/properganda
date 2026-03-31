@@ -146,14 +146,14 @@ export default function Hero({
           <div className="absolute inset-0 bg-linear-to-t from-brand-black/80 via-brand-black/20 to-transparent" />
         </section>
 
-        <SiteContainer className="z-10 w-full mt-24 lg:mt-40">
-          <section className="flex flex-col items-start justify-center gap-12">
+        <SiteContainer className="z-10 mt-24 w-full lg:mt-40">
+          <section className="flex w-full flex-col items-start justify-center gap-8 sm:gap-12">
             <BlurTextReveal
               as="h1"
-              className="font-bebas-neue uppercase font-normal xl:text-[180px] xl:leading-[160px] tracking-normal text-white lg:text-[180px] lg:leading-[170px] md:text-[140px] md:leading-[130px] sm:text-[100px] sm:leading-[90px] text-[60px] leading-[50px]"
+              className="max-w-full font-bebas-neue text-[clamp(3.5rem,16vw,6.25rem)] leading-[0.84] font-normal tracking-normal text-white uppercase sm:text-[100px] sm:leading-[90px] md:text-[140px] md:leading-[130px] lg:text-[180px] lg:leading-[170px] xl:text-[180px] xl:leading-[160px]"
               segments={HERO_LINES.map((line) => ({
                 text: line,
-                className: "block whitespace-nowrap",
+                className: "block max-w-full whitespace-nowrap",
               }))}
               stagger={0.018}
               duration={0.32}
@@ -161,38 +161,38 @@ export default function Hero({
               y={10}
             />
 
-            <section className="relative flex items-center justify-between">
-              <div className="flex flex-col gap-1">
+            <section className="relative flex w-full items-center justify-between">
+              <div className="flex w-full max-w-full flex-col gap-1.5">
                 <p
-                  className="text-white"
+                  className="max-w-[24ch] text-white sm:max-w-none"
                   style={{
                     fontFamily: "var(--font-inter-google), Inter, sans-serif",
                     fontWeight: 700,
-                    fontSize: "25px",
-                    lineHeight: "1.42",
-                    letterSpacing: "0.02em",
+                    fontSize: "clamp(1.125rem, 5.25vw, 1.5625rem)",
+                    lineHeight: "1.32",
+                    letterSpacing: "0.01em",
                     fontStyle: "normal",
                   }}
                 >
                   For Brands & Businesses that want to
                 </p>
-                <div className="flex items-center gap-[0.3em]">
+                <div className="flex w-full max-w-full items-center gap-[0.3em]">
                   <div
-                    className="relative text-white uppercase whitespace-nowrap"
+                    className="relative block max-w-full text-white uppercase"
                     style={{
-                      height: "1.42em",
+                      minHeight: "1.2em",
                       fontFamily: "var(--font-inter-google), Inter, sans-serif",
                       fontWeight: 900,
-                      fontSize: "50px",
-                      lineHeight: "1.42",
-                      letterSpacing: "0.02em",
+                      fontSize: "clamp(2rem, 9vw, 3.125rem)",
+                      lineHeight: "1.12",
+                      letterSpacing: "0.01em",
                       verticalAlign: "middle",
                     }}
                   >
                     <span className="sr-only">move, matter, make an impact</span>
                     <span
                       aria-hidden="true"
-                      className="grid h-full justify-items-start motion-reduce:hidden"
+                      className="grid justify-items-start motion-reduce:hidden"
                     >
                       {SLOT_WORDS.map((word, index) => (
                         <span
@@ -214,7 +214,7 @@ export default function Hero({
                         </span>
                       ))}
                     </span>
-                    <span aria-hidden="true" className="hidden motion-reduce:inline">
+                    <span aria-hidden="true" className="hidden whitespace-nowrap motion-reduce:inline">
                       {SLOT_WORDS[0]}
                     </span>
                   </div>

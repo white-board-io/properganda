@@ -27,7 +27,7 @@ export default function Footer() {
   return (
     <footer className="bg-brand-black pb-12 pt-20 text-white font-inter" role="contentinfo">
       <SiteContainer>
-        <div className="footer-content grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-36">
+        <div className="footer-content grid grid-cols-1 gap-16 pl-2 md:pl-0 lg:grid-cols-2 lg:gap-36">
           <div className="grid items-start gap-8 sm:grid-cols-[auto_1fr] lg:gap-12">
             <Link href="/" className="mt-2 inline-block">
               <Image
@@ -55,10 +55,14 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-24">
-            <nav className="flex flex-wrap justify-between gap-y-4">
+          <div className="flex flex-col gap-20 md:gap-24">
+            <nav className="grid grid-cols-2 gap-x-6 gap-y-3 md:flex md:flex-wrap md:justify-between md:gap-y-4">
               {NAV_LINKS.map((link) => (
-                <Link key={link.label} href={link.href} className="ui-footer-link">
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="ui-footer-link text-[1.125rem] leading-[1.3] sm:text-[1.25rem] md:text-[1.5rem]"
+                >
                   {link.label}
                 </Link>
               ))}

@@ -188,26 +188,26 @@ export default function Services() {
       <SiteContainer>
         <SectionEyebrow scramble>What We Do</SectionEyebrow>
 
-        <div className="flex flex-col gap-4" onMouseLeave={handleListMouseLeave}>
+        <div className="mt-6 flex flex-col gap-8 md:mt-0 md:gap-4" onMouseLeave={handleListMouseLeave}>
           {SERVICES.map((service, index) => (
             <div
               key={service.id}
               ref={(el) => {
                 itemRefs.current[index] = el;
               }}
-              className="service-item cursor-pointer md:cursor-default max-md:!opacity-100"
+              className="service-item cursor-pointer py-2 md:cursor-default md:py-0 max-md:!opacity-100"
               style={{ opacity: getOpacityFor(DEFAULT_ACTIVE, index) }}
               onMouseEnter={() => handleMouseEnter(index)}
               onClick={() => handleClick(index)}
             >
-                <div className="flex w-full items-center justify-between gap-4">
+                <div className="flex w-full items-start justify-between gap-5 md:items-center md:gap-4">
                   <p
-                    className="text-black break-words w-[calc(100%-3rem)] md:w-full"
+                    className="w-[calc(100%-4.5rem)] break-words pr-2 text-black md:w-full md:pr-0"
                     style={{
                       fontFamily: "Inter, sans-serif",
                       fontWeight: activeIndex === index ? 700 : 400,
-                      fontSize: "clamp(2.5rem, 7vw, 100px)",
-                      lineHeight: "1.2",
+                      fontSize: "clamp(2.625rem, 8.5vw, 100px)",
+                      lineHeight: "1.14",
                       letterSpacing: "0%",
                       transition: "font-weight 0.3s ease",
                     }}
@@ -215,7 +215,7 @@ export default function Services() {
                     {service.text}
                   </p>
 
-                  <div className="md:hidden flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-black text-white">
+                  <div className="mt-1 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-black text-white md:hidden">
                     {activeIndex === index ? (
                       <ChevronUp className="h-5 w-5" strokeWidth={3} />
                     ) : (
@@ -230,7 +230,7 @@ export default function Services() {
                 }}
                 style={{ height: 0, opacity: 0, overflow: "hidden" }}
               >
-                <ul className="flex flex-col gap-3 md:gap-4 pt-6 pb-4 pl-4 md:pl-25 text-black">
+                <ul className="flex flex-col gap-3 pt-7 pb-2 pl-4 text-black md:gap-4 md:pb-4 md:pl-25">
                   {service.subItems.map((item, itemIndex) => {
                     const Icon = item.icon;
                     return (

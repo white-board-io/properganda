@@ -218,6 +218,17 @@ export default function Manifesto() {
                         <h3 className="text-lg font-bold leading-tight tracking-tight text-brand-black">
                           {slide.author}
                         </h3>
+                        {slide.icon && (
+                          <div className="mt-3 md:hidden">
+                            <Image
+                              src={slide.icon}
+                              alt={`${slide.author} client logo`}
+                              width={96}
+                              height={40}
+                              className="h-8 w-auto object-contain"
+                            />
+                          </div>
+                        )}
                         <p className="ui-caption mt-1 text-brand-gray-dark">
                           {slide.role}
                         </p>
@@ -227,7 +238,7 @@ export default function Manifesto() {
                       {slide.icon && (
                         <Image
                           src={slide.icon}
-                          alt="Decorative Icon"
+                          alt={`${slide.author} client logo`}
                           width={100}
                           height={100}
                           className="h-10 w-auto"
