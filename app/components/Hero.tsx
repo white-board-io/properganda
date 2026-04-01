@@ -9,15 +9,88 @@ import { toast } from "sonner";
 import { BlurTextReveal } from "@/components/ui/blur-text-reveal";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
+import { cn } from "@/lib/utils";
 
 const SLOT_WORDS = ["MOVE", "MATTER", "MAKE AN IMPACT"] as const;
 const HERO_LINES = ["Creativity With", "A Conscience"] as const;
 const COMMANDMENTS_HERO_TITLE = "Proper";
 const COMMANDMENTS_HERO_SUBTITLE = "Ways of Working";
+const COMMANDMENTS_HERO_SUBTITLE_LINES = [COMMANDMENTS_HERO_SUBTITLE] as const;
 
 type HeroVariant = "default" | "commandments";
 
 gsap.registerPlugin(useGSAP);
+
+function LetsTalkBadge({
+  ariaLabel,
+  className,
+  onClick,
+}: {
+  ariaLabel: string;
+  className?: string;
+  onClick: () => void;
+}) {
+  return (
+    <aside
+      aria-label={ariaLabel}
+      onClick={onClick}
+      className={cn(
+        "ui-hero-badge fixed bottom-8 right-4 z-[60] flex h-16 w-16 cursor-pointer items-center justify-center rounded-full transition-shadow md:h-24 md:w-24",
+        className,
+      )}
+    >
+      <svg
+        width="100%"
+        height="100%"
+        viewBox="0 0 100 100"
+        className="absolute inset-0 rotate-[-60deg]"
+      >
+        <defs>
+          <path id="badge-circle-bottom" d="M 15,50 a 35,35 0 0,0 70,0" />
+        </defs>
+        <text
+          fontSize="16"
+          fill="#FFFFFF"
+          letterSpacing="1"
+          fontWeight="bold"
+          fontFamily="sans-serif"
+        >
+          <textPath
+            startOffset="28%"
+            textAnchor="middle"
+            href="#badge-circle-bottom"
+          >
+            LET&apos;S
+          </textPath>
+        </text>
+        <text
+          fontSize="16"
+          fill="#FFFFFF"
+          letterSpacing="1"
+          fontWeight="bold"
+          fontFamily="sans-serif"
+        >
+          <textPath
+            startOffset="82%"
+            textAnchor="middle"
+            href="#badge-circle-bottom"
+          >
+            TALK
+          </textPath>
+        </text>
+      </svg>
+      <div className="absolute left-[40%] top-[45%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+        <Image
+          width={36}
+          height={40}
+          className="h-auto w-6 md:w-9"
+          alt="Properganda Logo"
+          src="/images/svg/logo.svg"
+        />
+      </div>
+    </aside>
+  );
+}
 
 export default function Hero({
   variant = "default",
@@ -25,6 +98,9 @@ export default function Hero({
   variant?: HeroVariant;
 }) {
   const slotCharRefs = useRef<Array<Array<HTMLSpanElement | null>>>([]);
+  const commandmentSubtitleCharRefs = useRef<Array<Array<HTMLSpanElement | null>>>(
+    [],
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -88,6 +164,71 @@ export default function Hero({
         const timeline = gsap.timeline({ repeat: -1 });
 
         slotCharacters.forEach((characters) => {
+          timeline
+            .set(characters, {
+              autoAlpha: 0,
+              y: 10,
+              filter: "blur(8px)",
+            })
+            .to(characters, {
+              autoAlpha: 1,
+              y: 0,
+              filter: "blur(0px)",
+              duration: 0.45,
+              ease: "power2.out",
+              stagger: 0.024,
+              clearProps: "filter",
+            })
+            .to({}, { duration: 1.8 })
+            .to(characters, {
+              autoAlpha: 0,
+              filter: "blur(6px)",
+              duration: 0.3,
+              ease: "power1.inOut",
+              stagger: 0.016,
+            });
+        });
+
+        return () => {
+          timeline.kill();
+        };
+      });
+
+      return () => {
+        mediaMatch.revert();
+      };
+    },
+    { dependencies: [variant] },
+  );
+
+  useGSAP(
+    () => {
+      if (variant !== "commandments") {
+        return;
+      }
+
+      const subtitleCharacters = COMMANDMENTS_HERO_SUBTITLE_LINES.map((_, index) =>
+        (commandmentSubtitleCharRefs.current[index] ?? []).filter(
+          (character): character is HTMLSpanElement => character !== null,
+        ),
+      ).filter((characters) => characters.length > 0);
+
+      if (!subtitleCharacters.length) {
+        return;
+      }
+
+      const mediaMatch = gsap.matchMedia();
+
+      mediaMatch.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.set(subtitleCharacters.flat(), {
+          autoAlpha: 0,
+          y: 10,
+          filter: "blur(8px)",
+        });
+
+        const timeline = gsap.timeline({ repeat: -1 });
+
+        subtitleCharacters.forEach((characters) => {
           timeline
             .set(characters, {
               autoAlpha: 0,
@@ -223,62 +364,6 @@ export default function Hero({
             </section>
           </section>
 
-          <aside
-            aria-label="Let's Talk Button"
-            onClick={() => setIsModalOpen(true)}
-            className="ui-hero-badge fixed bottom-8 right-4 z-50 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full transition-shadow md:bottom-20 md:right-8 md:h-24 md:w-24 lg:bottom-[4rem] lg:right-[4rem]"
-          >
-            <svg
-              width="100%"
-              height="100%"
-              viewBox="0 0 100 100"
-              className="absolute inset-0 rotate-[-60deg]"
-            >
-              <defs>
-                <path id="badge-circle-bottom" d="M 15,50 a 35,35 0 0,0 70,0" />
-              </defs>
-              <text
-                fontSize="16"
-                fill="#FFFFFF"
-                letterSpacing="1"
-                fontWeight="bold"
-                fontFamily="sans-serif"
-              >
-                <textPath
-                  startOffset="28%"
-                  textAnchor="middle"
-                  href="#badge-circle-bottom"
-                >
-                  LET&apos;S
-                </textPath>
-              </text>
-              <text
-                fontSize="16"
-                fill="#FFFFFF"
-                letterSpacing="1"
-                fontWeight="bold"
-                fontFamily="sans-serif"
-              >
-                <textPath
-                  startOffset="82%"
-                  textAnchor="middle"
-                  href="#badge-circle-bottom"
-                >
-                  TALK
-                </textPath>
-              </text>
-            </svg>
-            <div className="absolute left-[40%] top-[45%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
-              <Image
-                width={36}
-                height={40}
-                className="h-auto w-6 md:w-9"
-                alt="Properganda Logo"
-                src="/images/svg/logo.svg"
-              />
-            </div>
-          </aside>
-
           {/* Contact Modal */}
           {isModalOpen && (
             <div
@@ -375,6 +460,11 @@ export default function Hero({
           </div>
           )}
         </SiteContainer>
+        <LetsTalkBadge
+          ariaLabel="Let's Talk Button"
+          className="md:bottom-20 md:right-8 lg:bottom-[4rem] lg:right-[4rem]"
+          onClick={() => setIsModalOpen(true)}
+        />
       </SectionShell>
     );
   }
@@ -402,64 +492,32 @@ export default function Hero({
             {COMMANDMENTS_HERO_TITLE}
           </h1>
           <p className="mt-2 font-inter align-middle text-[20px] leading-[28.8px] font-medium uppercase tracking-[0.2em] text-[#169D52] sm:text-[28px] sm:leading-[40.32px] sm:tracking-[0.24em] lg:text-[42px] lg:leading-[60.48px] lg:tracking-[0.31em]">
-            {COMMANDMENTS_HERO_SUBTITLE}
+            <span className="sr-only">{COMMANDMENTS_HERO_SUBTITLE}</span>
+            <span
+              aria-hidden="true"
+              className="grid min-h-[1.2em] justify-items-center motion-reduce:flex motion-reduce:min-h-0 motion-reduce:justify-center"
+            >
+              {COMMANDMENTS_HERO_SUBTITLE_LINES.map((line, index) => (
+                <span
+                  key={line}
+                  className="col-start-1 row-start-1 block whitespace-nowrap"
+                >
+                  {Array.from(line).map((character, characterIndex) => (
+                    <span
+                      key={`${line}-${characterIndex}-${character}`}
+                      className="inline-block whitespace-pre will-change-[transform,filter,opacity]"
+                      ref={(node) => {
+                        commandmentSubtitleCharRefs.current[index] ??= [];
+                        commandmentSubtitleCharRefs.current[index][characterIndex] = node;
+                      }}
+                    >
+                      {character === " " ? "\u00A0" : character}
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </span>
           </p>
-        </div>
-
-        <div
-          className="ui-hero-badge fixed bottom-8 right-4 z-50 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full transition-shadow md:bottom-[5rem] md:right-[2rem] md:h-24 md:w-24 lg:bottom-[4rem] lg:right-[4rem]"
-          aria-label="Let's Talk"
-          onClick={() => setIsModalOpen(true)}
-        >
-          <svg
-            className="absolute inset-0 rotate-[-60deg]"
-            viewBox="0 0 100 100"
-            width="100%"
-            height="100%"
-          >
-            <defs>
-              <path id="badge-circle-bottom" d="M 15,50 a 35,35 0 0,0 70,0" />
-            </defs>
-            <text
-              fontSize="16"
-              fill="#FFFFFF"
-              fontWeight="bold"
-              letterSpacing="1"
-              fontFamily="sans-serif"
-            >
-              <textPath
-                href="#badge-circle-bottom"
-                textAnchor="middle"
-                startOffset="28%"
-              >
-                LET&apos;S
-              </textPath>
-            </text>
-            <text
-              fontSize="16"
-              fill="#FFFFFF"
-              fontWeight="bold"
-              letterSpacing="1"
-              fontFamily="sans-serif"
-            >
-              <textPath
-                href="#badge-circle-bottom"
-                textAnchor="middle"
-                startOffset="82%"
-              >
-                TALK
-              </textPath>
-            </text>
-          </svg>
-          <div className="absolute left-[40%] top-[45%] z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
-            <Image
-              width={36}
-              height={40}
-              className="h-auto w-6 md:w-9"
-              alt="Properganda Logo"
-              src="/images/svg/logo.svg"
-            />
-          </div>
         </div>
 
         {/* Contact Modal */}
@@ -558,6 +616,11 @@ export default function Hero({
           </div>
         )}
       </SiteContainer>
+      <LetsTalkBadge
+        ariaLabel="Let's Talk"
+        className="md:bottom-[5rem] md:right-[2rem] lg:bottom-[4rem] lg:right-[4rem]"
+        onClick={() => setIsModalOpen(true)}
+      />
     </SectionShell>
   );
 }
