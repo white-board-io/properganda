@@ -71,8 +71,8 @@ function SectionEyebrow<C extends React.ElementType = "p">({
       const scrollTrigger = ScrollTrigger.create({
         trigger: animatedTextRef.current,
         start: "top 88%",
-        once: true,
         onEnter: () => tween.restart(true),
+        onEnterBack: () => tween.restart(true),
       });
 
       return () => {

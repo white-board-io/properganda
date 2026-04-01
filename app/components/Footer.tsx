@@ -1,15 +1,11 @@
 "use client";
 
-import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 
-import { createScrollReveal } from "@/lib/gsap-reveal";
+import { buttonVariants } from "@/components/ui/button";
 import { SiteContainer } from "@/components/ui/site-container";
-
-gsap.registerPlugin(useGSAP);
+import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
   { href: "#about", label: "About Us" },
@@ -19,42 +15,19 @@ const NAV_LINKS = [
 ];
 
 const SOCIAL_LINKS = [
-  { href: "#", label: "Instagram", icon: "/images/svg/insta.svg" },
-  { href: "#", label: "X (formerly Twitter)", icon: "/images/svg/x.svg" },
-  { href: "#", label: "LinkedIn", icon: "/images/svg/linkedin.svg" },
-];
-
-const OTHER_LINKS = [
-  { href: "/brand-book", label: "Brand Book" },
-  { href: "/employee-hand-book", label: "Employee Hand Book" },
+  { href: "https://www.instagram.com/properganda.in/", label: "Instagram", icon: "/images/svg/insta.svg" },
+  { href: "https://x.com/properganda_in", label: "X (formerly Twitter)", icon: "/images/svg/x.svg" },
+  { href: "https://www.linkedin.com/company/propergandacreative/", label: "LinkedIn", icon: "/images/svg/linkedin.svg" },
+  { href: "https://www.youtube.com/@PropergandaCreative/", label: "Youtube", icon: "/images/svg/youtube.svg" },
 ];
 
 export default function Footer() {
-  const sectionRef = useRef<HTMLElement>(null);
   const currentYear = new Date().getFullYear();
 
-  useGSAP(
-    () => {
-      createScrollReveal(".footer-content > *", {
-        trigger: sectionRef.current,
-        start: "top 86%",
-        stagger: 0.14,
-        duration: 1,
-        scale: 0.99,
-        blur: 10,
-      });
-    },
-    { scope: sectionRef },
-  );
-
   return (
-    <footer
-      ref={sectionRef}
-      className="bg-brand-black pb-12 pt-20 text-white font-inter"
-      role="contentinfo"
-    >
+    <footer className="bg-brand-black pb-12 pt-20 text-white font-inter" role="contentinfo">
       <SiteContainer>
-        <div className="footer-content grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-36">
+        <div className="footer-content grid grid-cols-1 gap-16 pl-2 md:pl-0 lg:grid-cols-2 lg:gap-36">
           <div className="grid items-start gap-8 sm:grid-cols-[auto_1fr] lg:gap-12">
             <Link href="/" className="mt-2 inline-block">
               <Image
@@ -66,53 +39,80 @@ export default function Footer() {
               />
             </Link>
 
-            <div className="flex flex-col gap-8">
-              <h2 className="text-3xl font-bold leading-tight text-[#169D52] sm:text-4xl lg:h-[102px] lg:w-[332px] lg:text-[40px] lg:leading-[51px]">
-                We&apos;re not big.
-                <br />
-                But we&apos;re Proper.
+            <div className="flex flex-col gap-20">
+              <h2 className="text-[32px] font-bold text-white sm:text-[40px] leading-tight sm:leading-[40px]">
+                <span className="block whitespace-nowrap">No drills.</span>
+                <span className="block whitespace-nowrap">No frills.</span>
+                <span className="block whitespace-nowrap">Just great work.</span>
               </h2>
 
               <div className="flex gap-4">
                 {SOCIAL_LINKS.map((link) => (
-                  <a key={link.label} href={link.href} className="ui-icon-link" aria-label={link.label}>
-                    <Image src={link.icon} alt={link.label} width={48} height={48} />
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ui-icon-link flex h-11 w-11 items-center justify-center rounded-full border bg-white"
+                    aria-label={link.label}
+                  >
+                    <Image src={link.icon} alt={link.label} width={23} height={23} />
                   </a>
                 ))}
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col gap-24">
-            <nav className="flex flex-wrap justify-between gap-y-4">
+          <div className="flex flex-col gap-20 md:gap-24">
+            <nav className="grid grid-cols-2 gap-x-6 gap-y-3 md:flex md:flex-wrap md:justify-between md:gap-y-4">
               {NAV_LINKS.map((link) => (
-                <Link key={link.label} href={link.href} className="ui-footer-link">
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="ui-footer-link text-[1.125rem] leading-[1.3] sm:text-[1.25rem] md:text-[1.5rem]"
+                >
                   {link.label}
                 </Link>
               ))}
             </nav>
 
-            <div className="flex flex-wrap justify-between gap-12">
+            <div className="flex flex-col gap-10 sm:flex-row sm:items-center sm:justify-between sm:gap-12">
               <div className="space-y-6">
-                <h3 className="ui-footer-heading">Locations</h3>
+                <h3 className="ui-footer-link">Location</h3>
                 <div className="space-y-2 text-lg text-brand-gray">
-                  <p>Sao Tome and Principe</p>
-                  <p>(208) 555-0112</p>
+                  <p>Lower Parel, Mumbai</p>
                 </div>
               </div>
 
-              <div className="space-y-6 lg:min-w-[300px]">
-                <h3 className="ui-footer-heading">Other</h3>
-                <div className="space-y-2 text-lg text-brand-gray">
-                  {OTHER_LINKS.map((link) => (
-                    <p key={link.label}>
-                      <Link href={link.href} className="underline transition-colors hover:text-brand-green">
-                        {link.label}
-                      </Link>
-                    </p>
-                  ))}
+              <Link
+                href="https://www.canopymedia.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  buttonVariants({
+                    variant: "canopyOutline",
+                    size: "sm",
+                  }),
+                  "inline-flex w-fit gap-2.5 self-start px-5 py-2 items-center",
+                )}
+                style={{ color: "#FFFFFF", borderColor: "#FFFFFF" }}
+              >
+                <div className="flex flex-col justify-center pt-[2px] text-left leading-[1.1]">
+                  <span className="text-[6px] font-black tracking-widest" style={{ color: "#FFFFFF" }}>
+                    Our
+                  </span>
+                  <span className="text-[6px] font-black tracking-widest" style={{ color: "#FFFFFF" }}>
+                    Studio
+                  </span>
                 </div>
-              </div>
+                <Image
+                  src="/images/svg/canopy.svg"
+                  alt="CANOPY"
+                  width={100}
+                  height={14}
+                  className="h-[14px] w-[100px]"
+                />
+              </Link>
             </div>
           </div>
         </div>

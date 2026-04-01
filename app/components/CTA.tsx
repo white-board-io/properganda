@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { type FormEvent, useState } from "react";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -20,13 +21,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
 const SERVICES = [
-  { value: "branding", label: "Branding" },
-  { value: "marketing", label: "Marketing" },
-  { value: "design", label: "Design" },
+  { value: "Branding", label: "Branding" },
+  { value: "Logo Design", label: "Logo Design" },
+  { value: "Social Media Marketing", label: "Social Media Marketing" },
+  { value: "Internal Communication", label: "Internal Communication" },
+  { value: "ESG Storytelling", label: "ESG Storytelling" },
+  { value: "Film & Video", label: "Film & Video" },
+  { value: "Other", label: "Other" },
 ];
 
 export default function CTA() {
   const [selectedService, setSelectedService] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const selectedServiceLabel = SERVICES.find(
     (service) => service.value === selectedService,
@@ -52,7 +58,7 @@ export default function CTA() {
         >
           <div className="flex h-full flex-col gap-12 lg:flex-row lg:justify-between">
             <div className="cta-content flex w-full flex-col lg:max-w-[385px]">
-              <SectionEyebrow className="mb-8">
+              <SectionEyebrow scramble className="mb-8 font-inter text-[20px] font-extrabold leading-[1.66]">
                 Contact
               </SectionEyebrow>
 
@@ -62,18 +68,21 @@ export default function CTA() {
                 get started!
               </h2>
 
-              <div className="mb-12 max-w-[385px] space-y-3">
-                <p className="ui-type-body-lg font-bold text-brand-black">
-                  Need to make a mark?
+              <div className="mb-12 max-w-[385px] space-y-6">
+                <p className="font-inter text-[20px] font-normal leading-[26px] tracking-normal text-brand-black">
+                  Big idea. Small idea.
+                  <br />
+                  No idea yet.
                 </p>
-                <p className="ui-type-body-lg font-normal text-brand-black">
-                  Our team delivers impressive results
+                <p className="font-inter text-[20px] font-bold leading-[26px] tracking-normal text-brand-black">
+                  <span className="text-[#169D52]">Bring it.</span> We turn maybes
                   <br />
-                  and expert execution. Visionary
+                  into makes sense.
+                </p>
+                <p className="font-inter text-[20px] font-normal leading-[26px] tracking-normal text-brand-black">
+                  Drop us a line.
                   <br />
-                  or overwhelmed, we&apos;re here to help!
-                  <br />
-                  Expect a response within 24 hours.
+                  We&apos;ll drop one back in 24 hours.
                 </p>
               </div>
 
@@ -87,28 +96,42 @@ export default function CTA() {
                       height={20}
                     />
                   </div>
-                  <a href="mailto:ping@properganda.in" className="ui-contact-link">
+                  <a href="mailto:ping@properganda.in" className="font-inter text-[20px] font-semibold leading-[26px] tracking-normal text-brand-black underline decoration-solid transition-colors hover:text-[#169D52]">
                     ping@properganda.in
                   </a>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <div className="flex size-10 items-center justify-center">
-                    <Image
-                      src="/images/svg/phone.svg"
-                      alt="Phone"
-                      width={30}
-                      height={30}
-                    />
-                  </div>
-                  <span className="ui-type-body-lg font-semibold text-brand-black">
-                    00000 00000
-                  </span>
                 </div>
               </div>
             </div>
 
-            <form className="flex h-full w-full flex-1 flex-col gap-8 lg:max-w-[797px]">
+            <form
+              onSubmit={async (e: FormEvent<HTMLFormElement>) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                const fd = new FormData(e.currentTarget);
+                try {
+                  const res = await fetch("/api/contact", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      name: fd.get("name"),
+                      email: fd.get("email"),
+                      mobile: fd.get("mobile"),
+                      service: fd.get("service"),
+                      message: fd.get("message"),
+                    }),
+                  });
+                  if (!res.ok) throw new Error("Failed to send");
+                  toast.success("You should hear back from us soon");
+                  e.currentTarget.reset();
+                  setSelectedService("");
+                } catch {
+                  toast.error("Something went wrong. Please try again.");
+                } finally {
+                  setIsSubmitting(false);
+                }
+              }}
+              className="flex h-full w-full flex-1 flex-col gap-8 lg:max-w-[797px]"
+            >
               <div className="grid grid-cols-1 gap-x-14 gap-y-6 md:grid-cols-2">
                 <div className="cta-form-item flex flex-col gap-2">
                   <label htmlFor="name" className="ui-form-label">
@@ -116,6 +139,7 @@ export default function CTA() {
                   </label>
                   <Input
                     id="name"
+                    name="name"
                     placeholder="Enter your Name"
                     className="w-full"
                     required
@@ -129,6 +153,7 @@ export default function CTA() {
                   <Input
                     type="email"
                     id="email"
+                    name="email"
                     placeholder="Enter your email ID"
                     className="w-full"
                     required
@@ -137,20 +162,20 @@ export default function CTA() {
 
                 <div className="cta-form-item flex flex-col gap-2">
                   <label htmlFor="mobile" className="ui-form-label">
-                    Mobile<span className="text-red-500">*</span>
+                    Mobile
                   </label>
                   <Input
                     type="tel"
                     id="mobile"
+                    name="mobile"
                     placeholder="Enter your Mobile number"
                     className="w-full"
-                    required
                   />
                 </div>
 
                 <div className="cta-form-item flex flex-col gap-2">
                   <label htmlFor="service" className="ui-form-label">
-                    Service <span className="text-red-500">*</span>
+                    Service
                   </label>
 
                   <div className="relative">
@@ -187,7 +212,7 @@ export default function CTA() {
                       </DropdownMenuContent>
                     </DropdownMenu>
 
-                    <input type="hidden" name="service" value={selectedService} required />
+                    <input type="hidden" name="service" value={selectedService} />
                   </div>
                 </div>
               </div>
@@ -196,16 +221,23 @@ export default function CTA() {
                 <label htmlFor="message" className="ui-form-label">
                   How can we help?<span className="text-red-500">*</span>
                 </label>
-                <Textarea id="message" className="w-full resize-none" required />
+                <Textarea
+                  id="message"
+                  name="message"
+                  placeholder="Write three wishes we can grant for you"
+                  className="w-full resize-none"
+                  required
+                />
               </div>
 
               <div className="cta-form-item">
                 <Button
                   type="submit"
                   variant="accent"
-                  className="group mt-4 h-[62px] w-full sm:w-[342px] rounded-[20px] font-inter text-[16px] font-semibold leading-none tracking-[0.02em] opacity-100"
+                  disabled={isSubmitting}
+                  className="group mt-4 h-[62px] w-full sm:w-auto sm:px-8 rounded-[20px] font-inter text-[16px] font-semibold leading-none tracking-[0.02em] opacity-100"
                 >
-                  Request For Free Consultation
+                  {isSubmitting ? "Sending..." : "Request for a call back"}
                   <svg
                     className="h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
                     viewBox="0 0 24 24"

@@ -25,7 +25,6 @@ import {
   Leaf
 } from "lucide-react";
 
-import { createScrollReveal } from "@/lib/gsap-reveal";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
@@ -154,15 +153,6 @@ export default function Services() {
           gsap.set(el, { height: 0, opacity: 0, overflow: "hidden" });
         }
       });
-
-      createScrollReveal(".service-item", {
-        trigger: sectionRef.current,
-        start: "top 70%",
-        stagger: 0.16,
-        duration: 1,
-        scale: 0.99,
-        blur: 10,
-      });
     },
     { scope: sectionRef },
   );
@@ -196,35 +186,36 @@ export default function Services() {
       aria-label="Our services"
     >
       <SiteContainer>
-        <SectionEyebrow>What We Do</SectionEyebrow>
+        <SectionEyebrow scramble>What We Do</SectionEyebrow>
 
-        <div className="flex flex-col gap-4" onMouseLeave={handleListMouseLeave}>
+        <div className="mt-6 flex flex-col gap-8 md:mt-0 md:gap-4" onMouseLeave={handleListMouseLeave}>
           {SERVICES.map((service, index) => (
             <div
               key={service.id}
               ref={(el) => {
                 itemRefs.current[index] = el;
               }}
-              className="service-item cursor-pointer md:cursor-default max-md:!opacity-100"
+              className="service-item cursor-pointer py-2 md:cursor-default md:py-0 max-md:!opacity-100"
               style={{ opacity: getOpacityFor(DEFAULT_ACTIVE, index) }}
               onMouseEnter={() => handleMouseEnter(index)}
               onClick={() => handleClick(index)}
             >
-                <div className="flex w-full items-center justify-between gap-4">
+                <div className="flex w-full items-start justify-between gap-5 md:items-center md:gap-4">
                   <p
-                    className="text-black break-words w-[calc(100%-3rem)] md:w-full"
+                    className="w-[calc(100%-4.5rem)] break-words pr-2 text-black md:w-full md:pr-0"
                     style={{
                       fontFamily: "Inter, sans-serif",
-                      fontWeight: 700,
-                      fontSize: "clamp(2.5rem, 7vw, 100px)",
-                      lineHeight: "1.2",
+                      fontWeight: activeIndex === index ? 700 : 400,
+                      fontSize: "clamp(2.625rem, 8.5vw, 100px)",
+                      lineHeight: "1.14",
                       letterSpacing: "0%",
+                      transition: "font-weight 0.3s ease",
                     }}
                   >
                     {service.text}
                   </p>
 
-                  <div className="md:hidden flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-black text-white">
+                  <div className="mt-1 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-black text-white md:hidden">
                     {activeIndex === index ? (
                       <ChevronUp className="h-5 w-5" strokeWidth={3} />
                     ) : (
@@ -239,12 +230,12 @@ export default function Services() {
                 }}
                 style={{ height: 0, opacity: 0, overflow: "hidden" }}
               >
-                <ul className="flex flex-col gap-3 md:gap-4 pt-6 pb-4 pl-2 md:pl-6 text-black">
+                <ul className="flex flex-col gap-3 pt-7 pb-2 pl-4 text-black md:gap-4 md:pb-4 md:pl-25">
                   {service.subItems.map((item, itemIndex) => {
                     const Icon = item.icon;
                     return (
                       <li key={itemIndex} className="flex items-center gap-3 md:gap-4 text-[#333] text-base md:text-xl md:font-medium">
-                        <Icon className="text-brand-green w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
+                        <Icon className="text-[#169D52] w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
                         <span className="cursor-pointer transition-opacity hover:opacity-70">{item.text}</span>
                       </li>
                     );
