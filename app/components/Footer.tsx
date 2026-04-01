@@ -41,13 +41,21 @@ export default function Footer() {
 
             <div className="flex flex-col gap-20">
               <h2 className="text-[32px] font-bold text-white sm:text-[40px] leading-tight sm:leading-[40px]">
-                <span className="block whitespace-nowrap">No drills. No frills.</span>
+                <span className="block whitespace-nowrap">No drills.</span>
+                <span className="block whitespace-nowrap">No frills.</span>
                 <span className="block whitespace-nowrap">Just great work.</span>
               </h2>
 
               <div className="flex gap-4">
                 {SOCIAL_LINKS.map((link) => (
-                  <a key={link.label} href={link.href} className="ui-icon-link flex h-11 w-11 items-center justify-center rounded-full border bg-white" aria-label={link.label}>
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ui-icon-link flex h-11 w-11 items-center justify-center rounded-full border bg-white"
+                    aria-label={link.label}
+                  >
                     <Image src={link.icon} alt={link.label} width={23} height={23} />
                   </a>
                 ))}

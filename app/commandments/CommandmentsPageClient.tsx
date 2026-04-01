@@ -46,7 +46,9 @@ export default function CommandmentsPageClient() {
         </div>
       </main>
 
-      <Footer />
+      <div className="md:snap-start md:snap-always">
+        <Footer />
+      </div>
     </div>
   );
 }
