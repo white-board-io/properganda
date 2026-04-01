@@ -1,0 +1,646 @@
+# Instincts generated from https://github.com/white-board-io/properganda
+# Generated: 2026-04-01T06:57:44.174Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: properganda-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: feat, chore, style, refactor, perf
+
+## Evidence
+
+- 59 commits analyzed
+- Detected conventional commit pattern
+- Examples: feat: refactor LetsTalkBadge into reusable component and add GSAP text reveal animation to commandments hero variant, refactor: add scroll snapping to footer, update text layout, and enable external link opening for social icons
+
+---
+id: properganda-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Commit Length
+
+## Action
+
+Write moderate-length commit messages (~63 characters)
+
+## Evidence
+
+- Average commit message length: 63 chars
+- Based on 59 commits
+
+---
+id: properganda-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Naming Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: camelCase
+
+---
+id: properganda-import-alias
+trigger: "when importing modules"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Import Alias
+
+## Action
+
+Use path aliases (@/, ~/) instead of relative imports
+
+## Evidence
+
+- Import analysis shows alias pattern
+- Example: import { x } from '@/lib/x'
+
+---
+id: properganda-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Export Style
+
+## Action
+
+Prefer default exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: default
+
+---
+id: properganda-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: properganda-workflow-feature-development
+trigger: "when implementing a new feature"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Workflow Feature Development
+
+## Action
+
+Follow the feature-development workflow:
+1. Add feature implementation
+2. Add tests for feature
+3. Update documentation
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~13x per month
+- Files: app/commandments/*, app/*, lib/*
+
+---
+id: properganda-workflow-refactoring
+trigger: "when refactoring code"
+confidence: 0.75
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Workflow Refactoring
+
+## Action
+
+Follow the refactoring workflow:
+1. Ensure tests pass before refactor
+2. Refactor code structure
+3. Verify tests still pass
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~5x per month
+- Files: src/**/*
+
+---
+id: properganda-workflow-add-or-update-component-animation
+trigger: "when doing add or update component animation"
+confidence: 0.8
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Workflow Add Or Update Component Animation
+
+## Action
+
+Follow the add-or-update-component-animation workflow:
+1. Edit one or more component files in app/components/ (e.g., AboutUs.tsx, Hero.tsx, Commandments.tsx, etc.) to add or update animation logic.
+2. Optionally update or add animation utility files in lib/ (e.g., lib/gsap-reveal.ts) or components/ui/ (e.g., blur-text-reveal.tsx, text-reveal-animation.tsx).
+3. Optionally update global styles in app/globals.css to support animation effects.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~6x per month
+- Files: app/components/*.tsx, lib/gsap-reveal.ts, components/ui/*.tsx
+
+---
+id: properganda-workflow-multi-component-style-and-layout-refactor
+trigger: "when doing multi component style and layout refactor"
+confidence: 0.75
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Workflow Multi Component Style And Layout Refactor
+
+## Action
+
+Follow the multi-component-style-and-layout-refactor workflow:
+1. Edit multiple files in app/components/ (e.g., Footer.tsx, Header.tsx, Manifesto.tsx, Services.tsx, etc.) to adjust styles, layout, or responsive behavior.
+2. Update app/globals.css for global style changes.
+3. Optionally update app/layout.tsx or app/page.tsx for layout-wide changes.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~5x per month
+- Files: app/components/*.tsx, app/globals.css, app/layout.tsx
+
+---
+id: properganda-workflow-add-or-update-asset-files
+trigger: "when doing add or update asset files"
+confidence: 0.65
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Workflow Add Or Update Asset Files
+
+## Action
+
+Follow the add-or-update-asset-files workflow:
+1. Add or update files in public/images/svg/ or public/videos/ directories.
+2. Edit relevant component files in app/components/ (e.g., LogoBar.tsx, Header.tsx) to reference new or updated assets.
+3. Optionally update favicon or other global assets.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~3x per month
+- Files: public/images/svg/*.svg, public/videos/*.mp4, app/components/*.tsx
+
+---
+id: properganda-workflow-add-or-update-api-endpoint-or-config
+trigger: "when doing add or update api endpoint or config"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Workflow Add Or Update Api Endpoint Or Config
+
+## Action
+
+Follow the add-or-update-api-endpoint-or-config workflow:
+1. Edit or create files in app/api/ (e.g., contact/route.ts).
+2. Update .env, .env.example, or .gitignore as needed.
+3. Optionally update package.json or lock files if dependencies change.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: app/api/*/route.ts, .env, .env.example
+
+---
+id: properganda-workflow-add-or-update-temporary-or-landing-page
+trigger: "when doing add or update temporary or landing page"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/white-board-io/properganda
+---
+
+# Properganda Workflow Add Or Update Temporary Or Landing Page
+
+## Action
+
+Follow the add-or-update-temporary-or-landing-page workflow:
+1. Edit or create app/components/ComingSoon.tsx.
+2. Update app/page.tsx to route to or include the temporary component.
+3. Update app/globals.css for any new styles.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: app/components/ComingSoon.tsx, app/page.tsx, app/globals.css
+
+---
+id: properganda-instinct-file-naming-camelCase
+trigger: "When creating a new file in the codebase"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct File Naming CamelCase
+
+## Action
+
+Name the file using camelCase (e.g., myComponent.tsx)
+
+## Evidence
+
+- Pattern in namingConventions.files: camelCase
+
+---
+id: properganda-instinct-function-naming-camelCase
+trigger: "When defining a new function"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Function Naming CamelCase
+
+## Action
+
+Name the function using camelCase (e.g., fetchData)
+
+## Evidence
+
+- Pattern in namingConventions.functions: camelCase
+
+---
+id: properganda-instinct-class-naming-PascalCase
+trigger: "When defining a new class or React component"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Class Naming PascalCase
+
+## Action
+
+Name the class/component using PascalCase (e.g., CommandmentsPageClient)
+
+## Evidence
+
+- Pattern in namingConventions.classes: PascalCase
+
+---
+id: properganda-instinct-constant-naming-SCREAMING_SNAKE_CASE
+trigger: "When declaring a constant value"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Constant Naming SCREAMING_SNAKE_CASE
+
+## Action
+
+Name the constant using SCREAMING_SNAKE_CASE (e.g., API_URL)
+
+## Evidence
+
+- Pattern in namingConventions.constants: SCREAMING_SNAKE_CASE
+
+---
+id: properganda-instinct-import-alias
+trigger: "When importing modules"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Import Alias
+
+## Action
+
+Use alias import style instead of relative paths
+
+## Evidence
+
+- Pattern in importStyle: alias
+
+---
+id: properganda-instinct-default-export
+trigger: "When exporting a module or component"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Default Export
+
+## Action
+
+Use default export style
+
+## Evidence
+
+- Pattern in exportStyle: default
+
+---
+id: properganda-instinct-try-catch-error-handling
+trigger: "When handling errors in code"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Try Catch Error Handling
+
+## Action
+
+Use try-catch blocks for error handling
+
+## Evidence
+
+- Pattern in errorHandling.style: try-catch
+
+---
+id: properganda-instinct-git-commit-conventional
+trigger: "When writing a commit message"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Git Commit Conventional
+
+## Action
+
+Use conventional commit prefixes (feat, chore, style, refactor, perf) followed by a concise description
+
+## Evidence
+
+- Seen in commit: feat: refactor LetsTalkBadge into reusable component and add GSAP text reveal animation to commandments hero variant
+- Pattern in commits.prefixes
+
+---
+id: properganda-instinct-git-commit-length
+trigger: "When composing a commit message"
+confidence: 0.8
+domain: git
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Git Commit Length
+
+## Action
+
+Keep the commit message concise, around 60 characters on average
+
+## Evidence
+
+- Pattern in commits.averageLength: 63
+
+---
+id: properganda-instinct-git-commit-feature-workflow
+trigger: "When implementing a new feature"
+confidence: 0.8
+domain: git
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Git Commit Feature Workflow
+
+## Action
+
+Sequence commits as: Add feature implementation → Add tests for feature → Update documentation
+
+## Evidence
+
+- Pattern in feature-development.commitSequence
+- Seen in commits: feat(seo): add sitemap, robots and metadata configuration
+
+---
+id: properganda-instinct-test-location-separate
+trigger: "When adding tests for code in src or app"
+confidence: 0.7
+domain: testing
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Test Location Separate
+
+## Action
+
+Place test files in a separate directory, not alongside source files
+
+## Evidence
+
+- Pattern in architecture.folderStructure.testLocation: separate
+
+---
+id: properganda-instinct-feature-development-workflow
+trigger: "When starting a new feature"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Feature Development Workflow
+
+## Action
+
+Edit files in app/commandments/, app/, or lib/ to implement the feature, then add tests and update documentation
+
+## Evidence
+
+- Pattern in workflows[feature-development].filesInvolved
+- Pattern in workflows[feature-development].commitSequence
+
+---
+id: properganda-instinct-refactoring-workflow
+trigger: "When refactoring code"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Refactoring Workflow
+
+## Action
+
+Ensure tests pass before refactor, refactor code in src/, then verify tests still pass
+
+## Evidence
+
+- Pattern in workflows[refactoring].commitSequence
+- Pattern in workflows[refactoring].filesInvolved
+
+---
+id: properganda-instinct-add-or-update-component-animation-workflow
+trigger: "When introducing or refining animations in a UI component"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Add Or Update Component Animation Workflow
+
+## Action
+
+Edit app/components/*.tsx to add/update animation logic, optionally update lib/gsap-reveal.ts or components/ui/*.tsx, and app/globals.css for styles
+
+## Evidence
+
+- Pattern in workflows[add-or-update-component-animation].filesInvolved
+- Pattern in workflows[add-or-update-component-animation].commitSequence
+
+---
+id: properganda-instinct-multi-component-style-layout-refactor-workflow
+trigger: "When improving look, feel, or responsiveness of several UI components"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Multi Component Style Layout Refactor Workflow
+
+## Action
+
+Edit multiple files in app/components/, update app/globals.css, and optionally app/layout.tsx or app/page.tsx
+
+## Evidence
+
+- Pattern in workflows[multi-component-style-and-layout-refactor].filesInvolved
+- Pattern in workflows[multi-component-style-and-layout-refactor].commitSequence
+
+---
+id: properganda-instinct-add-or-update-asset-files-workflow
+trigger: "When introducing new client logos, updating branding, or adding media assets"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Add Or Update Asset Files Workflow
+
+## Action
+
+Add/update files in public/images/svg/ or public/videos/, edit relevant app/components/*.tsx, and optionally update favicon or global assets
+
+## Evidence
+
+- Pattern in workflows[add-or-update-asset-files].filesInvolved
+- Pattern in workflows[add-or-update-asset-files].commitSequence
+
+---
+id: properganda-instinct-add-or-update-api-endpoint-or-config-workflow
+trigger: "When introducing or modifying an API endpoint or updating environment/configuration files"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Add Or Update Api Endpoint Or Config Workflow
+
+## Action
+
+Edit/create files in app/api/, update .env/.env.example/.gitignore, and optionally update package.json or lock files
+
+## Evidence
+
+- Pattern in workflows[add-or-update-api-endpoint-or-config].filesInvolved
+- Pattern in workflows[add-or-update-api-endpoint-or-config].commitSequence
+
+---
+id: properganda-instinct-add-or-update-temporary-or-landing-page-workflow
+trigger: "When displaying a temporary homepage or updating the coming soon experience"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: white-board-io/properganda
+---
+
+# Properganda Instinct Add Or Update Temporary Or Landing Page Workflow
+
+## Action
+
+Edit/create app/components/ComingSoon.tsx, update app/page.tsx, and update app/globals.css for styles
+
+## Evidence
+
+- Pattern in workflows[add-or-update-temporary-or-landing-page].filesInvolved
+- Pattern in workflows[add-or-update-temporary-or-landing-page].commitSequence
+
