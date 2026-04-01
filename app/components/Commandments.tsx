@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
@@ -18,28 +19,124 @@ const DESKTOP_CARD_EXIT_DURATION_MS = 320;
 const DESKTOP_CARD_ENTER_DURATION_MS = 420;
 const DESKTOP_AUTO_SCROLL_LOCK_MS = 1200;
 
-const renderTitle = (title: string) => {
-  const lowerTitle = title.toUpperCase();
-  if (lowerTitle.includes("COPY-PASTE")) {
-    const index = lowerTitle.indexOf("COPY-PASTE");
-    const before = title.slice(0, index);
-    const match = title.slice(index, index + 10);
-    const after = title.slice(index + 10);
-    return (
-      <>
-        {before}
-        <span 
-          className="bg-clip-text text-transparent" 
-          style={{ backgroundImage: 'linear-gradient(90deg, #169D52 -33.2%, #FFFFFF 104.45%)' }}
-        >
-          {match}
-        </span>
-        {after}
-      </>
+function AnimatedCommandmentDescription({
+  text,
+  className,
+}: {
+  text: string;
+  className?: string;
+}) {
+  const rootRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+
+    if (!root) {
+      return;
+    }
+
+    const characters = gsap.utils.toArray<HTMLElement>(
+      ".ui-commandment-description__char",
+      root,
     );
-  }
-  return title;
-};
+
+    if (!characters.length) {
+      return;
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(characters, { clearProps: "all" });
+      return;
+    }
+
+    let tween: gsap.core.Tween | null = null;
+
+    const playAnimation = () => {
+      tween?.kill();
+      gsap.killTweensOf(characters);
+      gsap.set(characters, {
+        opacity: 0,
+        y: 10,
+        filter: "blur(8px)",
+      });
+      tween = gsap.to(characters, {
+        opacity: 1,
+        y: 0,
+        filter: "blur(0px)",
+        duration: 0.45,
+        ease: "power2.out",
+        stagger: 0.024,
+        clearProps: "filter",
+      });
+    };
+
+    const rect = root.getBoundingClientRect();
+    const isVisible =
+      rect.bottom > 0 &&
+      rect.top < window.innerHeight &&
+      rect.right > 0 &&
+      rect.left < window.innerWidth;
+
+    if (isVisible) {
+      playAnimation();
+    } else {
+      gsap.set(characters, {
+        opacity: 0,
+        y: 10,
+        filter: "blur(8px)",
+      });
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          playAnimation();
+        }
+      },
+      { threshold: 0.35 },
+    );
+
+    observer.observe(root);
+
+    return () => {
+      observer.disconnect();
+      tween?.kill();
+      gsap.killTweensOf(characters);
+    };
+  }, [text]);
+
+  return (
+    <p className={className}>
+      <span ref={rootRef} className="block">
+        {text.split(/(\s+)/).map((token, tokenIndex) => {
+          if (!token) {
+            return null;
+          }
+
+          if (/^\s+$/.test(token)) {
+            return <React.Fragment key={tokenIndex}>{token}</React.Fragment>;
+          }
+
+          return (
+            <span
+              key={`${tokenIndex}-${token}`}
+              className="inline-block whitespace-nowrap"
+            >
+              {Array.from(token).map((character, characterIndex) => (
+                <span
+                  key={`${tokenIndex}-${characterIndex}-${character}`}
+                  className="ui-commandment-description__char inline-block will-change-[transform,filter,opacity]"
+                >
+                  {character}
+                </span>
+              ))}
+            </span>
+          );
+        })}
+      </span>
+    </p>
+  );
+}
 
 export default function Commandments({
   commandments,
@@ -461,11 +558,12 @@ export default function Commandments({
         {commandment.number}
       </span>
       <h3 className="font-bebas-neue mb-4 w-full max-w-4xl text-[clamp(2.75rem,5vw,3.75rem)] leading-[1.08] font-normal uppercase text-white">
-        {renderTitle(commandment.title)}
+        {commandment.title}
       </h3>
-      <p className="max-w-2xl text-2xl leading-[1.44] font-light tracking-[0.02em] text-white/70">
-        {commandment.description}
-      </p>
+      <AnimatedCommandmentDescription
+        text={commandment.description}
+        className="max-w-2xl text-2xl leading-[1.44] font-light tracking-[0.02em] text-white/70"
+      />
     </div>
   );
 
@@ -581,12 +679,13 @@ export default function Commandments({
               {/* Title & Description */}
               <div className="flex flex-col items-center">
                 <h3 className="mb-5 w-full max-w-[84%] text-center font-bebas-neue text-[24px] leading-[26px] font-normal tracking-[0.02em] text-white sm:max-w-[88%] sm:text-[28px] sm:leading-[30px]">
-                  {renderTitle(commandment.title)}
+                  {commandment.title}
                 </h3>
 
-                <p className="px-4 text-center font-inter text-[17px] leading-[1.4] font-light tracking-[0.02em] text-white/80 sm:text-[18px] sm:leading-[1.42]">
-                  {commandment.description}
-                </p>
+                <AnimatedCommandmentDescription
+                  text={commandment.description}
+                  className="px-4 text-center font-inter text-[17px] leading-[1.4] font-light tracking-[0.02em] text-white/80 sm:text-[18px] sm:leading-[1.42]"
+                />
               </div>
             </div>
           ))}
