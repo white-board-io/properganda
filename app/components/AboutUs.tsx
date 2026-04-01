@@ -375,7 +375,7 @@ export default function AboutUs() {
                   },
                   {
                     text:
-                      " for ambitious brands and organisations looking to create relevance, resonance and real-world impact.",
+                      " for ambitious brands and organisations looking to create relevance, resonance, and real-world impact.",
                   },
                 ]}
                 stagger={0.014}
