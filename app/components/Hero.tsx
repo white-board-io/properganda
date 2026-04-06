@@ -120,6 +120,7 @@ export default function Hero({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    const form = e.currentTarget;
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -130,7 +131,7 @@ export default function Hero({
       toast.success("You should hear back from us soon");
       setIsModalOpen(false);
       setFormData({ name: "", email: "", mobile: "", message: "" });
-      e.currentTarget.reset();
+      form.reset();
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
