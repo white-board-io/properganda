@@ -5,6 +5,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 import { BlurTextReveal } from "@/components/ui/blur-text-reveal";
 import { SectionShell } from "@/components/ui/section-shell";
@@ -116,7 +117,7 @@ export default function Hero({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
@@ -129,6 +130,7 @@ export default function Hero({
       toast.success("You should hear back from us soon");
       setIsModalOpen(false);
       setFormData({ name: "", email: "", mobile: "", message: "" });
+      e.currentTarget.reset();
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -450,9 +452,11 @@ export default function Hero({
                   {/* Submit */}
                   <button
                     type="submit"
-                    className="mt-1 w-full rounded-full bg-[#169D52] py-4 text-sm font-semibold text-white transition-colors hover:bg-green-700 active:scale-[0.98]"
+                    disabled={isSubmitting}
+                    className="mt-1 flex w-full items-center justify-center rounded-full bg-[#169D52] py-4 text-sm font-semibold text-white transition-colors hover:bg-green-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
                   >
-                    Request for a call back
+                    {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {isSubmitting ? "Sending..." : "Request for a call back"}
                   </button>
                 </form>
               </div>
@@ -606,8 +610,10 @@ export default function Hero({
                 {/* Submit */}
                 <button
                   type="submit"
-                  className="mt-1 w-full rounded-full bg-[#169D52] py-4 text-sm font-semibold text-white transition-colors hover:bg-green-700 active:scale-[0.98]"
+                  disabled={isSubmitting}
+                  className="mt-1 flex w-full items-center justify-center rounded-full bg-[#169D52] py-4 text-sm font-semibold text-white transition-colors hover:bg-green-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
                 >
+                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {isSubmitting ? "Sending..." : "Request for a call back"}
                 </button>
               </form>

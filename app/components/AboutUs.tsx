@@ -422,7 +422,7 @@ export default function AboutUs() {
                 href="#contact"
                 className="inline-block text-sm md:text-base font-medium text-white underline decoration-white/30 underline-offset-8 transition-colors hover:decoration-white"
               >
-                Be a part of Us
+                Work With Us
               </a>
             </section>
           </section>

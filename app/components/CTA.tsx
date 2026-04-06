@@ -2,7 +2,7 @@
 
 import { type FormEvent, useState } from "react";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -107,7 +107,8 @@ export default function CTA() {
               onSubmit={async (e: FormEvent<HTMLFormElement>) => {
                 e.preventDefault();
                 setIsSubmitting(true);
-                const fd = new FormData(e.currentTarget);
+                const form = e.currentTarget;
+                const fd = new FormData(form);
                 try {
                   const res = await fetch("/api/contact", {
                     method: "POST",
@@ -122,7 +123,7 @@ export default function CTA() {
                   });
                   if (!res.ok) throw new Error("Failed to send");
                   toast.success("You should hear back from us soon");
-                  e.currentTarget.reset();
+                  form.reset();
                   setSelectedService("");
                 } catch {
                   toast.error("Something went wrong. Please try again.");
@@ -235,21 +236,24 @@ export default function CTA() {
                   type="submit"
                   variant="accent"
                   disabled={isSubmitting}
-                  className="group mt-4 h-[62px] w-full sm:w-auto sm:px-8 rounded-[20px] font-inter text-[16px] font-semibold leading-none tracking-[0.02em] opacity-100"
+                  className="group mt-4 h-[62px] w-full sm:w-auto sm:px-8 rounded-[20px] font-inter text-[16px] font-semibold leading-none tracking-[0.02em] opacity-100 disabled:opacity-80 flex items-center justify-center gap-2"
                 >
+                  {isSubmitting && <Loader2 className="h-5 w-5 animate-spin" />}
                   {isSubmitting ? "Sending..." : "Request for a call back"}
-                  <svg
-                    className="h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <line x1="7" y1="17" x2="17" y2="7" />
-                    <polyline points="7 7 17 7 17 17" />
-                  </svg>
+                  {!isSubmitting && (
+                    <svg
+                      className="h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <line x1="7" y1="17" x2="17" y2="7" />
+                      <polyline points="7 7 17 7 17 17" />
+                    </svg>
+                  )}
                 </Button>
               </div>
             </form>

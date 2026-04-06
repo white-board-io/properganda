@@ -61,6 +61,20 @@ const MANIFESTO_DATA = [
     role: "(AVP & HEAD – Branding & Corporate Communications)",
     icon: "",
   },
+  {
+    id: "jaspreet-kaur",
+    text: "Working with Properganda has been less like working with an agency and more like collaborating with an extension of our own team. Over the last two years, what has stood out is how intuitively they understand what we are trying to achieve. They don’t just deliver, they translate intent, mood, and nuance into work that genuinely resonates. The team has the rare instinct that they bring to the table, the ability to pick up on our pulse without over-explanation, to know when to push boundaries and when to hold back. That balance of creativity and intuition is what sets them apart. In a space where timelines are tight and expectations are constantly evolving, they have always remained dependable, agile, and consistently ahead of the curve, even if it means burning the midnight oil. More than anything, Properganda brings heart into the work, and that’s what makes all the difference.",
+    author: "Jaspreet Kaur",
+    role: "Hero Future Energies",
+    icon: "/images/svg/hfe.svg",
+  },
+  {
+    id: "meghna-a",
+    text: "Working with Shibani & Properganda has been an exceptional experience. The team is prompt in their responses and ensures timely execution of tasks. Their efforts in maintaining our brand’s online presence are appreciated, and we value their dedication to meeting deadlines. Thank you for your support.",
+    author: "Meghna A",
+    role: "Sr. Manager, Communications and Marketing, Nasscom Foundation",
+    icon: "/images/svg/nf.svg",
+  },
 ];
 
 export default function Manifesto() {
