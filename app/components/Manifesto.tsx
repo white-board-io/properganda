@@ -3,8 +3,11 @@
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
+import Fade from "embla-carousel-fade";
+import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 
 import { Card } from "@/components/ui/card";
+import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { SectionShell } from "@/components/ui/section-shell";
 import { SiteContainer } from "@/components/ui/site-container";
 
@@ -31,30 +34,54 @@ function getWordTokens(text: string) {
 
 const MANIFESTO_DATA = [
   {
+    id: "kundan-kumar",
+    text: "Thank you for the excellent support in developing our safety visual identity and campaign materials. Your team has done a great job in creating impactful designs and communication that effectively promote safety awareness among our employees. We truly appreciate your creativity, professionalism, and commitment to the project.",
+    author: "Kundan Kumar",
+    role: "HSE, Hero Future Energies ",
+    icon: "/images/svg/hfe.svg",
+  },
+  {
     id: "tomomi-shimizu",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean faucibus, diam a sodales hendrerit, libero tortor scelerisque arcu, vitae consequat sem diam ut ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean faucibus, diam a sodales hendrerit, libero tortor scelerisque arcu, vitae consequat sem diam ut ex.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean faucibus, diam a sodales hendrerit, libero tortor scelerisque arcu, vitae consequat sem diam ut ex.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    text: "Creative, professional, exploratory, patient and warm. These are the words coming to my mind, when I look back our last 1 year journey with Properganda team. In particular, I love your art and design work, which is underpinned by your deep understanding about who we are. Thank you for feeling and understanding us.",
     author: "Tomomi Shimizu",
-    role: "Founder",
-    avatar: "/manifesto_avatar_1.png",
+    role: "Co-founder & Chief Executive Officer (CEO)",
+    icon: "/images/svg/torii.svg",
   },
   {
-    id: "sarah-jenkins",
-    text: "Our collective approach brings together diverse perspectives to craft campaigns that resonate, brands that endure, and conversations that matter. Every project we undertake is guided by our commitment to purposeful creativity — work that not only captures attention but also drives meaningful change.",
-    author: "Sarah Jenkins",
-    role: "Creative Director",
-    avatar: "/manifesto_avatar_2.png",
+    id: "anjali-bawa",
+    text: "Working with the Properganda team has been a seamless experience. They are extremely prompt and truly function as an extension of our internal team. The level of support and responsiveness they bring makes collaboration effortless. The quality of work delivered is consistently excellent. Once the brief or notes are shared, the team quickly translates them into well-executed outputs with minimal back and forth. Their proactive approach, politeness, and hands-on involvement make them a dependable partner to work with. We genuinely appreciate their professionalism and the ease with which they integrate into ongoing workflows.",
+    author: "Anjali Bawa",
+    role: "Lead - Corporate Communications, BluPine Energy",
+    icon: "/images/svg/bpe.svg",
   },
   {
-    id: "michael-chen",
-    text: "We believe that the most powerful brands are those built on authentic values, told through compelling stories, and designed to make a genuine impact. We don't just make things look good; we make things that do good.",
-    author: "Michael Chen",
-    role: "Lead Designer",
-    avatar: "/manifesto_avatar_3.png",
+    id: "dipankar-bose",
+    text: "Working with Properganda has been an absolute delight… they are still toddlers but boy are they feisty… I was blown over by their very first pitch deck… it stood out because they dared to be different and that in many ways pretty much defines them … the willingness and the guts to walk the path less explored. That is so refreshing in times when agencies mostly play safe and mimic each other. One other aspect that stood out was their proactive approach – even before we could furnish well-structured briefs, they were bubbling with ideas , some exceptional , others crazy, but atleast with them you wouldn’t have to nudge. I must also call out their exceptional client service , Shibani and team were literally 24x7 available on phone or chat, to make sure urgent deadlines were met and any feedback was duly noted. For me and my team , more often than not, Shibani was a panic button ,,, a quick call usually resulted in immediate soothing of nerves and an assurance that stuff would get delivered per schedule. I am sure the years ahead will only see Properganda get bigger, better and crazier… here’s wishing many more triumphs and lotsa action…",
+    author: "Dipankar Bose",
+    role: "(AVP & HEAD – Branding & Corporate Communications)",
+    icon: "",
+  },
+  {
+    id: "jaspreet-kaur",
+    text: "Working with Properganda has been less like working with an agency and more like collaborating with an extension of our own team. Over the last two years, what has stood out is how intuitively they understand what we are trying to achieve. They don’t just deliver, they translate intent, mood, and nuance into work that genuinely resonates. The team has the rare instinct that they bring to the table, the ability to pick up on our pulse without over-explanation, to know when to push boundaries and when to hold back. That balance of creativity and intuition is what sets them apart. In a space where timelines are tight and expectations are constantly evolving, they have always remained dependable, agile, and consistently ahead of the curve, even if it means burning the midnight oil. More than anything, Properganda brings heart into the work, and that’s what makes all the difference.",
+    author: "Jaspreet Kaur",
+    role: "Hero Future Energies",
+    icon: "/images/svg/hfe.svg",
+  },
+  {
+    id: "meghna-a",
+    text: "Working with Shibani & Properganda has been an exceptional experience. The team is prompt in their responses and ensures timely execution of tasks. Their efforts in maintaining our brand’s online presence are appreciated, and we value their dedication to meeting deadlines. Thank you for your support.",
+    author: "Meghna A",
+    role: "Sr. Manager, Communications and Marketing, Nasscom Foundation",
+    icon: "/images/svg/nf.svg",
   },
 ];
 
 export default function Manifesto() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
+    Fade(),
+    WheelGesturesPlugin(),
+  ]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const scrollSnaps = emblaApi?.scrollSnapList() ?? [];
 
@@ -98,10 +125,12 @@ export default function Manifesto() {
       aria-label="Brand manifesto carousel"
     >
       <SiteContainer>
-        <div className="relative mx-auto max-w-4xl">
+        <SectionEyebrow scramble>FROM OUR CLIENTS</SectionEyebrow>
+
+        <div className="relative mx-auto max-w-4xl mt-12 md:mt-16">
           <button
             onClick={scrollPrev}
-            className="absolute left-[-80px] top-[35%] z-10 hidden -translate-y-1/2 scale-150 text-brand-black/40 transition-all duration-300 hover:text-brand-black lg:block"
+            className="absolute left-[-80px] top-[35%] z-10 hidden -translate-y-1/2 scale-150 text-brand-black/40 transition-all duration-300 hover:text-brand-black cursor-pointer lg:block"
             aria-label="Previous slide"
           >
             <svg
@@ -123,7 +152,7 @@ export default function Manifesto() {
 
           <button
             onClick={scrollNext}
-            className="absolute right-[-80px] top-[35%] z-10 hidden -translate-y-1/2 scale-150 text-brand-black/40 transition-all duration-300 hover:text-brand-black lg:block"
+            className="absolute right-[-80px] top-[35%] z-10 hidden -translate-y-1/2 scale-150 text-brand-black/40 transition-all duration-300 hover:text-brand-black cursor-pointer lg:block"
             aria-label="Next slide"
           >
             <svg
@@ -144,17 +173,33 @@ export default function Manifesto() {
           </button>
 
           <div
-            className="cursor-grab overflow-hidden active:cursor-grabbing bg-neutral-cool-50"
+            className="overflow-hidden active:cursor-grabbing bg-neutral-cool-50 h-full"
             ref={emblaRef}
           >
-            <div className="flex">
+            <div className="flex h-full items-stretch">
               {MANIFESTO_DATA.map((slide) => (
                 <div
-                  className="min-w-0 flex-[0_0_100%]"
+                  className="relative min-w-0 flex-[0_0_100%] flex flex-col pt-6 md:pt-6"
                   key={slide.id}
                 >
-                  <Card className="relative mb-14 p-10 md:p-16 rounded-xl">
-                    <div className="ui-copy">
+                  <svg
+                    className="ui-text-accent absolute left-8 top-0 z-10 h-10 w-12 md:left-12 md:h-12 md:w-14"
+                    viewBox="0 0 56 48"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 48V30.622C0 14.386 8.731 4.187 20.207 0L24.414 9.402C17.359 12.608 13.448 18.108 12.897 24.572H24.414V48H0Z"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M31.586 48V30.622C31.586 14.386 40.317 4.187 51.793 0L56 9.402C48.945 12.608 45.034 18.108 44.483 24.572H56V48H31.586Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+
+                  <Card className="relative mb-14 p-10 md:p-16 rounded-xl flex-1 flex flex-col justify-center">
+                    <div className="ui-copy mt-4 max-h-[200px] mx-auto overflow-y-auto pr-4 custom-scrollbar md:mt-6">
                       {getWordTokens(slide.text).map((token) => (
                         <span
                           key={`${slide.id}-${token.id}`}
@@ -181,41 +226,42 @@ export default function Manifesto() {
                     </svg>
                   </Card>
 
-                  <div className="flex flex-col items-end justify-between gap-8 px-10 md:flex-row">
+                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 px-10">
                     <div className="flex items-center gap-5">
-                      <div className="relative h-16 w-16 overflow-hidden rounded-full grayscale ring-1 ring-black/5">
-                        <Image
-                          src={slide.avatar}
-                          alt={slide.author}
-                          fill
-                          sizes="64px"
-                          className="object-cover"
-                        />
-                      </div>
                       <div>
                         <h3 className="text-lg font-bold leading-tight tracking-tight text-brand-black">
                           {slide.author}
                         </h3>
+                        {slide.icon && (
+                          <div className="mt-3 md:hidden">
+                            <Image
+                              src={slide.icon}
+                              alt={`${slide.author} client logo`}
+                              width={96}
+                              height={40}
+                              className="h-8 w-auto object-contain"
+                            />
+                          </div>
+                        )}
                         <p className="ui-caption mt-1 text-brand-gray-dark">
                           {slide.role}
                         </p>
                       </div>
                     </div>
+                    <div className="hidden md:flex items-center justify-end">
+                      {slide.icon && (
+                        <Image
+                          src={slide.icon}
+                          alt={`${slide.author} client logo`}
+                          width={100}
+                          height={100}
+                          className="h-10 w-auto"
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-
-          <div className="pointer-events-none absolute bottom-[115px] right-[40px] z-10 hidden md:block">
-            <div className="flex items-center gap-2">
-              <Image
-                src="/images/svg/torii.svg"
-                alt="Torii"
-                width={80}
-                height={80}
-                className="h-10 w-auto"
-              />
             </div>
           </div>
 
