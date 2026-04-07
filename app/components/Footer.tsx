@@ -21,8 +21,19 @@ const SOCIAL_LINKS = [
   { href: "https://www.youtube.com/@PropergandaCreative/", label: "Youtube", icon: "/images/svg/youtube.svg" },
 ];
 
-export default function Footer() {
+export default function Footer({
+  variant = "default",
+}: {
+  variant?: "default" | "commandments";
+}) {
   const currentYear = new Date().getFullYear();
+  const navLinks = NAV_LINKS.map((link) => ({
+    ...link,
+    href:
+      variant === "commandments" && link.href !== "#contact"
+        ? `/${link.href}`
+        : link.href,
+  }));
 
   return (
     <footer className="bg-brand-black pb-12 pt-20 text-white font-inter" role="contentinfo">
@@ -65,7 +76,7 @@ export default function Footer() {
 
           <div className="flex flex-col gap-20 md:gap-24">
             <nav className="grid grid-cols-2 gap-x-6 gap-y-3 md:flex md:flex-wrap md:justify-between md:gap-y-4">
-              {NAV_LINKS.map((link) => (
+              {navLinks.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
@@ -78,7 +89,7 @@ export default function Footer() {
 
             <div className="flex flex-col gap-10 sm:flex-row sm:items-center sm:justify-between sm:gap-12">
               <div className="space-y-6">
-                <h3 className="ui-footer-link">Location</h3>
+                <h3 className="font-medium text-[1.25rem] leading-[1.625rem]">Location</h3>
                 <div className="space-y-2 text-lg text-brand-gray">
                   <p>Lower Parel, Mumbai</p>
                 </div>

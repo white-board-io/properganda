@@ -4,10 +4,12 @@ import { useEffect } from "react";
 
 import Header from "../components/Header";
 import Hero from "../components/Hero";
-import Commandments from "../components/Commandments";
+
 import CTA from "../components/CTA";
 import Footer from "../components/Footer";
 import { COMMANDMENTS } from "./data";
+import Commandments from "../components/Commandments";
+
 
 export default function CommandmentsPageClient() {
   useEffect(() => {
@@ -47,7 +49,7 @@ export default function CommandmentsPageClient() {
       </main>
 
       <div className="md:snap-start md:snap-always">
-        <Footer />
+        <Footer variant="commandments" />
       </div>
     </div>
   );

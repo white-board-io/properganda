@@ -14,16 +14,21 @@ const NAV_ITEMS = [
   { name: "Contact", href: "#contact" },
 ];
 
-
-
 export default function Header({
-  variant: _variant = "default",
+  variant = "default",
 }: {
   variant?: "default" | "commandments";
 }) {
-  void _variant;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [pastHero, setPastHero] = useState(false);
+
+  const navItems = NAV_ITEMS.map((item) => ({
+    ...item,
+    href:
+      variant === "commandments" && item.href !== "#contact"
+        ? `/${item.href}`
+        : item.href,
+  }));
 
   useEffect(() => {
     const onScroll = () => {
@@ -90,7 +95,7 @@ export default function Header({
             aria-label="Main navigation"
             className="hidden items-center gap-10 lg:gap-14 md:flex whitespace-nowrap z-10"
           >
-            {NAV_ITEMS.map((item) => (
+            {navItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
@@ -137,7 +142,7 @@ export default function Header({
           )}
         >
           <nav className="flex flex-col items-center gap-6 pb-8 pt-4">
-            {NAV_ITEMS.map((item) => (
+            {navItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}

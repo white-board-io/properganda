@@ -34,6 +34,13 @@ function getWordTokens(text: string) {
 
 const MANIFESTO_DATA = [
   {
+    id: "uma-chatterjee",
+    text: "Properganda brings a unique blend of creativity and commitment to the table. What impresses me most is their ability to be seriously funny in ideation and funnily serious in execution. They balance playful energy with professional excellence, making them refreshingly unconventional in a world of conventional agencies - and consistently effective.",
+    author: "Uma Chatterjee",
+    role: "Founder - Director, SANJOG INDIA\nCo-Founder, Torii International",
+    icon: "/images/svg/hfe.svg",
+  },
+  {
     id: "kundan-kumar",
     text: "Thank you for the excellent support in developing our safety visual identity and campaign materials. Your team has done a great job in creating impactful designs and communication that effectively promote safety awareness among our employees. We truly appreciate your creativity, professionalism, and commitment to the project.",
     author: "Kundan Kumar",
@@ -243,7 +250,7 @@ export default function Manifesto() {
                             />
                           </div>
                         )}
-                        <p className="ui-caption mt-1 text-brand-gray-dark">
+                        <p className="ui-caption mt-1 text-brand-gray-dark whitespace-pre-line">
                           {slide.role}
                         </p>
                       </div>

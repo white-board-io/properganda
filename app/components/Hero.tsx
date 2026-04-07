@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { createPortal } from "react-dom";
 
 import { BlurTextReveal } from "@/components/ui/blur-text-reveal";
 import { SectionShell } from "@/components/ui/section-shell";
@@ -19,6 +20,12 @@ const COMMANDMENTS_HERO_SUBTITLE = "Ways of Working";
 const COMMANDMENTS_HERO_SUBTITLE_LINES = [COMMANDMENTS_HERO_SUBTITLE] as const;
 
 type HeroVariant = "default" | "commandments";
+type ContactFormData = {
+  name: string;
+  email: string;
+  mobile: string;
+  message: string;
+};
 
 gsap.registerPlugin(useGSAP);
 
@@ -93,11 +100,177 @@ function LetsTalkBadge({
   );
 }
 
+function ContactModal({
+  isOpen,
+  formData,
+  isSubmitting,
+  onClose,
+  onChange,
+  onSubmit,
+}: {
+  isOpen: boolean;
+  formData: ContactFormData;
+  isSubmitting: boolean;
+  onClose: () => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void | Promise<void>;
+}) {
+  useLayoutEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const { body, documentElement } = document;
+    const scrollY = window.scrollY;
+    const originalBodyOverflow = body.style.overflow;
+    const originalBodyPosition = body.style.position;
+    const originalBodyTop = body.style.top;
+    const originalBodyWidth = body.style.width;
+    const originalHtmlOverflow = documentElement.style.overflow;
+    const originalHtmlScrollBehavior = documentElement.style.scrollBehavior;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    body.style.overflow = "hidden";
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+    documentElement.style.overflow = "hidden";
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      documentElement.style.scrollBehavior = "auto";
+      body.style.overflow = originalBodyOverflow;
+      body.style.position = originalBodyPosition;
+      body.style.top = originalBodyTop;
+      body.style.width = originalBodyWidth;
+      documentElement.style.overflow = originalHtmlOverflow;
+
+      window.removeEventListener("keydown", handleKeyDown);
+      window.scrollTo(0, scrollY);
+      documentElement.style.scrollBehavior = originalHtmlScrollBehavior;
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen || typeof document === "undefined") {
+    return null;
+  }
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[200] overflow-y-auto overscroll-contain bg-black/70 px-4 py-4 backdrop-blur-sm sm:px-6 sm:py-8"
+      onClick={onClose}
+    >
+      <div className="flex min-h-full items-center justify-center">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="contact-modal-title"
+          className="relative w-full max-w-md pt-12"
+          onClick={(event) => event.stopPropagation()}
+        >
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute -right-1 top-0 flex h-9 w-9 items-center justify-center rounded-full text-white transition-colors hover:bg-white/20 sm:-right-2"
+            aria-label="Close modal"
+          >
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+              <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </button>
+
+          <div className="relative max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl sm:max-h-[calc(100dvh-4rem)] sm:p-8">
+            <h2 id="contact-modal-title" className="sr-only">
+              Contact us
+            </h2>
+
+            <form onSubmit={onSubmit} className="flex flex-col gap-5">
+              <div className="flex flex-col gap-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  Name<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  placeholder="Enter your Name"
+                  value={formData.name}
+                  onChange={onChange}
+                  className="rounded-md border border-[#000000] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                />
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  Email<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  placeholder="Enter your email id"
+                  value={formData.email}
+                  onChange={onChange}
+                  className="rounded-md border border-[#000000] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                />
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <label className="text-sm font-semibold text-gray-900">Mobile</label>
+                <input
+                  type="tel"
+                  name="mobile"
+                  placeholder="Enter your Mobile number"
+                  value={formData.mobile}
+                  onChange={onChange}
+                  className="rounded-md border border-[#000000] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                />
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  How can we help?<span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  name="message"
+                  required
+                  rows={5}
+                  placeholder="Write three wishes we can grant for you"
+                  value={formData.message}
+                  onChange={onChange}
+                  className="resize-none rounded-md border border-[#000000] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="mt-1 flex w-full items-center justify-center rounded-full bg-[#169D52] py-4 text-sm font-semibold text-white transition-colors hover:bg-green-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isSubmitting ? "Sending..." : "Request for a call back"}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
 export default function Hero({
   variant = "default",
 }: {
   variant?: HeroVariant;
 }) {
+  const heroVideoRef = useRef<HTMLVideoElement | null>(null);
   const slotCharRefs = useRef<Array<Array<HTMLSpanElement | null>>>([]);
   const commandmentSubtitleCharRefs = useRef<Array<Array<HTMLSpanElement | null>>>(
     [],
@@ -109,13 +282,14 @@ export default function Hero({
     email: "",
     mobile: "",
     message: "",
-  });
+  } satisfies ContactFormData);
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const closeModal = () => setIsModalOpen(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -129,7 +303,7 @@ export default function Hero({
       });
       if (!res.ok) throw new Error("Failed to send");
       toast.success("You should hear back from us soon");
-      setIsModalOpen(false);
+      closeModal();
       setFormData({ name: "", email: "", mobile: "", message: "" });
       form.reset();
     } catch {
@@ -138,6 +312,72 @@ export default function Hero({
       setIsSubmitting(false);
     }
   };
+
+  const contactModal = (
+    <ContactModal
+      isOpen={isModalOpen}
+      formData={formData}
+      isSubmitting={isSubmitting}
+      onClose={closeModal}
+      onChange={handleFormChange}
+      onSubmit={handleSubmit}
+    />
+  );
+
+  useLayoutEffect(() => {
+    if (variant !== "default") {
+      return;
+    }
+
+    const video = heroVideoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    let isActive = true;
+
+    const attemptPlay = async () => {
+      if (!isActive) {
+        return;
+      }
+
+      video.muted = true;
+      video.defaultMuted = true;
+      video.playsInline = true;
+
+      try {
+        await video.play();
+      } catch {
+        // Mobile browsers can reject the first autoplay attempt; we retry on load/visibility events.
+      }
+    };
+
+    const handlePlaybackReady = () => {
+      if (video.paused) {
+        void attemptPlay();
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible" && video.paused) {
+        void attemptPlay();
+      }
+    };
+
+    void attemptPlay();
+
+    video.addEventListener("loadeddata", handlePlaybackReady);
+    video.addEventListener("canplay", handlePlaybackReady);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      isActive = false;
+      video.removeEventListener("loadeddata", handlePlaybackReady);
+      video.removeEventListener("canplay", handlePlaybackReady);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [variant]);
 
   useGSAP(
     () => {
@@ -279,10 +519,14 @@ export default function Hero({
       >
         <section className="absolute inset-0">
           <video
+            ref={heroVideoRef}
             autoPlay
             loop
             muted
             playsInline
+            preload="auto"
+            poster="/images/hero-bg.png"
+            disableRemotePlayback
             className="object-cover object-center w-full h-full opacity-100"
           >
             <source src="/videos/PPG-Home.mp4" type="video/mp4" />
@@ -367,103 +611,7 @@ export default function Hero({
             </section>
           </section>
 
-          {/* Contact Modal */}
-          {isModalOpen && (
-            <div
-              className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
-              onClick={() => setIsModalOpen(false)}
-            >
-              <div className="relative mx-4 flex w-full max-w-md flex-col" onClick={(e) => e.stopPropagation()}>
-                {/* Close button — outside the card */}
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="mb-3 ml-auto -mr-10 flex h-9 w-9 items-center justify-center rounded-full text-white transition-colors hover:bg-white/20"
-                  aria-label="Close modal"
-                >
-                  <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-                    <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  </svg>
-                </button>
-                <div
-                  className="w-full rounded-2xl bg-white p-12 shadow-2xl"
-                >
-
-                <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                  {/* Name */}
-                  <div className="flex flex-col gap-3">
-                    <label className="text-sm font-semibold text-gray-900">
-                      Name<span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      required
-                      placeholder="Enter your Name"
-                      value={formData.name}
-                      onChange={handleFormChange}
-                      className="rounded-md border border-[#000000] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500"
-                    />
-                  </div>
-
-                  {/* Email */}
-                  <div className="flex flex-col gap-3">
-                    <label className="text-sm font-semibold text-gray-900">
-                      Email<span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      placeholder="Enter your email id"
-                      value={formData.email}
-                      onChange={handleFormChange}
-                      className="rounded-md border border-[#000000] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500"
-                    />
-                  </div>
-
-                  {/* Mobile */}
-                  <div className="flex flex-col gap-3">
-                    <label className="text-sm font-semibold text-gray-900">Mobile</label>
-                    <input
-                      type="tel"
-                      name="mobile"
-                      placeholder="Enter your Mobile number"
-                      value={formData.mobile}
-                      onChange={handleFormChange}
-                      className="rounded-md border border-[#000000] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500"
-                    />
-                  </div>
-
-                  {/* Message */}
-                  <div className="flex flex-col gap-3">
-                    <label className="text-sm font-semibold text-gray-900">
-                      How can we help?<span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      name="message"
-                      required
-                      rows={5}
-                      placeholder="Write three wishes we can grant for you"
-                      value={formData.message}
-                      onChange={handleFormChange}
-                      className="resize-none rounded-md border border-[#000000] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500"
-                    />
-                  </div>
-
-                  {/* Submit */}
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="mt-1 flex w-full items-center justify-center rounded-full bg-[#169D52] py-4 text-sm font-semibold text-white transition-colors hover:bg-green-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
-                  >
-                    {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    {isSubmitting ? "Sending..." : "Request for a call back"}
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-          )}
+          {contactModal}
         </SiteContainer>
         <LetsTalkBadge
           ariaLabel="Let's Talk Button"
@@ -525,103 +673,7 @@ export default function Hero({
           </p>
         </div>
 
-        {/* Contact Modal */}
-        {isModalOpen && (
-          <div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
-            onClick={() => setIsModalOpen(false)}
-          >
-            <div className="relative mx-4 flex w-full max-w-md flex-col" onClick={(e) => e.stopPropagation()}>
-              {/* Close button — outside the card */}
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="mb-3 ml-auto -mr-10 flex h-9 w-9 items-center justify-center rounded-full text-white transition-colors hover:bg-white/20"
-                aria-label="Close modal"
-              >
-                <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-                  <path d="M1 1l14 14M15 1L1 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </button>
-              <div
-                className="w-full rounded-2xl bg-white p-8 shadow-2xl"
-              >
-
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                {/* Name */}
-                <div className="flex flex-col gap-3">
-                  <label className="text-sm font-semibold text-gray-900">
-                    Name<span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="Enter your Name"
-                    value={formData.name}
-                    onChange={handleFormChange}
-                    className="rounded-md border border-[#000000] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500"
-                  />
-                </div>
-
-                {/* Email */}
-                <div className="flex flex-col gap-3">
-                  <label className="text-sm font-semibold text-gray-900">
-                    Email<span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    placeholder="Enter your email id"
-                    value={formData.email}
-                    onChange={handleFormChange}
-                    className="rounded-md border border-[#000000] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500"
-                  />
-                </div>
-
-                {/* Mobile */}
-                <div className="flex flex-col gap-3">
-                  <label className="text-sm font-semibold text-gray-900">Mobile</label>
-                  <input
-                    type="tel"
-                    name="mobile"
-                    placeholder="Enter your Mobile number"
-                    value={formData.mobile}
-                    onChange={handleFormChange}
-                    className="rounded-md border border-[#000000] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500"
-                  />
-                </div>
-
-                {/* Message */}
-                <div className="flex flex-col gap-3">
-                  <label className="text-sm font-semibold text-gray-900">
-                    How can we help?<span className="text-red-500">*</span>
-                  </label>
-                  <textarea
-                    name="message"
-                    required
-                    rows={5}
-                    placeholder="Write three wishes we can grant for you"
-                    value={formData.message}
-                    onChange={handleFormChange}
-                    className="resize-none rounded-md border border-[#000000] px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500"
-                  />
-                </div>
-
-                {/* Submit */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="mt-1 flex w-full items-center justify-center rounded-full bg-[#169D52] py-4 text-sm font-semibold text-white transition-colors hover:bg-green-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
-                >
-                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  {isSubmitting ? "Sending..." : "Request for a call back"}
-                </button>
-              </form>
-            </div>
-          </div>
-          </div>
-        )}
+        {contactModal}
       </SiteContainer>
       <LetsTalkBadge
         ariaLabel="Let's Talk"
