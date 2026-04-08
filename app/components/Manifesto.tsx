@@ -38,7 +38,7 @@ const MANIFESTO_DATA = [
     text: "Properganda brings a unique blend of creativity and commitment to the table. What impresses me most is their ability to be seriously funny in ideation and funnily serious in execution. They balance playful energy with professional excellence, making them refreshingly unconventional in a world of conventional agencies - and consistently effective.",
     author: "Uma Chatterjee",
     role: "Founder - Director, SANJOG INDIA\nCo-Founder, Torii International",
-    icon: "/images/svg/sanjog.svg",
+    icon: "/images/svg/torii.svg",
   },
   {
     id: "kundan-kumar",
