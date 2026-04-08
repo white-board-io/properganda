@@ -659,33 +659,35 @@ export default function Commandments({
           {commandments.map((commandment) => (
             <div
               key={commandment.number}
-              className="w-full shrink-0 snap-center flex flex-col items-center justify-center px-6 relative"
+              className="relative h-full w-full shrink-0 snap-center px-6"
             >
-              {/* Top Number indicator with lines */}
-              <div className="mb-8 flex w-full items-center justify-center">
-                <div className="flex-1 flex items-center h-full">
-                  <div className="flex-1 h-[2px] bg-white"></div>
-                  <div className="w-[8px] h-[8px] rounded-full bg-white shrink-0 ml-[-2px]"></div>
+              <div className="grid h-full w-full grid-rows-[auto_minmax(0,1fr)] pt-28 sm:pt-20">
+                {/* Top Number indicator with lines */}
+                <div className="mb-8 -mx-6 flex w-[calc(100%+3rem)] items-center justify-center self-start">
+                  <div className="flex h-full flex-1 items-center">
+                    <div className="h-[2px] flex-1 bg-white"></div>
+                    <div className="ml-[-2px] h-[8px] w-[8px] shrink-0 rounded-full bg-white"></div>
+                  </div>
+                  <div className="shrink-0 px-6 text-center font-bebas-neue text-[110px] leading-none font-bold text-[#169D52] sm:text-[130px]">
+                    {commandment.number}
+                  </div>
+                  <div className="flex h-full flex-1 items-center">
+                    <div className="mr-[-2px] h-[8px] w-[8px] shrink-0 rounded-full bg-white"></div>
+                    <div className="h-[2px] flex-1 bg-white"></div>
+                  </div>
                 </div>
-                <div className="px-6 text-[110px] sm:text-[130px] leading-none text-[#169D52] font-bebas-neue font-bold text-center shrink-0">
-                  {commandment.number}
-                </div>
-                <div className="flex-1 flex items-center h-full">
-                  <div className="w-[8px] h-[8px] rounded-full bg-white shrink-0 mr-[-2px]"></div>
-                  <div className="flex-1 h-[2px] bg-white"></div>
-                </div>
-              </div>
 
-              {/* Title & Description */}
-              <div className="flex flex-col items-center">
-                <h3 className="mb-5 w-full max-w-[84%] text-center font-bebas-neue text-[24px] leading-[26px] font-normal tracking-[0.02em] text-white sm:max-w-[88%] sm:text-[28px] sm:leading-[30px]">
-                  {commandment.title}
-                </h3>
+                {/* Title & Description */}
+                <div className="flex w-full flex-col items-center justify-start pb-28">
+                  <h3 className="mb-5 w-full max-w-[84%] text-center font-bebas-neue text-[24px] leading-[26px] font-normal tracking-[0.02em] text-white sm:max-w-[88%] sm:text-[28px] sm:leading-[30px]">
+                    {commandment.title}
+                  </h3>
 
-                <AnimatedCommandmentDescription
-                  text={commandment.description}
-                  className="px-4 text-center font-inter text-[17px] leading-[1.4] font-light tracking-[0.02em] text-white/80 sm:text-[18px] sm:leading-[1.42]"
-                />
+                  <AnimatedCommandmentDescription
+                    text={commandment.description}
+                    className="px-4 text-center font-inter text-[17px] leading-[1.4] font-light tracking-[0.02em] text-white/80 sm:text-[18px] sm:leading-[1.42]"
+                  />
+                </div>
               </div>
             </div>
           ))}
