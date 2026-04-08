@@ -42,6 +42,9 @@ export const metadata: Metadata = {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
   },
+  openGraph: {
+    images: ["/images/PROPERGANDA-meta.png"],
+  },
 };
 
 export default function RootLayout({

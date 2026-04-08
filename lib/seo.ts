@@ -31,7 +31,7 @@ export const siteConfig = {
       DEFAULT_SITE_URL,
   ),
   defaultDescription:
-    "Properganda is a creative collective that helps brands, causes, and communities build memorable identities, campaigns, stories, and conversations with conscience.",
+    "Properganda is a creative agency for branding, content, films, and digital storytelling with a focus on positive impact.",
   defaultKeywords: [
     "Properganda",
     "brand strategy",
@@ -56,7 +56,7 @@ export function createPageMetadata({
   path = "/",
   keywords = [],
 }: PageMetadataInput): Metadata {
-  const socialTitle = `${title} | ${siteConfig.name}`;
+  const socialTitle = `${title}`;
 
   return {
     title,
@@ -72,11 +72,13 @@ export function createPageMetadata({
       title: socialTitle,
       url: absoluteUrl(path),
       siteName: siteConfig.name,
+      images: ["/images/PROPERGANDA-meta.png"],
     },
     twitter: {
       description,
-      card: "summary",
+      card: "summary_large_image",
       title: socialTitle,
+      images: ["/images/PROPERGANDA-meta.png"],
     },
   };
 }

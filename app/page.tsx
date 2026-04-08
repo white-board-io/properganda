@@ -12,7 +12,7 @@ import Footer from "./components/Footer";
 export const metadata: Metadata = createPageMetadata({
   title: "Properganda",
   description:
-    "Properganda is putting the finishing touches on a new digital experience. The full marketing site is coming soon.",
+    "Properganda is a creative agency for branding, content, films, and digital storytelling with a focus on positive impact.",
   path: "/",
   keywords: [
     "creative collective",

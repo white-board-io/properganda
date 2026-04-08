@@ -65,8 +65,8 @@ const MANIFESTO_DATA = [
     id: "dipankar-bose",
     text: "Working with Properganda has been an absolute delight… they are still toddlers but boy are they feisty… I was blown over by their very first pitch deck… it stood out because they dared to be different and that in many ways pretty much defines them … the willingness and the guts to walk the path less explored. That is so refreshing in times when agencies mostly play safe and mimic each other. One other aspect that stood out was their proactive approach – even before we could furnish well-structured briefs, they were bubbling with ideas , some exceptional , others crazy, but atleast with them you wouldn’t have to nudge. I must also call out their exceptional client service , Shibani and team were literally 24x7 available on phone or chat, to make sure urgent deadlines were met and any feedback was duly noted. For me and my team , more often than not, Shibani was a panic button ,,, a quick call usually resulted in immediate soothing of nerves and an assurance that stuff would get delivered per schedule. I am sure the years ahead will only see Properganda get bigger, better and crazier… here’s wishing many more triumphs and lotsa action…",
     author: "Dipankar Bose",
-    role: "(AVP & HEAD – Branding & Corporate Communications)",
-    icon: "",
+    role: "AVP & HEAD – Branding & Corporate Communications",
+    icon:"/images/svg/hfe.svg",
   },
   {
     id: "jaspreet-kaur",
