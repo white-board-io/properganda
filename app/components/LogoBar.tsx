@@ -71,16 +71,6 @@ export default function LogoBar() {
         const tl = gsap.timeline({ paused: true });
 
         tl.fromTo(
-          row,
-          {
-            clipPath: "inset(0 46% 0 46% round 999px)",
-          },
-          {
-            clipPath: "inset(0 0% 0 0% round 999px)",
-            duration: 0.85,
-            ease: "power2.out",
-          },
-        ).fromTo(
           items,
           {
             autoAlpha: 0,
@@ -103,10 +93,13 @@ export default function LogoBar() {
               from: "center",
             },
             onComplete: () => {
-              gsap.set(items, { clearProps: "filter,transformOrigin" });
+              gsap.set(row, { clearProps: "clipPath" });
+              gsap.set(items, {
+                clearProps: "filter,transformOrigin,scale,x,y,xPercent,yPercent,rotate,rotateX,rotateY",
+              });
             },
           },
-          "<+0.06",
+          0,
         );
 
         const scrollTrigger = ScrollTrigger.create({
