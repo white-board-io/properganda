@@ -8,6 +8,7 @@ import Services from "./components/Services";
 import Manifesto from "./components/Manifesto";
 import CTA from "./components/CTA";
 import Footer from "./components/Footer";
+import MothersDayFloatingButton from "./components/MothersDayFloatingButton";
 
 export const metadata: Metadata = createPageMetadata({
   title: "Properganda",
@@ -36,6 +37,7 @@ export default function Home() {
         <CTA />
       </main>
       <Footer />
+      <MothersDayFloatingButton />
     </>
   );
 }

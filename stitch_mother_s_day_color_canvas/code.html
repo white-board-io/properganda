@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mama's Art - Coloring Studio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Quicksand:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface": "#181c1d",
+                    "surface-variant": "#e0e3e4",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface-variant": "#534340",
+                    "outline": "#85736f",
+                    "tertiary-container": "#e0a083",
+                    "on-tertiary": "#ffffff",
+                    "surface-container": "#ebeeef",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f1f4f5",
+                    "inverse-on-surface": "#eef1f2",
+                    "on-tertiary-fixed-variant": "#693b24",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#bdcbb3",
+                    "surface-dim": "#d7dadb",
+                    "on-primary-container": "#693227",
+                    "inverse-surface": "#2d3132",
+                    "secondary": "#55624f",
+                    "surface": "#f7fafb",
+                    "inverse-primary": "#ffb4a6",
+                    "error-container": "#ffdad6",
+                    "on-primary": "#ffffff",
+                    "primary-fixed-dim": "#ffb4a6",
+                    "on-secondary-fixed": "#131e0f",
+                    "tertiary-fixed-dim": "#fab799",
+                    "tertiary-fixed": "#ffdbcc",
+                    "on-secondary-fixed-variant": "#3e4a38",
+                    "primary-fixed": "#ffdad3",
+                    "on-primary-fixed-variant": "#6f372c",
+                    "outline-variant": "#d8c2bd",
+                    "on-tertiary-container": "#633620",
+                    "on-tertiary-fixed": "#341101",
+                    "secondary-container": "#d6e4cc",
+                    "surface-container-highest": "#e0e3e4",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#d9e7ce",
+                    "surface-tint": "#8b4d41",
+                    "background": "#f7fafb",
+                    "on-secondary-container": "#596653",
+                    "surface-container-high": "#e6e9ea",
+                    "primary": "#8b4d41",
+                    "primary-container": "#e89b8c",
+                    "on-background": "#181c1d",
+                    "on-secondary": "#ffffff",
+                    "tertiary": "#855239",
+                    "on-primary-fixed": "#380d06",
+                    "surface-bright": "#f7fafb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "container-padding": "32px",
+                    "element-gap": "16px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "headline-md": [
+                            "Quicksand"
+                    ],
+                    "label-caps": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "title-sm": [
+                            "Quicksand"
+                    ],
+                    "display-lg": [
+                            "Quicksand"
+                    ]
+            },
+            "fontSize": {
+                    "headline-md": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "title-sm": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .inner-glow {
+            box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.6), 2px 4px 12px rgba(139, 77, 65, 0.1);
+        }
+        .canvas-shadow {
+            box-shadow: 0 30px 60px -15px rgba(139, 77, 65, 0.08);
+        }
+        .swatch-well {
+            box-shadow: inset 0px 4px 8px rgba(0,0,0,0.1), 0 1px 2px rgba(255,255,255,0.8);
+        }
+        .slider-track-inset {
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);
+        }
+        
+        /* Hide scrollbar for color palette but allow scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen w-full overflow-hidden flex flex-col font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed docked full-width top-0 z-50 flex justify-between items-center w-full px-gutter h-16 bg-surface/60 backdrop-blur-xl border-b border-outline-variant/20 shadow-sm">
+<div class="flex items-center gap-element-gap">
+<button aria-label="Menu" class="flex items-center justify-center p-2 text-on-surface-variant hover:bg-primary-container/20 transition-all duration-200 rounded-full">
+<span class="material-symbols-outlined text-[24px]">menu</span>
+</button>
+<h1 class="text-title-sm font-headline-md text-primary tracking-tight">Mama's Art</h1>
+</div>
+<div class="flex items-center gap-unit">
+<button class="flex items-center justify-center p-2 text-on-surface-variant hover:bg-primary-container/20 transition-all duration-200 rounded-full" title="undo">
+<span class="material-symbols-outlined text-[24px]">undo</span>
+</button>
+<button class="flex items-center justify-center p-2 text-on-surface-variant hover:bg-primary-container/20 transition-all duration-200 rounded-full" title="redo">
+<span class="material-symbols-outlined text-[24px]">redo</span>
+</button>
+<div class="w-px h-6 bg-outline-variant/30 mx-2"></div>
+<button class="flex items-center justify-center p-2 text-on-surface-variant hover:bg-primary-container/20 transition-all duration-200 rounded-full" title="download">
+<span class="material-symbols-outlined text-[24px]">download</span>
+</button>
+<button class="flex items-center justify-center p-2 text-on-surface-variant hover:bg-primary-container/20 transition-all duration-200 rounded-full" title="share">
+<span class="material-symbols-outlined text-[24px]">share</span>
+</button>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="flex-1 w-full h-full pt-16 pb-32 flex relative">
+<!-- Left Sidebar: Brush Size Slider -->
+<aside class="w-24 h-full flex flex-col items-center justify-center pl-gutter pr-unit z-10 shrink-0">
+<div class="h-64 w-12 bg-surface-container-high/50 backdrop-blur-md rounded-full flex flex-col items-center py-4 slider-track-inset relative group">
+<span class="material-symbols-outlined text-on-surface-variant mb-4 text-[20px]">lens</span>
+<!-- The Slider Track visual -->
+<div class="w-1 flex-1 bg-outline-variant/30 rounded-full relative">
+<!-- The Active portion -->
+<div class="absolute bottom-0 w-full h-1/2 bg-primary/40 rounded-full"></div>
+</div>
+<!-- The Thumb (Tactile pill) -->
+<button aria-label="Adjust brush size" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-surface-container-lowest rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.1)] inner-glow flex items-center justify-center cursor-ns-resize hover:scale-110 transition-transform active:scale-95">
+<div class="w-4 h-4 rounded-full bg-primary"></div>
+</button>
+<span class="material-symbols-outlined text-on-surface-variant mt-4 text-[12px]">lens</span>
+</div>
+</aside>
+<!-- Central Canvas Area -->
+<section class="flex-1 h-full flex items-center justify-center p-container-padding relative">
+<div class="w-full max-w-4xl aspect-[4/3] bg-surface-container-lowest rounded-xl canvas-shadow overflow-hidden relative border border-white/50">
+<!-- The actual coloring image -->
+<img alt="Minimalist line art of a mother and child" class="w-full h-full object-contain p-8 mix-blend-multiply opacity-80 pointer-events-none select-none" draggable="false" src="https://lh3.googleusercontent.com/aida/ADBb0uhVTKhUp7tPIAmWOb2i7SOOpKySQHabT1kHAw4UBJbAM_NEo5s_LZh9755-mFHRxM0mZYyC01gKh9Ux0R6plt29aF-gnfK5V-mH_IO0PGFNMJdJ8NfKy-TOgc5SyFP6J2n9XGwWMfxAd_9st56KXdo65m6LtJpb4XZ05kMu-gm8nDdbPYNQ2Xk9viHlTKaRpzvAdpTDkhIjIMZQWSFqM96KlNQu9UjS1j8wCtXQnIa4aoPxDjpDc2g7"/>
+<!-- Overlay for potential interactive drawing layer would go here -->
+<div class="absolute inset-0 w-full h-full cursor-crosshair"></div>
+</div>
+</section>
+<!-- Right Sidebar: Color Palette -->
+<aside class="w-24 h-full flex flex-col items-center justify-center pr-gutter pl-unit z-10 shrink-0">
+<div class="bg-surface-container-high/50 backdrop-blur-md rounded-full py-6 px-3 flex flex-col gap-4 no-scrollbar overflow-y-auto max-h-[80vh] border border-white/40 shadow-sm">
+<!-- Active Color Swatch -->
+<button aria-label="Select Coral Red" class="w-12 h-12 rounded-full bg-[#E57A7A] swatch-well flex items-center justify-center relative hover:scale-105 transition-transform">
+<!-- Active Indicator Ring -->
+<div class="absolute inset-1 rounded-full border-2 border-white/90"></div>
+</button>
+<!-- Inactive Swatches -->
+<button aria-label="Select Soft Orange" class="w-12 h-12 rounded-full bg-[#F2A65A] swatch-well hover:scale-105 transition-transform"></button>
+<button aria-label="Select Pale Yellow" class="w-12 h-12 rounded-full bg-[#FCE28B] swatch-well hover:scale-105 transition-transform"></button>
+<button aria-label="Select Mint Green" class="w-12 h-12 rounded-full bg-[#A2D3C2] swatch-well hover:scale-105 transition-transform"></button>
+<button aria-label="Select Baby Blue" class="w-12 h-12 rounded-full bg-[#8BB8E8] swatch-well hover:scale-105 transition-transform"></button>
+<button aria-label="Select Lavender" class="w-12 h-12 rounded-full bg-[#C1A5D8] swatch-well hover:scale-105 transition-transform"></button>
+<button aria-label="Select Pink" class="w-12 h-12 rounded-full bg-[#E8B4CB] swatch-well hover:scale-105 transition-transform"></button>
+<button aria-label="Select White" class="w-12 h-12 rounded-full bg-[#F5F5F5] swatch-well hover:scale-105 transition-transform"></button>
+<!-- Color Picker Plus -->
+<button aria-label="More Colors" class="w-12 h-12 rounded-full bg-surface-container-lowest shadow-sm flex items-center justify-center hover:bg-primary-container/10 transition-colors mt-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[24px]">add</span>
+</button>
+</div>
+</aside>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 flex gap-element-gap items-center bg-white/70 backdrop-blur-2xl w-max rounded-full px-6 py-3 border border-white/40 shadow-[0_20px_50px_rgba(0,0,0,0.1)]">
+<button aria-label="Pencil" class="flex flex-col items-center justify-center text-on-surface-variant/70 px-4 hover:text-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-[28px] mb-1" style="font-variation-settings: 'FILL' 1;">edit</span>
+<span class="text-label-caps font-label-caps">Pencil</span>
+</button>
+<!-- Active Tool -->
+<button aria-label="Brush" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-5 py-2 shadow-[inset_0px_2px_4px_rgba(255,255,255,0.6),_0px_4px_12px_rgba(139,77,65,0.2)] scale-110 active:scale-105 transition-transform duration-200 ease-out">
+<span class="material-symbols-outlined text-[28px] mb-1" style="font-variation-settings: 'FILL' 1;">brush</span>
+<span class="text-label-caps font-label-caps font-bold">Brush</span>
+</button>
+<button aria-label="Eraser" class="flex flex-col items-center justify-center text-on-surface-variant/70 px-4 hover:text-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-[28px] mb-1">ink_eraser</span>
+<span class="text-label-caps font-label-caps">Eraser</span>
+</button>
+<button aria-label="Stickers" class="flex flex-col items-center justify-center text-on-surface-variant/70 px-4 hover:text-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-[28px] mb-1">auto_awesome_motion</span>
+<span class="text-label-caps font-label-caps">Stickers</span>
+</button>
+<button aria-label="Magic" class="flex flex-col items-center justify-center text-on-surface-variant/70 px-4 hover:text-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-[28px] mb-1">auto_fix_high</span>
+<span class="text-label-caps font-label-caps">Magic</span>
+</button>
+</nav>
+</body></html>
