@@ -17,7 +17,7 @@ export default function MothersDayFloatingButton() {
 
   return (
     <Link
-      href="/mothers-day"
+      href="/proper/mothers-day"
       aria-label="Open the Mother's Day coloring studio"
       aria-hidden={pastHero}
       tabIndex={pastHero ? -1 : 0}

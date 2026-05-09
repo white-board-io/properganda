@@ -1,5 +1,5 @@
-import ColoringStudio from "./components/ColoringStudio";
+import { redirect } from "next/navigation";
 
-export default function MothersDayPage() {
-  return <ColoringStudio />;
+export default function MothersDayRedirectPage() {
+  redirect("/proper/mothers-day");
 }
