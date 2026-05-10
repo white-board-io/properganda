@@ -402,6 +402,7 @@ export default function ColoringStudio({ images }: { images: ColoringPageImage[]
 
   const updateZoom = useCallback((nextZoom: number) => {
     setPageZoom(clampZoom(nextZoom));
+    setTool("pointer");
   }, []);
 
   /* -------------------------- pointer handlers ------------------------- */
@@ -538,6 +539,8 @@ export default function ColoringStudio({ images }: { images: ColoringPageImage[]
     stickersRef.current = [...stickersRef.current, item];
     renderOverlay();
     pushHistory();
+    setTool("pointer");
+    setShowStickers(false);
   };
 
   const removeLastSticker = () => {
@@ -568,6 +571,7 @@ export default function ColoringStudio({ images }: { images: ColoringPageImage[]
     pushHistory();
     setShowTextDialog(false);
     setTextPlacement(null);
+    setTool("pointer");
   };
 
   /* ------------------------------- export ------------------------------ */
