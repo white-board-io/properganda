@@ -635,17 +635,15 @@ export default function ColoringStudio({ images }: { images: ColoringPageImage[]
 
     const url = await exportDataUrl();
 
-    try {
-      await saveDownloadForAnalytics(url);
-    } catch {
-      toast.message("Download worked, but analytics snapshot could not be saved.");
-    }
-
     const link = document.createElement("a");
     link.href = url;
     link.download = "wish-for-mom.png";
     link.click();
     toast.success("Saved! Your wish is on its way.");
+
+    void saveDownloadForAnalytics(url).catch(() => {
+      toast.message("Download worked, but analytics snapshot could not be saved.");
+    });
   };
 
   const handlePrint = async () => {

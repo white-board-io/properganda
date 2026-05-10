@@ -1,7 +1,6 @@
-import { mkdir, appendFile, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { randomUUID } from "node:crypto";
 
+import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 type DownloadPayload = {
@@ -10,8 +9,15 @@ type DownloadPayload = {
   selectedImageFilename?: string;
 };
 
-const DATA_DIR = path.join(process.cwd(), "public", "proper", "mothers-day", "downloads");
-const INDEX_FILE = path.join(DATA_DIR, "downloads-log.ndjson");
+type BlobAccess = "private" | "public";
+
+const BLOB_BASE_PATH = "proper/mothers-day/downloads";
+const BLOB_ACCESS: BlobAccess =
+  process.env.MOTHERS_DAY_BLOB_ACCESS === "private" ? "private" : "public";
+
+function toPathSegment(value: string | null | undefined) {
+  return value?.replace(/[^a-zA-Z0-9-]/g, "-").replace(/-+/g, "-").toLowerCase() || "unknown";
+}
 
 export async function POST(request: Request) {
   try {
@@ -34,22 +40,26 @@ export async function POST(request: Request) {
     const timestamp = new Date();
     const id = randomUUID();
     const filename = `${timestamp.toISOString().replace(/[:.]/g, "-")}-${id}.${extension}`;
+    const selectedImageId = body.selectedImageId ?? null;
+    const selectedImageFilename = body.selectedImageFilename ?? null;
+    const pathname = `${BLOB_BASE_PATH}/${toPathSegment(selectedImageId)}/${filename}`;
 
-    await mkdir(DATA_DIR, { recursive: true });
-    await writeFile(path.join(DATA_DIR, filename), buffer);
+    const blob = await put(pathname, buffer, {
+      access: BLOB_ACCESS,
+      contentType: `image/${extension}`,
+    });
 
-    const logEntry = {
+    return NextResponse.json({
+      ok: true,
       id,
-      createdAt: timestamp.toISOString(),
       filename,
-      selectedImageId: body.selectedImageId ?? null,
-      selectedImageFilename: body.selectedImageFilename ?? null,
+      pathname: blob.pathname,
+      url: blob.url,
+      createdAt: timestamp.toISOString(),
+      selectedImageId,
+      selectedImageFilename,
       bytes: buffer.byteLength,
-    };
-
-    await appendFile(INDEX_FILE, `${JSON.stringify(logEntry)}\n`, "utf8");
-
-    return NextResponse.json({ ok: true, filename });
+    });
   } catch (error) {
     console.error("Failed to save Mother's Day download", error);
     return NextResponse.json({ error: "Failed to save download" }, { status: 500 });
