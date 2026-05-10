@@ -608,10 +608,35 @@ export default function ColoringStudio({ images }: { images: ColoringPageImage[]
     }
   }, [buildExportCanvas]);
 
+  const saveDownloadForAnalytics = async (imageBase64: string) => {
+    if (!selectedImage) return;
+
+    const response = await fetch("/api/mothers-day/download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        imageBase64,
+        selectedImageId: selectedImage.id,
+        selectedImageFilename: selectedImage.filename,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to save download analytics");
+    }
+  };
+
   const handleDownload = async () => {
     if (!selectedImage) return;
 
     const url = await exportDataUrl();
+
+    try {
+      await saveDownloadForAnalytics(url);
+    } catch {
+      toast.message("Download worked, but analytics snapshot could not be saved.");
+    }
+
     const link = document.createElement("a");
     link.href = url;
     link.download = "wish-for-mom.png";
