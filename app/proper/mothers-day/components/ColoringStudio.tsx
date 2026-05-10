@@ -67,6 +67,11 @@ type TextItem = {
   color: string;
   size: number;
 };
+type HistoryState = {
+  base: ImageData;
+  stickers: StickerItem[];
+  texts: TextItem[];
+};
 
 type ColoringPageImage = {
   id: string;
@@ -111,8 +116,8 @@ export default function ColoringStudio({ images }: { images: ColoringPageImage[]
   const [lineArtReady, setLineArtReady] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
 
-  const historyRef = useRef<ImageData[]>([]);
-  const futureRef = useRef<ImageData[]>([]);
+  const historyRef = useRef<HistoryState[]>([]);
+  const futureRef = useRef<HistoryState[]>([]);
   const isDrawingRef = useRef(false);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
   const stickersRef = useRef<StickerItem[]>([]);
@@ -144,12 +149,46 @@ export default function ColoringStudio({ images }: { images: ColoringPageImage[]
     };
   }, [selectedImage]);
 
+  const syncOverlayFromState = useCallback(() => {
+    const overlay = overlayRef.current;
+    if (!overlay) return;
+    const ctx = overlay.getContext("2d");
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
+
+    for (const sticker of stickersRef.current) {
+      ctx.save();
+      ctx.font = `${sticker.size}px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(sticker.emoji, sticker.x, sticker.y);
+      ctx.restore();
+    }
+
+    for (const item of textsRef.current) {
+      ctx.save();
+      ctx.font = `600 ${item.size}px "Quicksand", "Inter", system-ui, sans-serif`;
+      ctx.fillStyle = item.color;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.shadowColor = "rgba(255, 255, 255, 0.85)";
+      ctx.shadowBlur = 8;
+      ctx.fillText(item.text, item.x, item.y);
+      ctx.restore();
+    }
+    setOverlayVersion((v) => v + 1);
+  }, [canvasSize.height, canvasSize.width]);
+
   /* ------------------------------- history ----------------------------- */
 
   const pushHistory = useCallback(() => {
     const ctx = canvasRef.current?.getContext("2d");
     if (!ctx) return;
-    const snap = ctx.getImageData(0, 0, canvasSize.width, canvasSize.height);
+    const snap: HistoryState = {
+      base: ctx.getImageData(0, 0, canvasSize.width, canvasSize.height),
+      stickers: stickersRef.current.map((item) => ({ ...item })),
+      texts: textsRef.current.map((item) => ({ ...item })),
+    };
     historyRef.current.push(snap);
     if (historyRef.current.length > HISTORY_LIMIT) {
       historyRef.current.shift();
@@ -163,16 +202,22 @@ export default function ColoringStudio({ images }: { images: ColoringPageImage[]
     const current = historyRef.current.pop()!;
     futureRef.current.push(current);
     const previous = historyRef.current[historyRef.current.length - 1];
-    ctx.putImageData(previous, 0, 0);
-  }, []);
+    ctx.putImageData(previous.base, 0, 0);
+    stickersRef.current = previous.stickers.map((item) => ({ ...item }));
+    textsRef.current = previous.texts.map((item) => ({ ...item }));
+    syncOverlayFromState();
+  }, [syncOverlayFromState]);
 
   const redo = useCallback(() => {
     const ctx = canvasRef.current?.getContext("2d");
     if (!ctx || futureRef.current.length === 0) return;
     const next = futureRef.current.pop()!;
     historyRef.current.push(next);
-    ctx.putImageData(next, 0, 0);
-  }, []);
+    ctx.putImageData(next.base, 0, 0);
+    stickersRef.current = next.stickers.map((item) => ({ ...item }));
+    textsRef.current = next.texts.map((item) => ({ ...item }));
+    syncOverlayFromState();
+  }, [syncOverlayFromState]);
 
   /* ----------------------------- canvas init ---------------------------- */
 
@@ -404,7 +449,9 @@ export default function ColoringStudio({ images }: { images: ColoringPageImage[]
 
     isDrawingRef.current = true;
     lastPointRef.current = point;
-    drawLine(point, point);
+    if (event.pointerType !== "touch") {
+      drawLine(point, point);
+    }
   };
 
   const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -465,6 +512,7 @@ export default function ColoringStudio({ images }: { images: ColoringPageImage[]
 
     if (dragRef.current) {
       dragRef.current = null;
+      pushHistory();
       return;
     }
     if (!isDrawingRef.current) return;
@@ -476,34 +524,8 @@ export default function ColoringStudio({ images }: { images: ColoringPageImage[]
   /* ------------------------------ stickers ----------------------------- */
 
   const renderOverlay = useCallback(() => {
-    const overlay = overlayRef.current;
-    if (!overlay) return;
-    const ctx = overlay.getContext("2d");
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
-
-    for (const sticker of stickersRef.current) {
-      ctx.save();
-      ctx.font = `${sticker.size}px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(sticker.emoji, sticker.x, sticker.y);
-      ctx.restore();
-    }
-
-    for (const item of textsRef.current) {
-      ctx.save();
-      ctx.font = `600 ${item.size}px "Quicksand", "Inter", system-ui, sans-serif`;
-      ctx.fillStyle = item.color;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.shadowColor = "rgba(255, 255, 255, 0.85)";
-      ctx.shadowBlur = 8;
-      ctx.fillText(item.text, item.x, item.y);
-      ctx.restore();
-    }
-    setOverlayVersion((v) => v + 1);
-  }, [canvasSize.height, canvasSize.width]);
+    syncOverlayFromState();
+  }, [syncOverlayFromState]);
 
   const placeSticker = (x: number, y: number) => {
     const item: StickerItem = {
@@ -515,11 +537,13 @@ export default function ColoringStudio({ images }: { images: ColoringPageImage[]
     };
     stickersRef.current = [...stickersRef.current, item];
     renderOverlay();
+    pushHistory();
   };
 
   const removeLastSticker = () => {
     stickersRef.current = stickersRef.current.slice(0, -1);
     renderOverlay();
+    pushHistory();
   };
 
   /* -------------------------------- text ------------------------------- */
@@ -541,6 +565,7 @@ export default function ColoringStudio({ images }: { images: ColoringPageImage[]
     };
     textsRef.current = [...textsRef.current, item];
     renderOverlay();
+    pushHistory();
     setShowTextDialog(false);
     setTextPlacement(null);
   };
